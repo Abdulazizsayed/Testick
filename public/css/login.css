@@ -1,0 +1,48 @@
+body {
+    background-image: url("../images/website/backgrounds/login-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.blue-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: rgba(18, 15, 100, 0.73);
+}
+
+.login-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background-color: rgb(18, 15, 100);
+    padding: 30px 60px;
+}
+
+.login-form .logo {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 3px solid #ddd;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.login-form .logo img {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
