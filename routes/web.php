@@ -19,4 +19,11 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
+Route::get('/QB/home','QBcontroller@homeView');
+Route::get('/QB/create','QBcontroller@createQBView');
+Route::get('/QB/addQuestionToQB','QBcontroller@addQuestionToQBView');
+
+Route::post('/createQB','QBcontroller@createQB');
+Route::post('/addQuestionToQB','QBcontroller@addQuestionToQB');
+
 Route::get('/home', 'HomeController@index')->name('home');
