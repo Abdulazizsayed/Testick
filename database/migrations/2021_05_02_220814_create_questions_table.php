@@ -19,7 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->integer('type');
             $table->integer('chapter');
 
-            $table->foreignId('parent_id')->constrained('questions')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('parent_id')->constrained('questions')->onDelete('cascade')->onUpdate('cascade')->nullable(TRUE);
             $table->foreignId('question_bank_id')->constrained('question_banks')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

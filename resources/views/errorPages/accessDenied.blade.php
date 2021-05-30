@@ -2,6 +2,6 @@
 
 @section('content')
 <div class="container">
-    <H1> HOME </H1>    
+    <h1> access denied <h1>
 </div>
 @endsection

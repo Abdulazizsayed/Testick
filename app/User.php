@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function questionBanks()
     {
-        $this->hasMany(QuestionBank::class, 'instructor_id');
+        return $this->hasMany(QuestionBank::class, 'instructor_id');
     }
 
     public function studentAnswers()
