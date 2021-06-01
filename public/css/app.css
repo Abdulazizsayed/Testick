@@ -72,9 +72,9 @@ body {
     font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.6;
-    color: #212529;
+    color: #fff;
     text-align: left;
-    background-color: #807ec7;
+    background-color: #46439b;
     padding: 0;
     padding-left: 300px;
 }
@@ -11118,3 +11118,14 @@ a.text-dark:focus {
 }
 /* End left bar section */
 /* End layout page */
+
+/* Start home page */
+.home section header {
+    font-size: 40px;
+}
+
+.home section p {
+    font-size: 18px;
+    padding-left: 20px;
+}
+/* End home page */
