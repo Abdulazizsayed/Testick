@@ -10,11 +10,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/custom.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -33,12 +37,12 @@
                     </div>
                 @endif
                 <h3 class="text-center">
-                    <a class="text-white" href="">{{Auth::user()->username}}</a>
+                    <a class="text-white{{request()->is('users/editProfile') ? " active-link" : ""}}" href="{{asset('users/editProfile')}}">{{Auth::user()->name}}</a>
                 </h3>
                 <div class="sidebar">
                     <ul class="elements">
                         <a class="nav-link" href="#">
-                            <li class='{{$active == "home" ? "active" : ""}}'>
+                            <li class='{{request()->is('home') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/home.png')}}" alt="Home">
                                 </div>
@@ -46,7 +50,7 @@
                             </li>
                         </a>
                         <a class="nav-link" href="#">
-                            <li class='{{$active == "courses" ? "active" : ""}}'>
+                            <li class='{{request()->is('courses') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/courses.png')}}" alt="Courses">
                                 </div>
@@ -54,7 +58,7 @@
                             </li>
                         </a>
                         <a class="nav-link" href="#">
-                            <li class='{{$active == "exams" ? "active" : ""}}'>
+                            <li class='{{request()->is('exams') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/exams.png')}}" alt="Exams">
                                 </div>
@@ -62,7 +66,7 @@
                             </li>
                         </a>
                         <a class="nav-link" href="#">
-                            <li class='{{$active == "questionBanks" ? "active" : ""}}'>
+                            <li class='{{request()->is('questionBanks') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/question-banks.png')}}" alt="Question Banks">
                                 </div>
@@ -70,7 +74,7 @@
                             </li>
                         </a>
                         <a class="nav-link" href="#">
-                            <li class='{{$active == "examsAnalysis" ? "active" : ""}}'>
+                            <li class='{{request()->is('examAnalysis') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/exam-analysis.png')}}" alt="Exam Analysis">
                                 </div>

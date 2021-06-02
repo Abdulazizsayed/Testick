@@ -11038,6 +11038,10 @@ a.text-dark:focus {
     width: 100%;
 }
 
+.active-link {
+    text-decoration: underline;
+}
+
 /* Start layout page */
 /* Start left bar section */
 #navbar {
@@ -11129,3 +11133,35 @@ a.text-dark:focus {
     padding-left: 20px;
 }
 /* End home page */
+
+/* Edit profile */
+.edit-profile {
+    padding: 100px;
+    font-size: 20px;
+}
+
+.edit-profile input[type="submit"] {
+    font-size: 20px;
+}
+
+.edit-profile form .edit-profile-img {
+    position: relative;
+    width: 50%;
+    margin: auto;
+    padding-bottom: 30px;
+}
+
+.edit-profile form .edit-profile-img i {
+    position: absolute;
+    bottom: 40px;
+    right: 130px;
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #3490dc;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+}
+/* End edit profile */
