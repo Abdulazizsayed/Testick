@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->integer('type');
+            $table->text('type');
             $table->integer('chapter');
 
             $table->foreignId('parent_id')->constrained('questions')->onDelete('cascade')->onUpdate('cascade')->nullable(TRUE);
