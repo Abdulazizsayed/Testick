@@ -3,9 +3,11 @@ namespace App\Http\Controllers;
 use App\User;
 use App\QuestionBank;
 use App\Http\Controllers\Questioncontroller;
+use App\Http\Controllers\AnswerController;
 use PhpOffice\PhpSpreadsheet;
 use App\Question;
 use App\Answer;
+use DB;
 
 use Illuminate\Http\Request;
 class QBcontroller extends Controller
@@ -115,7 +117,24 @@ class QBcontroller extends Controller
         {
             return view('errorPages/accessDenied');
         }
-        return view('questionsbank/addQuestionToQB');
+        return redirect('/QB/home');
+    }
+    public function destroy($QuestionBankID)
+    {
+        $QBObj = QuestionBank::find($QuestionBankID);
+        $Q = new Questioncontroller();
+        $A = new AnswerController();
+        $Questions = Question::where('question_bank_id' , $QuestionBankID)->get(); // getting all questions
+        $Answers = array();
+        for($i=0 ; $i < count($Questions) ; $i++) // getting all answers for the above questions
+        {
+            $answer = Answer::where('question_id' , $Questions[$i]->id)->get();
+            array_push($Answers , $answer);
+        }
+        $A->delete($Answers);
+        $Q->delete($Questions);
+        $QBObj = QuestionBank::find($QuestionBankID)->delete();
+        return redirect('/QB/home');
     }
 
     public function addQuestionToQB()

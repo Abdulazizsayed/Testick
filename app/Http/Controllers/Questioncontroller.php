@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use  App\Question;
-
+use DB;
 use Illuminate\Http\Request;
 
 class Questioncontroller extends Controller
@@ -11,4 +11,12 @@ class Questioncontroller extends Controller
     {
         Question::create($data);
     }
+    public function delete($data)
+    {
+        for($i = 0 ; $i < count($data) ; $i++)
+        {
+            $deleted = Question::find($data[$i]->id)->delete();
+        }
+    }
+    
 }
