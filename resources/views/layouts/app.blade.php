@@ -57,7 +57,7 @@
                                 <span class="link-label">Courses</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('exams.index')}}">
                             <li class='{{request()->is('exams') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/exams.png')}}" alt="Exams">

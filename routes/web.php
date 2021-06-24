@@ -29,6 +29,9 @@ Route::post('/users/editProfile', 'ProfileController@update');
 Route::get('/QB/home', 'QBcontroller@homeView');
 Route::get('/QB/create', 'QBcontroller@createQBView');
 Route::get('/QB/addQuestionToQB', 'QBcontroller@addQuestionToQBView');
-Route::post('/QB/delete/{QuestionBankID}' , 'QBcontroller@destroy');
+Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('/createQB', 'QBcontroller@createQB');
 Route::post('/addQuestionToQB', 'QBcontroller@addQuestionToQB');
+
+// Exam routes
+Route::resource('exams', 'ExamController');
