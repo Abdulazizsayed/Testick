@@ -16,7 +16,7 @@ class CreateExamsTable extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('type');
+            $table->enum('type', ['Quiz', 'Midterm', 'Final']);
             $table->date('date');
             $table->float('duration');
             $table->float('allow_period');
