@@ -81,6 +81,14 @@
                                 <span class="link-label">Exams Analysis</span>
                             </li>
                         </a>
+                        <a class="nav-link" href="/logout">
+                            <li>
+                                <div class="nav-link-image circle-image">
+                                    <img src="{{asset('images/website/nav-links/logout.png')}}" alt="Logout">
+                                </div>
+                                <span class="link-label">Logout</span>
+                            </li>
+                        </a>
                     </ul>
                 </div>
             </div>

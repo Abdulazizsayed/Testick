@@ -20,6 +20,11 @@ class Course extends Model
         return $this->hasMany(Announcement::class);
     }
 
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
+
     #polymorphic relationships
     public function image()
     {

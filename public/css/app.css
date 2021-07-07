@@ -11165,3 +11165,63 @@ a.text-dark:focus {
     cursor: pointer;
 }
 /* End edit profile */
+
+/* Start Exams main page */
+
+.title {
+    font-size: 50px;
+}
+
+.desc {
+    font-size: 18px;
+    color: #bbb;
+    margin-bottom: 50px;
+}
+
+.label {
+    color: rgb(223, 223, 223);
+    padding-right: 10px;
+    font-size: 20px;
+    display: inline;
+}
+
+select.filter-by {
+    background-color: #071038;
+    color: #fff;
+    width: 80%;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+form {
+    display: inline;
+}
+
+form input.search-filter-input {
+    width: 30%;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0;
+}
+
+.exams-index .create-exam-btn,
+.exams-index .edit-exam-btn {
+    background-color: #071038;
+    color: #fff;
+}
+
+table {
+    background-color: #120f64;
+}
+
+table,
+table tr,
+table td {
+    color: #fff;
+}
+
+.thead-blue {
+    background-color: #071038;
+}
+
+/* End Exams main page */

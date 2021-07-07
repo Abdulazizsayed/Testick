@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\Exam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'teacher']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,6 @@ class ExamController extends Controller
      */
     public function index()
     {
-        // dd();
         return view('exams.teacher.index')->with(['exams' => Auth::user()->exams]);
     }
 
@@ -84,5 +89,31 @@ class ExamController extends Controller
     {
         $exam->delete();
         return redirect('/exams')->with('status', 'Exam deleted successfully');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->filter_value == 'course code') {
+            $course = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->first();
+            if ($course) {
+                $exams = $course->exams;
+            } else {
+                $exams = [];
+            }
+        } else {
+            $exams = Auth::user()->exams()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
+        }
+
+        if ($exams) {
+            return response()->json([
+                'exams' => $exams->map(function ($exam) {
+                    return [$exam->id, $exam->title, $exam->course->code, $exam->course->subject->name, $exam->type, $exam->duration, $exam->allow_period, $exam->date, csrf_token()];
+                })
+            ]);
+        } else {
+            return response()->json([
+                'exams' => $exams
+            ]);
+        }
     }
 }
