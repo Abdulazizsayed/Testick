@@ -13,8 +13,6 @@
                 <button class="btn btn-primary">create</button>
             </div>
         </div>
-<<<<<<< Updated upstream
-=======
     </form>
 
     <div>
@@ -51,8 +49,6 @@
          @endforeach
         </table> 
         </div>
->>>>>>> Stashed changes
 
-    </from>
 </div>
 @endsection

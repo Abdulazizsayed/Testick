@@ -18,15 +18,10 @@ Route::get('/', function () {
 });
 
 Auth::routes(['register' => false]);
+Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('/QB/home','QBcontroller@homeView');
-Route::get('/QB/create','QBcontroller@createQBView');
-Route::get('/QB/addQuestionToQB','QBcontroller@addQuestionToQBView');
+Route::get('/home', 'HomeController@index')->name('home');
 
-<<<<<<< Updated upstream
-Route::post('/createQB','QBcontroller@createQB');
-Route::post('/addQuestionToQB','QBcontroller@addQuestionToQB');
-=======
 // Question banks routes
 Route::get('/QB/home', 'QBcontroller@homeView');
 Route::get('/QB/create', 'QBcontroller@createQBView');
@@ -34,6 +29,14 @@ Route::get('/QB/addQuestionToQB/{QuestionBankID}', 'QBcontroller@addQuestionToQB
 Route::post('/QB/addQuestionToQB/{QuestionBankID}' , 'QBcontroller@addQuestionToQBView');
 Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('/createQB', 'QBcontroller@createQB');
->>>>>>> Stashed changes
 
-Route::get('/home', 'HomeController@index')->name('home');
+// User routes
+Route::get('/users/editProfile', 'ProfileController@edit');
+Route::post('/users/editProfile', 'ProfileController@update');
+
+// Exam routes
+Route::resource('exams', 'ExamController');
+Route::post('exams/search', 'ExamController@search');
+
+// Error routes
+Route::get('errorPages/accessDenied', 'ErrorController@accessDenied');

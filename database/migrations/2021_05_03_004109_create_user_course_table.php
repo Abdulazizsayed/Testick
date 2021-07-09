@@ -17,7 +17,7 @@ class CreateUserCourseTable extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

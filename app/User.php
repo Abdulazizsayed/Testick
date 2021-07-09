@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function exams()
     {
-        $this->hasMany(Exam::class);
+        return $this->hasMany(Exam::class, 'creator_id');
     }
 
     public function questionBanks()
@@ -71,6 +71,6 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return $this->belongsToMany('App\Course');
+        return $this->belongsToMany('App\Course', 'user_course');
     }
 }

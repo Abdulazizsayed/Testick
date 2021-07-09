@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use  App\Question;
-
+use DB;
 use Illuminate\Http\Request;
 
 class Questioncontroller extends Controller
@@ -11,9 +11,7 @@ class Questioncontroller extends Controller
     {
         return Question::create($data);
     }
-<<<<<<< Updated upstream
-=======
-    
+
     public function delete($data)
     {
         for($i = 0 ; $i < count($data) ; $i++)
@@ -22,5 +20,5 @@ class Questioncontroller extends Controller
         }
     }
     
->>>>>>> Stashed changes
+
 }
