@@ -1,22 +1,13 @@
+<?php
+use App\QuestionBank;
+?>
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
-    <form action="/addQuestionToQB" enctype="multipart/form-data" method="post">
+    <form action="/QB/addQuestionToQB/{{$id}}" enctype="multipart/form-data" method="get">
     @csrf
         <div class="row pt-3">
             <h1>Add Question to Question Bank<h1>
-        </div>
-        <div class="row">
-            <div class="col-8 offset-2">
-                <select class="form-control" name="QB" id="QB" required>
-                    <option value=></option>
-                    <option value="1">math120</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
-            </div>
         </div>
 
         <div class="row">
@@ -24,24 +15,26 @@
                 <div class="d-flex">
                     <select class="form-control" name="parent" id="parent" >
                         <option value=></option>
-                        <option value="1">parent</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                        @foreach( QuestionBank::find($id)->questions as $question)
+                        {
+                            <option value="{{$question->id}}">{{$question->content}}</option>
+                        }
+                        @endforeach 
                     </select>
-                    <select class="form-control" name="chapter" id="chapter" required>
-                        <option value=></option>
-                        <option value="1">chapter</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                    </select>
+
+                    <input id="chapter" name="chapter" type="text" class="form-control @error('chapter') is-invalid @enderror" chapter="chapter" value="{{ old('chapter') }}" required autocomplete="chapter" autofocus>
+                    @error('chapter')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+
                     <select class="form-control" name="type" id="type" required>
                         <option value=></option>
-                        <option value="0">type</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                        <option value="MCQ">MCQ</option>
+                        <option value="T/F">T/F</option>
+                        <option value="MQ">MQ</option>
+                        <option value="Eassy">Eassy</option>
                     </select>
                 </div>
             </div>
@@ -80,9 +73,9 @@
 
             <div class="col-8 offset-2">
                 <div class="d-flex">
-                    <label for="answer2" name="answer2" class="col-md-4 col-form-label">answer2</label>
+                    <label for="answer2" class="col-md-4 col-form-label">answer2</label>
 
-                    <input id="answer2" type="text" class="form-control @error('answer2') is-invalid @enderror" answer2="answer2" value="{{ old('answer2') }}" required autocomplete="answer2" autofocus>
+                    <input id="answer2" name="answer2" type="text" class="form-control @error('answer2') is-invalid @enderror" answer2="answer2" value="{{ old('answer2') }}" required autocomplete="answer2" autofocus>
                     @error('answer2')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -98,9 +91,7 @@
                 <button class="btn btn-primary">ADD</button>
             </div>
         </div>
-       
-                         
-
+                 
     </from>
 </div>
 @endsection
