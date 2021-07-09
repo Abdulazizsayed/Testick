@@ -13,7 +13,7 @@
                 <button class="btn btn-primary">create</button>
             </div>
         </div>
-    </from>
+    </form>
 
     <div>
         <table> 
@@ -28,8 +28,9 @@
             <td>{{$questionBank->title}} </td>
             <td>{{$questionBank->subject_id}} </td>
             <td>
-            <form action="/QB"  enctype="multipart/form-data" method="get"> 
-            <button class="btn btn-primary">Add Question</button>
+            <form action="/QB/addQuestionToQB/{{$questionBank->id}}"  enctype="multipart/form-data" method="post"> 
+            @csrf
+                <button class="btn btn-primary">Add Question</button>
             </form>
             </td>
             <td>

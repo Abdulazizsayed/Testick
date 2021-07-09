@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->text('content');
             $table->text('type');
-            $table->integer('chapter');
+            $table->text('chapter');
 
             $table->foreignId('parent_id')->constrained('questions')->onDelete('cascade')->onUpdate('cascade')->nullable(TRUE);
             $table->foreignId('question_bank_id')->constrained('question_banks')->onDelete('cascade')->onUpdate('cascade');

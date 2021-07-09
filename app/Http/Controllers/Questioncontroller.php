@@ -9,8 +9,9 @@ class Questioncontroller extends Controller
 {
     public function store($data)
     {
-        Question::create($data);
+        return Question::create($data);
     }
+
     public function delete($data)
     {
         for($i = 0 ; $i < count($data) ; $i++)
@@ -19,4 +20,5 @@ class Questioncontroller extends Controller
         }
     }
     
+
 }
