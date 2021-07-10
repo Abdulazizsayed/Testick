@@ -6,92 +6,100 @@ use App\QuestionBank;
 <div class="container">
     <form action="/QB/addQuestionToQB/{{$id}}" enctype="multipart/form-data" method="get">
     @csrf
-        <div class="row pt-3">
-            <h1>Add Question to Question Bank<h1>
+        <div class="row pt-3" style="margin-left: 50px">
+            <h1>Add Question<h1>
         </div>
+
+
+
+
+
 
         <div class="row">
             <div class="col-8 offset-2">
                 <div class="d-flex">
-                    <select class="form-control" name="parent" id="parent" >
-                        <option value=></option>
+                    <div style="float:left;width:50%;margin-right: 10px;">
+                    <select class="form-control" name="parent" id="parent" style="background-color: #1A034A;color: white" >
+                        <option value="" disabled selected >Question Parent</option>
                         @foreach( QuestionBank::find($id)->questions as $question)
                         {
                             <option value="{{$question->id}}">{{$question->content}}</option>
                         }
-                        @endforeach 
+                        @endforeach
                     </select>
-
-                    <input id="chapter" name="chapter" type="text" class="form-control @error('chapter') is-invalid @enderror" chapter="chapter" value="{{ old('chapter') }}" required autocomplete="chapter" autofocus>
-                    @error('chapter')
-                    <span class="invalid-feedback" role="alert">
+                    </div>
+                    <div>
+                        <input id="chapter" name="chapter" type="text" class="form-control @error('chapter') is-invalid @enderror" chapter="chapter" value="{{ old('chapter') }}" required autocomplete="chapter" autofocus placeholder="Chapter" style="background-color: #1A034A;color: white">
+                        @error('chapter')
+                        <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
-                    @enderror
-
-                    <select class="form-control" name="type" id="type" required>
-                        <option value=></option>
+                        @enderror
+                    </div>
+                    <div style="float:right;width:20%;margin-left: 10px;">
+                    <select class="form-control" name="type" id="type" required style="background-color: #1A034A;color: white">
+                        <option value="" disabled selected >Type</option>
                         <option value="MCQ">MCQ</option>
                         <option value="T/F">T/F</option>
                         <option value="MQ">MQ</option>
                         <option value="Eassy">Eassy</option>
                     </select>
+                    </div>
                 </div>
             </div>
         </div>
+        <br>
 
         <div class="row">
             <div class="col-8 offset-2">
-        
-                <div class="form-group row">
-                    <label for="Qcontent" class="col-md-4 col-form-label">Qcontent</label>
 
-                    <input id="Qcontent" name="Qcontent" type="text" class="form-control @error('Qcontent') is-invalid @enderror" Qcontent="Qcontent" value="{{ old('Qcontent') }}" required autocomplete="Qcontent" autofocus>
+                <div class="form-group row">
+                    <div><label for="Qcontent" class="col-md-4 col-form-label">QuestionContent</label>
+                    </div>
+                    <div style="width: 521px"><input id="Qcontent" name="Qcontent" type="text" class="form-control @error('Qcontent') is-invalid @enderror" Qcontent="Qcontent" value="{{ old('Qcontent') }}" required autocomplete="Qcontent" autofocus>
                     @error('Qcontent')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-8 offset-2">
-                <div class="d-flex">
-                    <label for="answer1" class="col-md-4 col-form-label">answer1</label>
 
-                    <input id="answer1" name="answer1" type="text" class="form-control @error('answer1') is-invalid @enderror" answer1="answer1" value="{{ old('answer1') }}" required autocomplete="answer1" autofocus>
+            <div class="col-8 offset-2">
+
+                <div class="d-flex">
+
+
+
+                    <div><label for="answer1" class="col-md-4 col-form-label">answer</label>
+                    </div>
+                    <div style="width: 2500px; margin-left: 47px"><input id="answer1" name="answer1" type="text" class="form-control @error('answer1') is-invalid @enderror" answer1="answer1" value="{{ old('answer1') }}" required autocomplete="answer1" autofocus>
                     @error('answer1')
                     <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                     </span>
                     @enderror
+                    </div>
+                    <div style="margin-top: 10px;margin-left: 20px"><h6>Correct</h6></div>
                     <input class="form-control" type="checkbox" id="ch1" name="ch1" value="correct">
+
                 </div>
             </div>
 
-            <div class="col-8 offset-2">
-                <div class="d-flex">
-                    <label for="answer2" class="col-md-4 col-form-label">answer2</label>
-
-                    <input id="answer2" name="answer2" type="text" class="form-control @error('answer2') is-invalid @enderror" answer2="answer2" value="{{ old('answer2') }}" required autocomplete="answer2" autofocus>
-                    @error('answer2')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                    <input class="form-control" type="checkbox" id="ch2" name="ch2" value="correct">
-                </div>
-            </div>
         </div>
 
-        <div class="row pt-3">
-            <div class="col-8 offset-2">
+<br>
+        <br>
+
+        <div  style="margin-left: 500px;">
                 <button class="btn btn-primary">ADD</button>
             </div>
-        </div>
-                 
+
+
     </from>
 </div>
 @endsection
