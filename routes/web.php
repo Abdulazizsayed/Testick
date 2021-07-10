@@ -23,10 +23,11 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Question banks routes
-Route::get('/QB/home', 'QBcontroller@homeView');
+Route::resource('questionsbank', 'QBcontroller');
+Route::get('/QB/index', 'QBcontroller@index');
 Route::get('/QB/create', 'QBcontroller@createQBView');
-Route::get('/QB/addQuestionToQB/{QuestionBankID}', 'QBcontroller@addQuestionToQB');
-Route::post('/QB/addQuestionToQB/{QuestionBankID}' , 'QBcontroller@addQuestionToQBView');
+Route::post('/QB/addQuestion/{QuestionBankID}' , 'QBcontroller@addQuestionView');
+Route::get('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
 Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('/createQB', 'QBcontroller@createQB');
 
