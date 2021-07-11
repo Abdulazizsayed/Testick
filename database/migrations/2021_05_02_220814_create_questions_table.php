@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->text('content');
             $table->enum('type', ['Parent', 'T/F', 'SSMCQ', 'MSMCQ', 'Essay', 'Text Check']);
-            $table->integer('chapter');
+            $table->string('chapter');
 
             $table->foreignId('parent_id')->nullable()->constrained('questions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('question_bank_id')->nullable()->constrained('question_banks')->onDelete('cascade')->onUpdate('cascade');

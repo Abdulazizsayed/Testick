@@ -22,6 +22,11 @@ class AnswerController extends Controller
         ]);
     }
 
+    public function store($data)
+    {
+        Answer::create($data);
+    }
+
     public function delete($data)
     {
         for ($i = 0; $i < count($data); $i++) {

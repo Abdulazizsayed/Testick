@@ -5,11 +5,12 @@ use App\QuestionBank;
 use App\Http\Controllers\Questioncontroller;
 use App\Http\Controllers\AnswerController;
 use PhpOffice\PhpSpreadsheet;
+use Validator;
+use Request;
 use App\Question;
 use App\Answer;
 use DB;
 
-use Illuminate\Http\Request;
 class QBcontroller extends Controller
 {
     protected $guarded =[];
@@ -19,19 +20,19 @@ class QBcontroller extends Controller
         $this->middleware('auth'); 
     }
 
-    public function homeView()
+    public function index()
     {
-        return view('questionsbank/QBhome');
+        return view('questionsbank/index');
     }
 
     public function createQBView()
     {
-        return view('questionsbank/createQB');
+        return view('questionsbank/create');
     }
 
-    public function addQuestionToQBView()
+    public function addQuestionView($QB_id)
     {
-        return view('questionsbank/addQuestionToQB');
+        return view('questionsbank/addQuestion',['id'=>$QB_id]);
     }
 
     public function createQB()
@@ -117,7 +118,7 @@ class QBcontroller extends Controller
         {
             return view('errorPages/accessDenied');
         }
-        return redirect('/QB/home');
+        return redirect('/QB/index');
     }
     public function destroy($QuestionBankID)
     {
@@ -126,40 +127,81 @@ class QBcontroller extends Controller
         $A = new AnswerController();
         $Questions = Question::where('question_bank_id' , $QuestionBankID)->get(); // getting all questions
         $Answers = array();
-        for($i=0 ; $i < count($Questions) ; $i++) // getting all answers for the above questions
+        if( $Questions != null )
         {
-            $answer = Answer::where('question_id' , $Questions[$i]->id)->get();
-            array_push($Answers , $answer);
+            for($i=0 ; $i < count($Questions) ; $i++) // getting all answers for the above questions
+            {
+                $answer = Answer::where('question_id' , $Questions[$i]->id)->get();
+                array_push($Answers , $answer);
+            }
+            $A->delete($Answers);
+            $Q->delete($Questions);
+            $QBObj = QuestionBank::find($QuestionBankID)->delete();
         }
-        $A->delete($Answers);
-        $Q->delete($Questions);
-        $QBObj = QuestionBank::find($QuestionBankID)->delete();
-        return redirect('/QB/home');
+        return redirect('/QB/index');
     }
 
-    public function addQuestionToQB()
+    public function addQuestion($QuestionBankID)
     {
         if(auth()->user()->role == 1 )
         {
-            $data = request()->validate([ 
-                'another'=>'',
-                'QB'=> 'required',
-                'parent'=> '',
-                'chapter'=> 'required',
-                'type'=> 'required',
-                'Qcontent'=> 'required',
-                'answer1'=> 'required',
-                ]);
+            $data = request::all();
+            $validatedData = Validator::make($data, [
+                'chapter' => 'required',
+                'type' => 'required',
+                'Qcontent' => 'required',
+                'answer1' => 'required',
+            ]);
+            if (!$validatedData->fails()) 
+            {
+                if( array_key_exists( "parent" ,$data ) )
+                {
+                    $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> $data['parent'] , 'question_bank_id'=> $QuestionBankID ];
+                    $forLoopLenght = count($data) - 5;
+                }
+                else
+                {
+                    $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> NULL , 'question_bank_id'=> $QuestionBankID ];
+                    $forLoopLenght = count($data) - 4;
+                }
+                $QC = new Questioncontroller();
+                $question_obj = $QC->store($Qdata);
+                $QC = new AnswerController();
 
-            $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> $data['parent'] , 'question_bank_id'=> $data['QB'] ];
-            $QC = new Questioncontroller();
-            $QC->store($Qdata);
+                for ($i = 1; $i <= $forLoopLenght ; $i++) 
+                {   
+                    if( array_key_exists( "answer".$i ,$data ) )
+                    {
+                        $answersData['answer'.$i] = $data['answer'.$i];
+                        if( array_key_exists( "ch".$i ,$data ) )
+                        {
+                            $answersData["ch".$i] = $data['ch'.$i];
+                        }
+                        else
+                        {
+                            $answersData["ch".$i] = "false";
+                        }
+                    }
+                }   
+                
+                for ($i = 1; $i <= count($answersData) / 2 ; $i++) 
+                {   
+                    $temp['content'] = $answersData['answer'.$i];
+                    $temp['is_correct'] = $answersData["ch".$i];
+                    $temp['question_id'] = $question_obj['id'] ;
+                    $QC->store($temp);
+                } 
+            }
+            else
+            {
+                return response($validatedData->messages(), 200);
+            }                    
         }
         else
         {
             return view('errorPages/accessDenied');
         }
-        return view('questionsbank/addQuestionToQB');
+        return $this->addQuestionView($QuestionBankID); 
     }
 
         

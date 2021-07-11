@@ -65,7 +65,7 @@
                                 <span class="link-label">Exams</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('questionsbank.index')}}">
                             <li class='{{request()->is('questionBanks') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/question-banks.png')}}" alt="Question Banks">

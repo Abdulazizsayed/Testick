@@ -9,7 +9,7 @@ class Questioncontroller extends Controller
 {
     public function store($data)
     {
-        Question::create($data);
+        return Question::create($data);
     }
 
     public function delete($data)

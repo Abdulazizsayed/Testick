@@ -22,17 +22,18 @@ Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// Question banks routes
+Route::resource('questionsbank', 'QBcontroller');
+Route::get('/QB/index', 'QBcontroller@index');
+Route::get('/QB/create', 'QBcontroller@createQBView');
+Route::post('/QB/addQuestion/{QuestionBankID}' , 'QBcontroller@addQuestionView');
+Route::get('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
+Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
+Route::post('/createQB', 'QBcontroller@createQB');
+
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');
 Route::post('/users/editProfile', 'ProfileController@update');
-
-// Question banks routes
-Route::get('/QB/home', 'QBcontroller@homeView');
-Route::get('/QB/create', 'QBcontroller@createQBView');
-Route::get('/QB/addQuestionToQB', 'QBcontroller@addQuestionToQBView');
-Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
-Route::post('/createQB', 'QBcontroller@createQB');
-Route::post('/addQuestionToQB', 'QBcontroller@addQuestionToQB');
 
 // Exam routes
 Route::resource('exams', 'ExamController');
