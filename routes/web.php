@@ -39,5 +39,11 @@ Route::post('/users/editProfile', 'ProfileController@update');
 Route::resource('exams', 'ExamController');
 Route::post('exams/search', 'ExamController@search');
 
+// Question routes
+Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
+
+// Answer routes
+Route::put('answers/updateQuestionAnswer/{answer}', 'AnswerController@updateQuestionAnswer');
+
 // Error routes
 Route::get('errorPages/accessDenied', 'ErrorController@accessDenied');
