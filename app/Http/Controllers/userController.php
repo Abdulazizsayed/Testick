@@ -24,7 +24,7 @@ class userController extends Controller
             , 'role' => $User['role'] , 'email' => $User['email']);
             $createdUser = User::create($addUser);
 
-            $emailBody = 'You have been successfully registered to Testick. 
+            $emailBody = 'You have been successfully registered to TesTick. 
             Now you can login using these credantials.' .
             '  Email: ' . $User['email'] .
             '  Password: ' . $password;
@@ -35,7 +35,7 @@ class userController extends Controller
             ];
 
             Mail::to($User['email'])->send(new Gmail($details));
-            return createdUser;
+            return $createdUser;
         }
         else{
             return $found;

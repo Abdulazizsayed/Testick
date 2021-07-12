@@ -23,7 +23,7 @@ class Gmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from Testick')
+        return $this->subject('Mail from TesTick')
             ->view('gmail')
             ->from('testick.official@gmail.com');
     }
