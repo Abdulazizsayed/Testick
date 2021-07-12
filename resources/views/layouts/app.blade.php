@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -41,7 +41,7 @@
                 </h3>
                 <div class="sidebar">
                     <ul class="elements">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('home')}}">
                             <li class='{{request()->is('home') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/home.png')}}" alt="Home">
@@ -65,7 +65,7 @@
                                 <span class="link-label">Exams</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('questionsbank.index')}}">
                             <li class='{{request()->is('questionBanks') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/question-banks.png')}}" alt="Question Banks">
