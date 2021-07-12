@@ -17,10 +17,11 @@ class courseController extends Controller
             $course = array('code' => $newCourse[0] , 'subject_id' => $subject_id , 'level' => $newCourse[2] , 'semester' => $newCourse[3]);
             $newCreatedCourse = Course::create($course);
             //dd("New created course: " , $newCreatedCourse);
-            return $newCreatedCourse['id'];
+            return $newCreatedCourse;
         }
         else{ 
             // this course already exists message
+            return $found;
         }
     }
 }

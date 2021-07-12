@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\userController;
 use App\User;
 use App\Http\Controllers\courseController;
+use App\Course;
 
 class integrationController extends Controller
 {
@@ -64,13 +65,14 @@ class integrationController extends Controller
             }
         }
         $courseObj = new courseController();
-        $courseObj->create($Course);
+        $myCourse = $courseObj->create($Course);
         $user = new userController();
+        $usersIDs = array();
         for($i = 0 ; $i < count($users) ; $i++)
         {
-            $user->create($users[$i]);
+           $foundUser =  $user->create($users[$i]);
+           $foundUser->courses()->attach($myCourse['id']);
         }
-        
-
+        // a view will be returned here
     }
 }

@@ -15,12 +15,13 @@ class userController extends Controller
         $found = User::where('email', '=', $User['email'])->first();
         if($found == null) // a new user will be created
         {
-            $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890');
+            $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890');
             $password = substr($random, 0, 6);
             $hashedPassword = Hash::make($password);
             $User['password'] = $hashedPassword;
             $User['username'] = $User['name'];
-            $addUser = array('username' => $User['name'] , 'name'  => $User['name'] , 'password' => $hashedPassword , 'role' => $User['role'] , 'email' => $User['email']);
+            $addUser = array('username' => $User['name'] , 'name'  => $User['name'] , 'password' => $hashedPassword 
+            , 'role' => $User['role'] , 'email' => $User['email']);
             $createdUser = User::create($addUser);
 
             $emailBody = 'You have been successfully registered to Testick. 
@@ -34,6 +35,11 @@ class userController extends Controller
             ];
 
             Mail::to($User['email'])->send(new Gmail($details));
+            return createdUser;
         }
+        else{
+            return $found;
+        }
+        
     }
 }
