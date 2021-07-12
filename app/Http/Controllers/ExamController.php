@@ -56,15 +56,9 @@ class ExamController extends Controller
         return view('exams.teacher.show')->with('exam', $exam);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function addQuestionView(Exam $exam)
     {
-        //
+        return view('exams.teacher.addQuestion')->with('exam', $exam);
     }
 
     /**
