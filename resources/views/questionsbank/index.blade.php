@@ -2,6 +2,7 @@
 use App\Subject;
 ?>
 @extends('layouts.app')
+@section('title', 'Question banks')
 @section('content')
 <div class="container">
 
@@ -14,7 +15,7 @@ use App\Subject;
             <div class="col-md-auto">
                 <button class="btn btn-primary">Create</button>
             </div>
-        </form>    
+        </form>
     </div>
     <p class="pr-5 pl-5 pt-3 desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi illum, architecto impedit odit fuga quia harum beatae? Tenetur perferendis culpa officia. Ut totam error eveniet quasi cum repudiandae et fugiat!</p>
 
@@ -52,10 +53,7 @@ use App\Subject;
                 <td>{{$questionBank->title}}</td>
                 <td>{{Subject::find($questionBank->subject_id)->name}}</td>
                 <td>
-                    <form action="/QB/addQuestion/{{$questionBank->id}}"  enctype="multipart/form-data" method="post"> 
-                     @csrf
-                        <button class="btn btn-primary">Add Question</button>
-                    </form>
+                    <a class="btn btn-primary" href="QB/addQuestion/{{$questionBank->id}}">Add Question</a>
                 </td>
                 <td>
                     <form action="#"  enctype="multipart/form-data" method="post">

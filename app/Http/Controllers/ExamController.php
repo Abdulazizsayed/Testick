@@ -112,7 +112,7 @@ class ExamController extends Controller
             ]);
         } else {
             return response()->json([
-                'exams' => $exams
+                'exams' => $exams,
             ]);
         }
     }

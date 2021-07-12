@@ -11077,10 +11077,6 @@ a.text-dark:focus {
 #navbar .sidebar .elements li.active {
     background-color: #071038;
 }
-/* #navbar .sidebar .elements li .link-label {
-    padding-bottom: 10px;
-    display: inline-block;
-} */
 
 #navbar .sidebar .elements a {
     text-decoration: none;
@@ -11304,10 +11300,10 @@ table td {
     font-size: 18px;
 }
 
-.fa-plus {
+.add.btn {
     border-radius: 5px;
     background-color: #aaa;
-    padding: 15px;
     cursor: pointer;
+    color: #fff;
 }
 /* End show exam page */

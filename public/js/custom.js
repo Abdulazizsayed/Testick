@@ -174,7 +174,6 @@ $(".edit-answer-form").on("submit", function(e) {
 
         success: function(data) {
             if (data.success == true) {
-                // console.log($(form));
                 $(form).attr("hidden", true);
                 questionContent = $(form)
                     .prev()
@@ -196,4 +195,42 @@ $(".edit-answer-form").on("submit", function(e) {
             }
         }
     });
+});
+
+// Check if the question is t/f to enable true or false answers only
+$(".add-question .type").on("change", function() {
+    // console.log(this["value"]);
+    if (this["value"] == "Parent") {
+        $(".add-question .answers .answer input").attr("disabled", true);
+    } else {
+        $(".add-question .answers .answer input").attr("disabled", false);
+    }
+});
+
+// Add answer to question
+let answersCounter = 1;
+$(".add-answer").on("click", function() {
+    answersCounter++;
+    newAnswer = `
+    <hr>
+    <div class="row answer">
+        <div class="col-8">
+            <div>
+                <div>
+                    <label for="answer${answersCounter}">Answer ${answersCounter}</label>
+                </div>
+                <div>
+                    <input id="answer${answersCounter}" name="answer${answersCounter}" type="text" class="form-control" answer${answersCounter}="answer${answersCounter}" required autocomplete="answer${answersCounter}" autofocus>
+                </div>
+                <div class="mt-3">
+                    <input class="form-check-input form-control" type="checkbox" id="ch${answersCounter}" name="ch${answersCounter}" value="${answersCounter}">
+                    <label class="form-check-label" for="ch${answersCounter}">
+                        Correct?
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    $(".answers").append(newAnswer);
 });
