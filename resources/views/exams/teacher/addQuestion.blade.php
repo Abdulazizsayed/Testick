@@ -2,21 +2,21 @@
 use App\QuestionBank;
 ?>
 @extends('layouts.app')
-@section('title', 'Add quesiton to ' . $questionBank->title)
+@section('title', 'Add quesiton to ' . $exam->title)
 @section('content')
 <div class="container add-question">
-    <form action="/QB/addQuestion/{{$questionBank->id}}" enctype="multipart/form-data" method="POST">
+    <form action="{{--asset('exams/addQuestion/' . $exam->id)--}}" enctype="multipart/form-data" method="POST">
     @csrf
     @method('POST')
 
-    <h2 class="title">Add Question to {{$questionBank->title}}<h2>
+    <h2 class="title">Add Question to {{$exam->title}}<h2>
     <div class="row">
             <div class="col-8">
                 <div class="d-flex">
                     <div style="float:left;width:50%;margin-right: 10px;">
                         <select class="form-control" name="parent" id="parent" style="background-color: #1A034A;color: white" >
                             <option value="null" disabled selected >Question Parent</option>
-                            @foreach( $questionBank->questions as $question)
+                            @foreach( $exam->questions as $question)
                             {
                                 <option value="{{$question->id}}">{{$question->content}}</option>
                             }
@@ -42,12 +42,20 @@ use App\QuestionBank;
                                 <option value="Eassay">Eassay</option>
                             </select>
                         </div>
-                        <div style="float:right;width:20%;margin-left: 10px;">
+                        <div style="float:right;width:30%;margin-left: 10px;">
                             <select class="form-control" name="difficulty" id="difficulty" required style="background-color: #1A034A;color: white">
                                 <option value="" disabled selected >Difficulty</option>
                                 <option value="Easy">Easy</option>
                                 <option value="Med">Med</option>
                                 <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div style="float:right;width:40%;margin-left: 10px;">
+                            <select class="form-control" name="question bank" id="question bank" required style="background-color: #1A034A;color: white">
+                                <option value="" disabled selected >Question bank</option>
+                                @foreach( Auth::user()->questionBanks as $questionBank)
+                                    <option value="{{$questionBank->id}}">{{$questionBank->title}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

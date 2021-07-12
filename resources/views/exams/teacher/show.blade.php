@@ -72,7 +72,7 @@
         <hr style="border-color: #AAA">
     @endforeach
     <div class="text-center">
-        <div class="btn add" title="Add new question">Add question <i class="fa fa-plus fa-lg"></i></div>
+        <a class="btn add" title="Add new question" href="{{asset('exams/addQuestionView/' . $exam->id)}}">Add question <i class="fa fa-plus fa-lg"></i></a>
     </div>
     <div class="operations text-center pt-3">
         @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
