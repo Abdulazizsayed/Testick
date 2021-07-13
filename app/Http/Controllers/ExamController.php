@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Exam;
-use Illuminate\Http\Request;
+use Request;
+use Validator;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
@@ -111,9 +112,41 @@ class ExamController extends Controller
         }
     }
 
-    public function addQuestion($QuestionBankID)
+    public function addQuestion( $examID )
     {
-        dd("hhhhh");
+        if(auth()->user()->role == 1 )
+        {
+            $examobj = Exam::find( $examID);
+            $data = request::all();
+            $validatedData = Validator::make($data, [
+                'question_bank' => 'required'
+            ]);
+            if (!$validatedData->fails()) 
+            {
+                $dataKeys = array_keys($data);
+                
+                if( count($dataKeys) > 6 )
+                {
+                    for( $i = 6 ; $i < count($dataKeys) ; $i++ )
+                    {
+                        $examobj->questions()->attach( $data[$dataKeys[$i]] );
+                    }
+                }
+                else
+                {
+                    echo "You should choose answers";
+                } 
+            }
+            else 
+            {
+                return response($validatedData->messages(), 200);
+            }
+        } 
+        else 
+        {
+            return view('errorPages/accessDenied');
+        }
+        return $this->addQuestionView($examobj);
     }
 
 }
