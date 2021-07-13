@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
 use App\Course;
 use App\Http\Controllers\subjectController;
 class courseController extends Controller
 {
+    public function index()
+    {
+        return view('course/index');
+    }
+
     public function create($newCourse)
     {
         $found = Course::where('code', '=', $newCourse[0])->first(); 
@@ -24,4 +29,11 @@ class courseController extends Controller
             return $found;
         }
     }
+
+    public function createAnnouncement()
+    {   
+        $data = request::all();
+        dd($data);
+    }
+
 }
