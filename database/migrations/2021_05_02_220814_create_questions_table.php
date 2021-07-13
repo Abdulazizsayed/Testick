@@ -16,11 +16,11 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->text('type');
-            $table->text('chapter');
+            $table->enum('type', ['Parent', 'T/F', 'SSMCQ', 'MSMCQ', 'Essay', 'Text Check']);
+            $table->string('chapter');
 
-            $table->foreignId('parent_id')->constrained('questions')->onDelete('cascade')->onUpdate('cascade')->nullable(TRUE);
-            $table->foreignId('question_bank_id')->constrained('question_banks')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('questions')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('question_bank_id')->nullable()->constrained('question_banks')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

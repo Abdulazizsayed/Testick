@@ -87,3 +87,113 @@ $(document).on("keyup", ".search-filter-input", function(e) {
 
     document.getElementById("search-form").submit();
 });
+
+// Edit question content
+$(document).on(
+    "click",
+    ".question-header .edit-question-btn, .answer .edit-answer-btn",
+    function() {
+        parent = $(this).parent();
+        parent.attr("hidden", true);
+
+        editForm = parent.next();
+        editForm.attr("hidden", false);
+        editForm
+            .children()
+            .eq(3)
+            .focus();
+    }
+);
+
+// Discard editing question
+$(
+    ".edit-question-form .discard-changing-question, .edit-answer-form .discard-changing-question"
+).on("click", function() {
+    parent = $(this).parent();
+    parent.attr("hidden", true);
+
+    parent.prev().attr("hidden", false);
+});
+
+// Edit question ajax
+$(".edit-question-form").on("submit", function(e) {
+    e.preventDefault();
+    let question_id = this["id"].value;
+    let form = this;
+
+    $.ajax({
+        url: "/questions/updateExamQuestion/" + question_id,
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            if (data.success == true) {
+                // console.log($(form));
+                $(form).attr("hidden", true);
+                questionContent = $(form)
+                    .prev()
+                    .first();
+
+                questionContent.attr("hidden", false);
+                questionContent
+                    .children()
+                    .eq(0)
+                    .html(data.content);
+                questionContent.addClass("bg-success");
+            } else {
+                $(form).attr("hidden", true);
+                questionContent = $(form)
+                    .prev()
+                    .first();
+
+                questionContent.attr("hidden", false);
+                questionContent.addClass("bg-danger");
+            }
+        }
+    });
+});
+
+// Edit answer ajax
+$(".edit-answer-form").on("submit", function(e) {
+    e.preventDefault();
+    let answer_id = this["id"].value;
+    let form = this;
+
+    $.ajax({
+        url: "/answers/updateQuestionAnswer/" + answer_id,
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            if (data.success == true) {
+                // console.log($(form));
+                $(form).attr("hidden", true);
+                questionContent = $(form)
+                    .prev()
+                    .first();
+
+                questionContent.attr("hidden", false);
+                questionContent.html(
+                    data.content + '<i class="fa fa-edit edit-answer-btn"></i>'
+                );
+                questionContent.addClass("bg-success");
+            } else {
+                $(form).attr("hidden", true);
+                questionContent = $(form)
+                    .prev()
+                    .first();
+
+                questionContent.attr("hidden", false);
+                questionContent.addClass("bg-danger");
+            }
+        }
+    });
+});

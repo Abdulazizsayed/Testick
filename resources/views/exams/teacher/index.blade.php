@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Exams')
+
 @section('content')
 <div class="container exams-index">
     @if (session('status'))
@@ -56,7 +58,9 @@
         <tbody class="exams-holder">
             @foreach ($exams as $exam)
             <tr>
-                <td>{{$exam->title}}</td>
+                <td>
+                    <a href='{{asset('exams/' . $exam->id)}}'>{{$exam->title}}</a>
+                </td>
                 <td>{{$exam->course->code}}</td>
                 <td>{{$exam->course->subject->name}}</td>
                 <td>{{$exam->type}}</td>

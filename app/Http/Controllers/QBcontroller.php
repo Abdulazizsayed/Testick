@@ -20,19 +20,19 @@ class QBcontroller extends Controller
         $this->middleware('auth'); 
     }
 
-    public function homeView()
+    public function index()
     {
-        return view('questionsbank/QBhome');
+        return view('questionsbank/index');
     }
 
     public function createQBView()
     {
-        return view('questionsbank/createQB');
+        return view('questionsbank/create');
     }
 
-    public function addQuestionToQBView($QB_id)
+    public function addQuestionView($QB_id)
     {
-        return view('questionsbank/addQuestionToQB',['id'=>$QB_id]);
+        return view('questionsbank/addQuestion',['id'=>$QB_id]);
     }
 
     public function createQB()
@@ -118,7 +118,7 @@ class QBcontroller extends Controller
         {
             return view('errorPages/accessDenied');
         }
-        return redirect('/QB/home');
+        return redirect('/QB/index');
     }
     public function destroy($QuestionBankID)
     {
@@ -127,18 +127,21 @@ class QBcontroller extends Controller
         $A = new AnswerController();
         $Questions = Question::where('question_bank_id' , $QuestionBankID)->get(); // getting all questions
         $Answers = array();
-        for($i=0 ; $i < count($Questions) ; $i++) // getting all answers for the above questions
+        if( $Questions != null )
         {
-            $answer = Answer::where('question_id' , $Questions[$i]->id)->get();
-            array_push($Answers , $answer);
+            for($i=0 ; $i < count($Questions) ; $i++) // getting all answers for the above questions
+            {
+                $answer = Answer::where('question_id' , $Questions[$i]->id)->get();
+                array_push($Answers , $answer);
+            }
+            $A->delete($Answers);
+            $Q->delete($Questions);
+            $QBObj = QuestionBank::find($QuestionBankID)->delete();
         }
-        $A->delete($Answers);
-        $Q->delete($Questions);
-        $QBObj = QuestionBank::find($QuestionBankID)->delete();
-        return redirect('/QB/home');
+        return redirect('/QB/index');
     }
 
-    public function addQuestionToQB($QuestionBankID)
+    public function addQuestion($QuestionBankID)
     {
         if(auth()->user()->role == 1 )
         {
@@ -151,7 +154,21 @@ class QBcontroller extends Controller
             ]);
             if (!$validatedData->fails()) 
             {
-                for ($i = 1; $i <= count($data) - 5 ; $i++) 
+                if( array_key_exists( "parent" ,$data ) )
+                {
+                    $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> $data['parent'] , 'question_bank_id'=> $QuestionBankID ];
+                    $forLoopLenght = count($data) - 5;
+                }
+                else
+                {
+                    $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> NULL , 'question_bank_id'=> $QuestionBankID ];
+                    $forLoopLenght = count($data) - 4;
+                }
+                $QC = new Questioncontroller();
+                $question_obj = $QC->store($Qdata);
+                $QC = new AnswerController();
+
+                for ($i = 1; $i <= $forLoopLenght ; $i++) 
                 {   
                     if( array_key_exists( "answer".$i ,$data ) )
                     {
@@ -167,11 +184,6 @@ class QBcontroller extends Controller
                     }
                 }   
                 
-                $Qdata = [ 'content'=>$data['Qcontent'],'type'=>$data['type'],'chapter'=> $data['chapter'],'parent_id'=> $data['parent'] , 'question_bank_id'=> $QuestionBankID ];
-                $QC = new Questioncontroller();
-                $question_obj = $QC->store($Qdata);
-                
-                $QC = new AnswerController();
                 for ($i = 1; $i <= count($answersData) / 2 ; $i++) 
                 {   
                     $temp['content'] = $answersData['answer'.$i];
@@ -189,7 +201,7 @@ class QBcontroller extends Controller
         {
             return view('errorPages/accessDenied');
         }
-        return $this->addQuestionToQBView($QuestionBankID); 
+        return $this->addQuestionView($QuestionBankID); 
     }
 
         
