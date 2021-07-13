@@ -110,4 +110,10 @@ class ExamController extends Controller
             ]);
         }
     }
+
+    public function addQuestion($QuestionBankID)
+    {
+        dd("hhhhh");
+    }
+
 }

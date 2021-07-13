@@ -130,49 +130,68 @@ class QBcontroller extends Controller
 
     public function addQuestion($QuestionBankID)
     {
-        if (auth()->user()->role == 1) {
+        if(auth()->user()->role == 1 )
+        {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'chapter' => 'required',
                 'type' => 'required',
-                'Qcontent' => 'required',
-                'answer1' => 'required',
+                'difficulty' => 'required',
+                'Qcontent' => 'required'
             ]);
-            if (!$validatedData->fails()) {
-                if (array_key_exists("parent", $data)) {
-                    $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'chapter' => $data['chapter'], 'parent_id' => $data['parent'], 'question_bank_id' => $QuestionBankID];
-                    $forLoopLenght = count($data) - 5;
-                } else {
-                    $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'chapter' => $data['chapter'], 'parent_id' => NULL, 'question_bank_id' => $QuestionBankID];
-                    $forLoopLenght = count($data) - 4;
+            if (!$validatedData->fails()) 
+            {
+
+                if (array_key_exists("parent", $data)) 
+                {
+                    $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'] ,'chapter' => $data['chapter'], 'parent_id' => $data['parent'], 'question_bank_id' => $QuestionBankID];
+                    $forLoopLenght = count($data) - 7;
+                }
+                 else
+                {
+                    $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'] , 'chapter' => $data['chapter'], 'parent_id' => NULL, 'question_bank_id' => $QuestionBankID];
+                    $forLoopLenght = count($data) - 6;
                 }
                 $QC = new Questioncontroller();
                 $question_obj = $QC->store($Qdata);
-                $QC = new AnswerController();
 
-                for ($i = 1; $i <= $forLoopLenght; $i++) {
-                    if (array_key_exists("answer" . $i, $data)) {
+                for ($i = 1; $i <= $forLoopLenght; $i++) 
+                {
+                    if (array_key_exists("answer" . $i, $data) && $data["answer" . $i] != null) 
+                    {
                         $answersData['answer' . $i] = $data['answer' . $i];
-                        if (array_key_exists("ch" . $i, $data)) {
+                        if (array_key_exists("ch" . $i, $data)) 
+                        {
                             $answersData["ch" . $i] = $data['ch' . $i];
-                        } else {
+                        } 
+                        else 
+                        {
                             $answersData["ch" . $i] = 0;
                         }
                     }
                 }
 
-                for ($i = 1; $i <= count($answersData) / 2; $i++) {
-                    $temp['content'] = $answersData['answer' . $i];
-                    $temp['is_correct'] = $answersData["ch" . $i];
-                    $temp['question_id'] = $question_obj['id'];
-                    $QC->store($temp);
+                if( $data['type'] != "Parent" )
+                {
+                    $QC = new AnswerController();
+                    for ($i = 1; $i <= count($answersData) / 2; $i++) 
+                    {
+                        $temp['content'] = $answersData['answer' . $i];
+                        $temp['is_correct'] = $answersData["ch" . $i];
+                        $temp['question_id'] = $question_obj['id'];
+                        $QC->store($temp);
+                    }
                 }
-            } else {
+            }
+            else 
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
-        return $this->addQuestionView($QuestionBankID);
+        return $this->addQuestionView($QuestionBankID); 
     }
 }
