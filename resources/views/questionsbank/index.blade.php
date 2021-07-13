@@ -4,14 +4,18 @@ use App\Subject;
 @extends('layouts.app')
 @section('title', 'Question banks')
 @section('content')
-<div class="container">
-
-<div class="row">
+<div class="container question-banks">
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+    <div class="row">
         <div class="col">
             <h2 class="title">Question Bank</h2>
         </div>
         <form action="/QB/create" enctype="multipart/form-data" method="get">
-        @csrf
+            @csrf
             <div class="col-md-auto">
                 <button class="btn btn-primary">Create</button>
             </div>
@@ -42,29 +46,23 @@ use App\Subject;
             <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Subject</th>
-                <th scope="col">Add question</th>
-                <th scope="col">Update</th>
-                <th scope="col">Delete</th>
+                <th scope="col">Operations</th>
             </tr>
         </thead>
-        <tbody class="exams-holder">
+        <tbody class="question-banks-holder">
             @foreach(auth()->user()->questionBanks as $questionBank)
             <tr>
                 <td>{{$questionBank->title}}</td>
-                <td>{{Subject::find($questionBank->subject_id)->name}}</td>
+                <td>{{$questionBank->subject->name}}</td>
                 <td>
-                    <a class="btn btn-primary" href="QB/addQuestion/{{$questionBank->id}}">Add Question</a>
-                </td>
-                <td>
+                    <a class="btn btn-success" href="QB/addQuestion/{{$questionBank->id}}">Add Question <i class="fa fa-plus fa-lg"></i></a>
                     <form action="#"  enctype="multipart/form-data" method="post">
                     @csrf
-                        <button class="btn btn-primary">Update</button>
+                        <button class="btn btn-primary">Update <i class="fa fa-edit fa-lg"></i></button>
                     </form>
-                </td>
-                <td>
                     <form action="/QB/delete/{{$questionBank->id}}"  enctype="multipart/form-data" method="post">
                     @csrf
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger">Delete <i class="fa fa-times fa-lg"></i></button>
                     </form>
                 </td>
             </tr>
