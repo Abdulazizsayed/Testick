@@ -12,6 +12,8 @@ use Request;
 use App\Question;
 use App\Answer;
 use DB;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 
 class QBcontroller extends Controller
 {
@@ -125,7 +127,7 @@ class QBcontroller extends Controller
             $Q->delete($Questions);
             $QBObj = QuestionBank::find($QuestionBankID)->delete();
         }
-        return redirect('/QB/index');
+        return redirect('/QB/index')->with('status', 'َThe question bank deleted successfully');
     }
 
     public function addQuestion($QuestionBankID)
@@ -174,5 +176,17 @@ class QBcontroller extends Controller
             return view('errorPages/accessDenied');
         }
         return $this->addQuestionView($QuestionBankID);
+    }
+
+    public function search(HttpRequest $request)
+    {
+
+        $questionBanks = Auth::user()->questionBanks()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
+
+        return response()->json([
+            'questionBanks' => $questionBanks->map(function ($questionBank) {
+                return [$questionBank->id, $questionBank->title, $questionBank->subject->name, csrf_token()];
+            })
+        ]);
     }
 }

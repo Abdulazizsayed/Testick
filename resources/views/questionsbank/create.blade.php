@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Create question bank')
+
 @section('content')
 <div class="container">
     <form action="/createQB" enctype="multipart/form-data" method="post">

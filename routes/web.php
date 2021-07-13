@@ -30,6 +30,7 @@ Route::get('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestionView');
 Route::post('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
 Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('/createQB', 'QBcontroller@createQB');
+Route::post('QB/search', 'QBcontroller@search');
 
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');

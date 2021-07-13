@@ -69,15 +69,15 @@
                 <td>{{$exam->date}}</td>
                 <td>
                 @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
-                    <button class="btn btn-primary">Analysis</button>
-                    <button class="btn btn-success">Students grades</button>
+                    <button class="btn btn-primary">Analysis <i class="fa fa-pie-chart fa-lg"></i></button>
+                    <button class="btn btn-success">Students grades <i class="fa fa-percent fa-lg"></i></button>
                 @else
                     <form action="/exams/{{$exam->id}}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger">Delete <i class="fa fa-times fa-lg"></i></button>
                     </form>
-                    <button class="btn edit-exam-btn">Edit</button>
+                    <button class="btn edit-exam-btn">Edit <i class="fa fa-edit fa-lg"></i></button>
                 @endif
                 </td>
             </tr>

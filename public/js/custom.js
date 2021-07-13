@@ -40,8 +40,8 @@ $(".filter-by").on("change", function() {
     $(".filter-value").val(optionText.toLowerCase());
 });
 
-// Search by ajax
-$(document).on("keyup", ".search-filter-input", function(e) {
+// Search exams by ajax
+$(document).on("keyup", ".exams-index .search-filter-input", function(e) {
     document.getElementById("search-form").submit = function() {
         $.ajax({
             url: "/exams/search",
@@ -81,6 +81,50 @@ $(document).on("keyup", ".search-filter-input", function(e) {
                 }
 
                 examsHolder.innerHTML = content;
+            }
+        });
+    };
+
+    document.getElementById("search-form").submit();
+});
+
+// Search question banks by ajax
+$(document).on("keyup", ".question-banks .search-filter-input", function(e) {
+    document.getElementById("search-form").submit = function() {
+        $.ajax({
+            url: "/QB/search",
+            type: "POST",
+            data: new FormData(this),
+            dataType: "JSON",
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                // console.log(data);
+                let questionBanksHolder = document.querySelector(
+                    ".question-banks-holder"
+                );
+                let content = "";
+                for (questionBank of data.questionBanks) {
+                    content += `<tr>
+                                    <td>${questionBank[1]}</td>
+                                    <td>${questionBank[2]}</td>
+                                    <td>
+                                        <a class="btn btn-success" href="QB/addQuestion/${questionBank[0]}">Add Question <i class="fa fa-plus fa-lg"></i></a>
+                                        <form action="#"  enctype="multipart/form-data" method="post">
+                                            <input type="hidden" name="_token" value="${questionBank[3]}">
+                                            <button class="btn btn-primary">Update <i class="fa fa-edit fa-lg"></i></button>
+                                            </form>
+                                        <form action="/QB/delete/${questionBank[0]}"  enctype="multipart/form-data" method="post">
+                                            <input type="hidden" name="_token" value="${questionBank[3]}">
+                                            <button class="btn btn-danger">Delete <i class="fa fa-times fa-lg"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>`;
+                }
+
+                questionBanksHolder.innerHTML = content;
             }
         });
     };
