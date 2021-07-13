@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $fillable = [
-        'content', 'type', 'chapter', 'parent_id', 'question_bank_id'
+        'content', 'type', 'chapter', 'parent_id', 'question_bank_id','difficulty'
     ];
 
     public function questionBank()
