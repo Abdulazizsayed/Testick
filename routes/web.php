@@ -39,7 +39,8 @@ Route::post('/users/editProfile', 'ProfileController@update');
 // Exam routes
 Route::resource('exams', 'ExamController');
 Route::post('exams/search', 'ExamController@search');
-Route::get('exams/addQuestionView/{exam}', 'ExamController@addQuestionView');
+Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
+Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');

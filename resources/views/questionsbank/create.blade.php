@@ -1,3 +1,7 @@
+<?php
+    use App\Subject;
+    $subjects = Subject::all();
+?>
 @extends('layouts.app')
 
 @section('title', 'Create question bank')
@@ -35,10 +39,9 @@
                     <div style="float:right;width:50% ;">
                     <select class="form-control" name="sub" id="sub" style="background-color: #1A034A;color: white" >
                         <option value="" disabled selected >Subject</option>
-                        <option value="10">math</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                        <option value="audi">Audi</option>
+                        @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{$subject->name}}</option> 
+                        @endforeach
                     </select>
                 </div>
                 </div>
