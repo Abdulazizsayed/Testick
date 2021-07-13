@@ -13,10 +13,14 @@ class courseController extends Controller
     {
         return view('course/index');
     }
+    public function announcementLog()
+    {
+        return view('course/announcementlog');
+    }
 
     public function create($newCourse)
     {
-        $found = Course::where('code', '=', $newCourse[0])->first(); 
+        $found = Course::where('code', '=', $newCourse[0])->first();
         if($found == null)
         {
             $subject = new subjectController();
@@ -26,7 +30,7 @@ class courseController extends Controller
             //dd("New created course: " , $newCreatedCourse);
             return $newCreatedCourse;
         }
-        else{ 
+        else{
             // this course already exists message
             return $found;
         }
