@@ -61,6 +61,16 @@ use App\Subject;
     @csrf
         <div class="row">
             <div class="col-8">
+
+                <div>
+                    <select class="form-control" name="courseID" id="courseID" required style="background-color: #1A034A;color: white">
+                        <option value="" disabled selected >Courses</option>
+                        @foreach(auth()->user()->courses as $course)
+                            <option value="{{$course->id}}">{{$course->code}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div>
                     <div>
                         <label for="Announcement Title">Announcement Title</label>
