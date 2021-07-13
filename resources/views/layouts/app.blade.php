@@ -30,7 +30,7 @@
                 @if (Auth::check())
                     <div class="user-image circle-image">
                         @if(Auth::user()->image)
-                        <img src="{{asset('images/users/' . Auth::user()->image)}}" alt="User photo">
+                        <img src="{{asset('storage/' . Auth::user()->image->url)}}" alt="User photo">
                         @else
                         <img src="{{asset('images/users/default.jpg')}}" alt="User photo">
                         @endif

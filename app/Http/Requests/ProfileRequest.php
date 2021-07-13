@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name' => 'min:2|max:30|string',
-            'username' => 'min:2|max:20|string|unique:users',
+            'username' => 'min:2|max:20|string|unique:users,username,' . Auth::user()->id,
             'password' => 'min:8|max:50|string|nullable',
             'image' => 'image|nullable',
         ];
