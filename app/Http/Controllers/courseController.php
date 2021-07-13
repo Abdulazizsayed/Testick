@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Request;
+use Validator;
 use App\Course;
+use App\Announcement;
 use App\Http\Controllers\subjectController;
 class courseController extends Controller
 {
@@ -32,8 +34,31 @@ class courseController extends Controller
 
     public function createAnnouncement()
     {   
-        $data = request::all();
-        dd($data);
+        if(auth()->user()->role == 1 )
+        {
+            $data = request::all();
+            $validatedData = Validator::make($data, [
+                'ATitle' => 'required',
+                'AContent' => 'required',
+                'courseID' => 'required',
+            ]);
+            if (!$validatedData->fails()) 
+            {
+                $Courseobj = Course::find( $data['courseID']);
+                $Adata = ['title' => $data['ATitle'] , 'content' => $data['AContent'] , 'publisher_id' => auth()->user()->id , 'course_id' => $data['courseID'] ];
+                $an = new Announcement();
+                $an::create($Adata);
+            }
+            else 
+            {
+                return response($validatedData->messages(), 200);
+            }
+        } 
+        else 
+        {
+            return view('errorPages/accessDenied');
+        }
+        return $this->index();
     }
 
 }
