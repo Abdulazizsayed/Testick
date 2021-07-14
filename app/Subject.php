@@ -17,6 +17,6 @@ class Subject extends Model
 
     public function questionBanks()
     {
-        return $this->hasMany(QuestionBank::class, 'question_bank_id');
+        return $this->hasMany(QuestionBank::class);
     }
 }

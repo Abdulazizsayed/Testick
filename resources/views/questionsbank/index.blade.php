@@ -35,7 +35,7 @@ use App\Subject;
             <span class='label'>Search by <span class="selected-filter">Title</span></span>
             <form id="search-form" autocomplete="off">
                 @csrf
-                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter exam Title">
+                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter question bank Title">
                 <input class='filter-value' name='filter_value' type="text" value="title" hidden>
             </form>
         </div>
