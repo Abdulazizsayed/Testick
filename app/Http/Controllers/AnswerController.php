@@ -29,9 +29,15 @@ class AnswerController extends Controller
 
     public function delete($data)
     {
-        for ($i = 0; $i < count($data); $i++) {
-            for ($j = 0; $j < count($data[$i]); $j++) {
-                $deleted = Answer::find($data[$i][$j]->id)->delete();
+        for ($i = 0; $i < count($data); $i++) 
+        {
+            for ($j = 0; $j < count($data[$i]); $j++) 
+            {
+                $deleted = Answer::find($data[$i][$j]->id);
+                if( $deleted != null )
+                {
+                    $deleted->delete();
+                }
             }
         }
     }

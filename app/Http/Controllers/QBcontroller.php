@@ -30,7 +30,7 @@ class QBcontroller extends Controller
         return view('questionsbank/index');
     }
 
-    public function createQBView()
+    public function QBcreateView()
     {
         return view('questionsbank/create');
     }
@@ -40,95 +40,108 @@ class QBcontroller extends Controller
         return view('questionsbank/addQuestion', ['questionBank' => QuestionBank::find($id)]);
     }
 
-    public function createQB()
+    public function QBcreate()
     {
-
-        if (auth()->user()->role == 1) {
-            $data = request()->validate([
+        if (auth()->user()->role == 1)
+        {
+            $data = request::all();
+            $validatedData = Validator::make($data, [
                 'QBfile' => 'mimes:xls,xlsx,csv',
                 'title' => 'required',
-                'sub' => 'required',
+                'sub' => 'required'
             ]);
-            $QuestionBankData = ['title' => $data['title'], 'instructor_id' => auth()->user()->id, 'subject_id' => $data['sub']];
-            $newQuestionBank = QuestionBank::create($QuestionBankData); // creating the new question bank
-            $path = $data['QBfile']->getRealPath();
-            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
-            $excel_Obj = $reader->load($path);
-            $worksheet = $excel_Obj->getActiveSheet();
-            $lastRow = $worksheet->getHighestRow();
-            $highestColumn = $worksheet->getHighestDataColumn();
-            $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
-            $Questions = array(); // total questions
+            if (!$validatedData->fails()) 
+            {
+                $QuestionBankData = ['title' => $data['title'], 'instructor_id' => auth()->user()->id, 'subject_id' => $data['sub']];
+                $newQuestionBank = QuestionBank::create($QuestionBankData); // creating the new question bank
+                $path = $data['QBfile']->getRealPath();
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
+                $excel_Obj = $reader->load($path);
+                $worksheet = $excel_Obj->getActiveSheet();
+                $lastRow = $worksheet->getHighestRow();
+                $highestColumn = $worksheet->getHighestDataColumn();
+                $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+                $Questions = array(); // total questions
 
-            for ($row = 2; $row <= $lastRow; $row++) {
-                $QuestionObj = new Question();
-                $QuestionFromDataBase;
-                for ($col = 'A'; $col <= $highestColumn; $col++) {
-                    $Answers = array(); // total answers
-                    $cellValue = $worksheet->getCell($col . $row)->getValue();
-                    if ($cellValue != null) {
-                        if ($col == 'A') // Question
+                for ($row = 2; $row <= $lastRow; $row++)
+                {
+                    $QuestionObj = new Question();
+                    $QuestionFromDataBase;
+                    for ($col = 'A'; $col <= $highestColumn; $col++) 
+                    {
+                        $Answers = array(); // total answers
+                        $cellValue = $worksheet->getCell($col . $row)->getValue();
+                        if ($cellValue != null) 
                         {
-                            $QuestionObj['content'] = $cellValue;
-                        } else if ($col == 'B') // Type
-                        {
-                            $QuestionObj['type'] = $cellValue;
-                        } else if ($col == 'C') // Chapter
-                        {
-                            $QuestionObj->chapter = $cellValue;
-                        } else if ($col == 'D') // parent id
-                        {
-                            $QuestionObj['parent_id'] = $Questions[$cellValue - 2]['id'];
-                        } else if ($col == 'E') // Question Difficulity
-                        {
-                            $QuestionObj['difficulty'] = $cellValue;
-                            $questionController = new Questioncontroller();
-                            $insertQuestion = ['content' => $QuestionObj['content'], 'type' => $QuestionObj['type'], 'chapter' => $QuestionObj['chapter'], 'parent_id' => $QuestionObj['parent_id'], 'question_bank_id' => $newQuestionBank['id'], 'difficulty' =>  $QuestionObj['difficulty']];
-                            $QuestionFromDataBase = $questionController->store($insertQuestion);
-                            array_push($Questions, $QuestionFromDataBase);
-                        } else if ($col == 'F') // Correct Answer - the question ID is missing :)
-                        {
+                            if ($col == 'A') // Question
+                            {
+                                $QuestionObj['content'] = $cellValue;
+                            } else if ($col == 'B') // Type
+                            {
+                                $QuestionObj['type'] = $cellValue;
+                            } else if ($col == 'C') // Chapter
+                            {
+                                $QuestionObj->chapter = $cellValue;
+                            } else if ($col == 'D') // parent id
+                            {
+                                $QuestionObj['parent_id'] = $Questions[$cellValue - 2]['id'];
+                            } else if ($col == 'E') // Question Difficulity
+                            {
+                                $QuestionObj['difficulty'] = $cellValue;
+                                $questionController = new Questioncontroller();
+                                $insertQuestion = ['content' => $QuestionObj['content'], 'type' => $QuestionObj['type'], 'chapter' => $QuestionObj['chapter'], 'parent_id' => $QuestionObj['parent_id'], 'question_bank_id' => $newQuestionBank['id'], 'difficulty' =>  $QuestionObj['difficulty']];
+                                $QuestionFromDataBase = $questionController->store($insertQuestion);
+                                array_push($Questions, $QuestionFromDataBase);
+                            } else if ($col == 'F') // Correct Answer - the question ID is missing :)
+                            {
 
-                            if ($QuestionObj['type'] == "Essay") {
-                                $insertAnswer = ['content' => $cellValue, 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
-                                $answerController = new AnswerController();
-                                $answerController->store($insertAnswer);
-                            } else if ($QuestionObj['type'] == "MSMCQ" ||  $QuestionObj['type'] == "SSMCQ") {
-                                $answersArray = explode("~", $cellValue); // cutting string on ~ char
-                                for ($ans = 0; $ans < count($answersArray); $ans++) {
-                                    $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
+                                if ($QuestionObj['type'] == "Essay") {
+                                    $insertAnswer = ['content' => $cellValue, 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
+                                    $answerController = new AnswerController();
+                                    $answerController->store($insertAnswer);
+                                } else if ($QuestionObj['type'] == "MSMCQ" ||  $QuestionObj['type'] == "SSMCQ") {
+                                    $answersArray = explode("~", $cellValue); // cutting string on ~ char
+                                    for ($ans = 0; $ans < count($answersArray); $ans++) {
+                                        $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
+                                        $answerController = new AnswerController();
+                                        $answerController->store($insertAnswer);
+                                    }
+                                } else if ($QuestionObj['type'] == "T/F") {
+                                    $correct = -1;
+                                    if ($cellValue == 'Yes') {
+                                        $correct = 1;
+                                    } else if ($cellValue == 'No') {
+                                        $correct = 0;
+                                    }
+                                    $insertAnswer = ['content' => $cellValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
                                     $answerController = new AnswerController();
                                     $answerController->store($insertAnswer);
                                 }
-                            } else if ($QuestionObj['type'] == "T/F") {
-                                $correct = -1;
-                                if ($cellValue == 'Yes') {
-                                    $correct = 1;
-                                } else if ($cellValue == 'No') {
-                                    $correct = 0;
-                                }
-                                $insertAnswer = ['content' => $cellValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
-                                $answerController = new AnswerController();
-                                $answerController->store($insertAnswer);
-                            }
-                        } else if ($col == 'G') // Wrong Answer -  the question ID is missing :)
-                        {
-                            if ($QuestionObj['type'] != "Essay") {
-                                $answersArray = explode("~", $cellValue); // cutting string on ~ char
-                                for ($ans = 0; $ans < count($answersArray); $ans++) {
-                                    $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
-                                    $answerController = new AnswerController();
-                                    $answerController->store($insertAnswer);
+                            } else if ($col == 'G') // Wrong Answer -  the question ID is missing :)
+                            {
+                                if ($QuestionObj['type'] != "Essay") {
+                                    $answersArray = explode("~", $cellValue); // cutting string on ~ char
+                                    for ($ans = 0; $ans < count($answersArray); $ans++) {
+                                        $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
+                                        $answerController = new AnswerController();
+                                        $answerController->store($insertAnswer);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        } else {
+            else
+            {
+                return response($validatedData->messages(), 200);
+            }
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
-        return redirect('/QB/index');
+        return $this->index();
     }
     public function destroy($QuestionBankID)
     {
@@ -136,8 +149,10 @@ class QBcontroller extends Controller
         $Q = new Questioncontroller();
         $A = new AnswerController();
         $Questions = Question::where('question_bank_id', $QuestionBankID)->get(); // getting all questions
+
         $Answers = array();
-        if ($Questions != null) {
+        if ($Questions != null)
+        {
             for ($i = 0; $i < count($Questions); $i++) // getting all answers for the above questions
             {
                 $answer = Answer::where('question_id', $Questions[$i]->id)->get();
@@ -145,14 +160,19 @@ class QBcontroller extends Controller
             }
             $A->delete($Answers);
             $Q->delete($Questions);
-            $QBObj = QuestionBank::find($QuestionBankID)->delete();
+            $QBObj = QuestionBank::find($QuestionBankID);
+            if( $QBObj != null )
+            {
+                $QBObj->delete();
+            }
         }
         return redirect('/QB/index')->with('status', 'َThe question bank deleted successfully');
     }
 
     public function addQuestion($QuestionBankID)
     {
-        if (auth()->user()->role == 1) {
+        if (auth()->user()->role == 1) 
+        {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'chapter' => 'required',
@@ -160,8 +180,8 @@ class QBcontroller extends Controller
                 'difficulty' => 'required',
                 'Qcontent' => 'required'
             ]);
-            if (!$validatedData->fails()) {
-
+            if (!$validatedData->fails()) 
+            {
                 if (array_key_exists("parent", $data)) {
                     $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'], 'chapter' => $data['chapter'], 'parent_id' => $data['parent'], 'question_bank_id' => $QuestionBankID];
                     $forLoopLenght = count($data) - 7;

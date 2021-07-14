@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/createQB" enctype="multipart/form-data" method="post">
+    <form action="/QB/create" enctype="multipart/form-data" method="post">
     @csrf
         <div class="row pt-3" style="margin-left: 50px">
             <h1>Create New Question Bank<h1>
@@ -34,10 +34,10 @@
 
                 <div class="d-flex">
                     <div style="float: left; margin-right: 50px"><h6>QuestionFile</h6></div>
-                    <div > <input type="file" name="QBfile" id="QBfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" >
+                    <div > <input type="file" name="QBfile" id="QBfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
                     </div>
                     <div style="float:right;width:50% ;">
-                    <select class="form-control" name="sub" id="sub" style="background-color: #1A034A;color: white" >
+                    <select class="form-control" name="sub" id="sub" style="background-color: #1A034A;color: white" required >
                         <option value="" disabled selected >Subject</option>
                         @foreach($subjects as $subject)
                         <option value="{{ $subject->id }}">{{$subject->name}}</option> 

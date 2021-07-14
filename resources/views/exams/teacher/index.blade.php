@@ -14,7 +14,9 @@
             <h2 class="title">Exams</h2>
         </div>
         <div class="col-md-auto">
-            <button class="btn create-exam-btn">Create manually</button>
+            <form action="/exams/createExamManually" enctype="multipart/form-data" method="get">
+                <button class="btn create-exam-btn">Create manually</button>
+            </form>
         </div>
         <div class="col col-lg-2">
             <button class="btn create-exam-btn">Create randomly</button>
