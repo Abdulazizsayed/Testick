@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Exam;
 use Request;
+use Illuminate\Http\Request as HttpRequest;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,7 +42,7 @@ class ExamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         //
     }
@@ -69,7 +70,7 @@ class ExamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HttpRequest $request, $id)
     {
         //
     }
@@ -86,67 +87,47 @@ class ExamController extends Controller
         return redirect('/exams')->with('status', 'Exam deleted successfully');
     }
 
-    public function search(Request $request)
+    public function search(HttpRequest $request)
     {
         if ($request->filter_value == 'course code') {
-            $course = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->first();
-            if ($course) {
-                $exams = $course->exams;
-            } else {
-                $exams = [];
-            }
+            $exams = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->get()->map(function ($item) {
+                return $item->exams;
+            })->collapse();
         } else {
             $exams = Auth::user()->exams()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
         }
 
-        if ($exams) {
-            return response()->json([
-                'exams' => $exams->map(function ($exam) {
-                    return [$exam->id, $exam->title, $exam->course->code, $exam->course->subject->name, $exam->type, $exam->duration, $exam->allow_period, $exam->date, csrf_token()];
-                })
-            ]);
-        } else {
-            return response()->json([
-                'exams' => $exams,
-            ]);
-        }
+        return response()->json([
+            'exams' => $exams->map(function ($exam) {
+                return [$exam->id, $exam->title, $exam->course->code, $exam->course->subject->name, $exam->type, $exam->duration, $exam->allow_period, $exam->date, csrf_token()];
+            })
+        ]);
     }
 
-    public function addQuestion( $examID )
+    public function addQuestion($examID)
     {
-        if(auth()->user()->role == 1 )
-        {
-            $examobj = Exam::find( $examID);
+        if (auth()->user()->role == 1) {
+            $examobj = Exam::find($examID);
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'question_bank' => 'required'
             ]);
-            if (!$validatedData->fails()) 
-            {
+            if (!$validatedData->fails()) {
                 $dataKeys = array_keys($data);
-                
-                if( count($dataKeys) > 6 )
-                {
-                    for( $i = 6 ; $i < count($dataKeys) ; $i++ )
-                    {
-                        $examobj->questions()->attach( $data[$dataKeys[$i]] );
+
+                if (count($dataKeys) > 6) {
+                    for ($i = 6; $i < count($dataKeys); $i++) {
+                        $examobj->questions()->attach($data[$dataKeys[$i]]);
                     }
-                }
-                else
-                {
+                } else {
                     echo "You should choose answers";
-                } 
-            }
-            else 
-            {
+                }
+            } else {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
         return $this->addQuestionView($examobj);
     }
-
 }

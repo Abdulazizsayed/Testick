@@ -36,7 +36,7 @@ $(".filter-by").on("change", function() {
     selectedFilter = $(".selected-filter");
     selectedFilter.text(optionText);
     $(".search-filter-input").val("");
-    $(".search-filter-input").attr("placeholder", "Enter exam " + optionText);
+    $(".search-filter-input").attr("placeholder", "Enter " + optionText);
     $(".filter-value").val(optionText.toLowerCase());
 });
 
@@ -53,6 +53,7 @@ $(document).on("keyup", ".exams-index .search-filter-input", function(e) {
             processData: false,
 
             success: function(data) {
+                // console.log(data);
                 let examsHolder = document.querySelector(".exams-holder");
                 let now = new Date();
                 let content = "";
