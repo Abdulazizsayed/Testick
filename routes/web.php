@@ -24,7 +24,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Question banks routes
 Route::resource('questionsbank', 'QBcontroller');
-Route::get('/QB/index', 'QBcontroller@index');
 Route::get('/QB/create', 'QBcontroller@createQBView');
 Route::get('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestionView');
 Route::post('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
@@ -33,9 +32,11 @@ Route::post('/createQB', 'QBcontroller@createQB');
 Route::post('QB/search', 'QBcontroller@search');
 
 // Course routes
-Route::get('/course/index', 'courseController@index');
-Route::get('/course/announcementLog', 'courseController@announcementLog');
+Route::resource('course', 'courseController');
+Route::post('/course/announcementLog', 'courseController@announcementLog');
 Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
+
+
 
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');
