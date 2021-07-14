@@ -17,7 +17,6 @@ class CreateAnnouncementsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->date('date');
 
             $table->foreignId('publisher_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade')->onUpdate('cascade');

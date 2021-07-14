@@ -32,6 +32,11 @@ Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('/createQB', 'QBcontroller@createQB');
 Route::post('QB/search', 'QBcontroller@search');
 
+// Course routes
+Route::get('/course/index', 'courseController@index');
+Route::get('/course/announcementLog', 'courseController@announcementLog');
+Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
+
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');
 Route::post('/users/editProfile', 'ProfileController@update');
