@@ -141,7 +141,7 @@ class QBcontroller extends Controller
         {
             return view('errorPages/accessDenied');
         }
-        return $this->index();
+        return redirect('/QB/index');
     }
     public function destroy($QuestionBankID)
     {

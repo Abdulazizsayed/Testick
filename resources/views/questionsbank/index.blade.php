@@ -55,7 +55,7 @@ use App\Subject;
                 <td>{{$questionBank->title}}</td>
                 <td>{{$questionBank->subject->name}}</td>
                 <td>
-                    <a class="btn btn-success" href="QB/addQuestion/{{$questionBank->id}}">Add Question <i class="fa fa-plus fa-lg"></i></a>
+                    <a class="btn btn-success" href="/QB/addQuestion/{{$questionBank->id}}">Add Question <i class="fa fa-plus fa-lg"></i></a>
                     <form action="#"  enctype="multipart/form-data" method="post">
                     @csrf
                         <button class="btn btn-primary">Update <i class="fa fa-edit fa-lg"></i></button>

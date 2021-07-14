@@ -15,7 +15,8 @@
         </div>
         <div class="col-md-auto">
             <form action="/exams/createExamManually" enctype="multipart/form-data" method="get">
-                <button class="btn create-exam-btn">Create manually</button>
+            @csrf
+                <button type="submit" class="btn create-exam-btn">Create manually</button>
             </form>
         </div>
         <div class="col col-lg-2">
