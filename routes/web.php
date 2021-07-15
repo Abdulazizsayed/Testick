@@ -37,6 +37,8 @@ Route::resource('course', 'courseController');
 Route::post('/course/announcementLog', 'courseController@announcementLog');
 Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
 
+
+
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');
 Route::post('/users/editProfile', 'ProfileController@update');
