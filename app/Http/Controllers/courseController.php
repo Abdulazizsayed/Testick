@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\subjectController;
+use Illuminate\Support\Facades\Mail;
+
+use App\Announcement;
+use App\Course;
+use App\Mail\Gmail;
+
 use Request;
 use Validator;
-use App\Course;
-use App\Announcement;
-use App\Http\Controllers\subjectController;
+
 class courseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         return view('course/index');
     }
+    
     public function announcementLog()
     {
         return view('course/announcementlog');
@@ -48,10 +59,19 @@ class courseController extends Controller
             ]);
             if (!$validatedData->fails()) 
             {
-                $Courseobj = Course::find( $data['courseID']);
                 $Adata = ['title' => $data['ATitle'] , 'content' => $data['AContent'] , 'publisher_id' => auth()->user()->id , 'course_id' => $data['courseID'] ];
                 $an = new Announcement();
                 $an::create($Adata);
+
+                $emailBody = $Adata['content'];
+                $details = ['title' => 'Announcement in Course '.Course::find($Adata['course_id'])->code , 'body' => $emailBody];
+
+                $courseUsers = Course::find($Adata['course_id'])->users;
+
+                foreach( $courseUsers as $user )
+                {
+                    Mail::to($user['email'])->send(new Gmail($details));
+                }
             }
             else 
             {

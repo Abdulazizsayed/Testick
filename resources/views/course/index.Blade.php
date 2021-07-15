@@ -9,10 +9,10 @@ use App\Subject;
         <div class="col">
             <h2 class="title">Courses</h2>
         </div>
-        <form action="/QB/create" enctype="multipart/form-data" method="get">
+        <form action="/course/announcementLog" enctype="multipart/form-data" method="post">
             @csrf
             <div class="col-md-auto">
-                <button class="btn btn-primary">Create</button>
+                <button class="btn btn-primary">Logs</button>
             </div>
         </form>
     </div>
