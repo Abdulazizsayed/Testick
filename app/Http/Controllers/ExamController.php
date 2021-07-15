@@ -131,7 +131,7 @@ class ExamController extends Controller
         return $this->addQuestionView($examobj);
     }
 
-    public function createExamView($isManually)
+    public function createExamManuallyView($isManually)
     {
         if ($isManually) {
             return view('exams.teacher.createExamManually');
@@ -143,5 +143,14 @@ class ExamController extends Controller
     public function analysis(Exam $exam)
     {
         return view('exams.teacher.analysis')->with('exam', $exam);
+    }
+    public function createExamRandomllyView($isRandomlly)
+    {
+        if ($isRandomlly) {
+            return view('exams.teacher.createExamRandomlly');
+        } else {
+            dd('Not found');
+        }
+
     }
 }
