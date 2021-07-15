@@ -48,7 +48,8 @@ Route::resource('exams', 'ExamController');
 Route::post('exams/search', 'ExamController@search');
 Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
-Route::get('exams/createExamManually', 'ExamController@createExamManuallyView');
+Route::get('exams/analysis/{exam}', 'ExamController@analysis');
+Route::get('exams/create/{isManually}', 'ExamController@createExamView');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
