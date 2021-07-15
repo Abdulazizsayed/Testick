@@ -14,10 +14,10 @@
             <h2 class="title">Exams</h2>
         </div>
         <div class="col-md-auto">
-            <a class="btn create-exam-btn" href="{{asset('exams/create/1')}}">Create manually</a>
+            <a class="btn create-exam-btn" href="{{asset('exams/create/manually/1')}}">Create manually</a>
         </div>
         <div class="col col-lg-2">
-            <button class="btn create-exam-btn">Create randomly</button>
+            <a class="btn create-exam-btn" href="{{asset('exams/create/randomlly/1')}}">Create randomly</a>
         </div>
 
     <p class="pr-5 pl-5 pt-3 desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi illum, architecto impedit odit fuga quia harum beatae? Tenetur perferendis culpa officia. Ut totam error eveniet quasi cum repudiandae et fugiat!</p>
