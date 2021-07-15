@@ -63,6 +63,12 @@ class ExamController extends Controller
         return view('exams.teacher.addQuestion')->with('exam', $exam);
     }
 
+    public function createExamManuallyView()
+    {
+        dd("hhhhhh");
+        //return view('exams\teacher\createExamManually');
+    }
+
     /**
      * Update the specified resource in storage.
      *

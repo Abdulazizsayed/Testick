@@ -15,7 +15,11 @@ class Questioncontroller extends Controller
     public function delete($data)
     {
         for ($i = 0; $i < count($data); $i++) {
-            $deleted = Question::find($data[$i]->id)->delete();
+            $deleted = Question::find($data[$i]->id);
+            if( $deleted != null )
+            {
+                $deleted->delete();
+            }
         }
     }
 
