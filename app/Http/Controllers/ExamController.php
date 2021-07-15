@@ -63,12 +63,6 @@ class ExamController extends Controller
         return view('exams.teacher.addQuestion')->with('exam', $exam);
     }
 
-    public function createExamManuallyView()
-    {
-        dd("hhhhhh");
-        //return view('exams\teacher\createExamManually');
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -135,5 +129,19 @@ class ExamController extends Controller
             return view('errorPages/accessDenied');
         }
         return $this->addQuestionView($examobj);
+    }
+
+    public function createExamView($isManually)
+    {
+        if ($isManually) {
+            return view('exams.teacher.createExamManually');
+        } else {
+            dd('Not found');
+        }
+    }
+
+    public function analysis(Exam $exam)
+    {
+        return view('exams.teacher.analysis')->with('exam', $exam);
     }
 }
