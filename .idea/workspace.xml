@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="12d1af3e-d733-4429-b69a-00d8f37c56d3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/exams/teacher/createExamRandomlly.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ExamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ExamController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/exams/teacher/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/exams/teacher/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/exams/teacher/createExamRandomlly.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/exams/teacher/createExamRandomlly.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +168,7 @@
       <workItem from="1624398477567" duration="2178000" />
       <workItem from="1625493246351" duration="619000" />
       <workItem from="1625910767656" duration="26523000" />
-      <workItem from="1626376453104" duration="2772000" />
+      <workItem from="1626376453104" duration="10594000" />
     </task>
     <servers />
   </component>
