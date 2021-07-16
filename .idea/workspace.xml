@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="12d1af3e-d733-4429-b69a-00d8f37c56d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/views/course/student/index.Blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/exams/teacher/createExamRandomlly.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/exams/teacher/createExamRandomlly.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/courseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/courseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
