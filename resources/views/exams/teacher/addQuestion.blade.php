@@ -14,7 +14,7 @@ use App\QuestionBank;
             <div class="col-8">
                 <div class="d-flex">
                     <div style="float:right;width:40%;margin-left: 10px;">
-                        <select class="form-control" name="question bank" id="question bank" required style="background-color: #1A034A;color: white">
+                        <select class="form-control" name="questionbank" id="questionbank" required style="background-color: #1A034A;color: white">
                             <option value="" disabled selected >Question bank</option>
                             @foreach( Auth::user()->questionBanks as $questionBank)
                             <option value="{{$questionBank->id}}">{{$questionBank->title}}</option>
@@ -54,7 +54,7 @@ use App\QuestionBank;
                     </tr>
                 </thead>
                 <tbody class="exams-holder">
-                    @foreach(QuestionBank::find(2)->questions as $question)
+                    @foreach(QuestionBank::find(1)->questions as $question)
                     <tr>
                         <td>{{$question->content}}</td>
                         <td>{{$question->type}}</td>
