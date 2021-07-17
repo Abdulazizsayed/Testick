@@ -35,4 +35,8 @@ class Exam extends Model
     {
         return $this->belongsTo(Course::class);
     }
+    public function students_assigned()
+    {
+        return $this->belongsToMany('App\User', 'assign_exam', 'student_id', 'exam_id');
+    }
 }

@@ -197,4 +197,77 @@ class ExamController extends Controller
         }
 
     }
+
+    public function createExamRandomlly()
+    {
+        if (auth()->user()->role == 1) 
+        {
+            $data = request::all();
+            $keys = array_keys($data);
+            //dd($keys);
+            $validatedData = Validator::make($data, [
+                'title' => 'required',
+                'eType' => 'required',
+                'date' => 'required|date',
+                'course' => 'required',
+                'duration' => 'required|numeric',
+                'allow' => 'required|numeric'
+            ]);
+            if (!$validatedData->fails()) 
+            {
+                $chapterCounter = 2;
+                $questionCount = 1;
+                $Chapters = array();
+                $tempChapter = array();
+                $Questions = array();
+                for ($i = 8; $i < count($data); $i++) {
+                    if($keys[$i] == ("ch".$chapterCounter) || $i == count($data) -1 )
+                    {
+                        if($i == count($data) -1 ) // adding the value of last index of data
+                        {
+                            array_push($tempChapter , $data[$keys[$i]]);
+                        }
+                        array_push($Chapters , $tempChapter);
+                        $tempChapter = array();
+                        array_push($tempChapter , $data[$keys[$i]]); // adding the value of the next chapter
+                        $chapterCounter++;
+                    }
+                    else{
+                        array_push($tempChapter , $data[$keys[$i]]);
+                    }
+                }
+                //dd($Chapters , $data , count($data) , $chapterCounter , $Questions);
+                for($i = 0 ; $i < count($Chapters) ; $i++)
+                {
+                    $tempQuestion = array();
+                    for($j = 0 ; $j < count($Chapters[$i]) ; $j = $j + 3 )
+                    {
+                        if($j == 0)
+                        {
+                            array_push($tempQuestion , $Chapters[$i][0]  , $Chapters[$i][$j+1], $Chapters[$i][$j+2] ,$Chapters[$i][$j+3]);
+                            $j++;
+                        }
+                        else{
+                            //dd($j , $Chapters[$i][$j+2]);
+                            array_push($tempQuestion , $Chapters[$i][0]  , $Chapters[$i][$j], $Chapters[$i][$j+1] ,$Chapters[$i][$j+2]);
+                        }
+                        array_push($Questions , $tempQuestion);
+                        $tempQuestion = array();
+                    }
+                    
+                    
+                }
+                dd($Chapters , $data , count($data) , $chapterCounter , $Questions);
+            }
+            else
+            {
+                return response($validatedData->messages(), 200);
+            }
+        } 
+        else 
+        {
+            return view('errorPages/accessDenied');
+        }
+        //return $this->createExamManuallyView(1);
+    }
 }
