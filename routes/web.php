@@ -39,6 +39,7 @@ Route::post('/course/announcementLog', 'courseController@announcementLog');
 Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
 //student
 Route::get('/course/student/index', 'courseController@studentindex');
+Route::get('/course/student/courseView/{couresID}', 'courseController@studentCourseView');
 
 
 // User routes

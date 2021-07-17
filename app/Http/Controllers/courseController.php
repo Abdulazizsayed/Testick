@@ -33,6 +33,11 @@ class courseController extends Controller
         return view('course/announcementlog');
     }
 
+    public function studentCourseView($courseID)
+    {
+        return view('/course/student/studentCourseView', ['course' => Course::find($courseID)]);
+    }
+
     public function create($newCourse)
     {
         $found = Course::where('code', '=', $newCourse[0])->first();
@@ -88,5 +93,6 @@ class courseController extends Controller
         }
         return $this->index();
     }
+
 
 }
