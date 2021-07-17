@@ -69,7 +69,7 @@
                 <td>{{$exam->date}}</td>
                 <td>
                 @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
-                    <button class="btn btn-primary">Analysis <i class="fa fa-pie-chart fa-lg"></i></button>
+                    <a class="btn btn-primary" href="{{asset('exams/analysis/' . $exam->id)}}">Analysis <i class="fa fa-pie-chart fa-lg"></i></a>
                     <button class="btn btn-success">Students grades <i class="fa fa-percent fa-lg"></i></button>
                 @else
                     <form action="/exams/{{$exam->id}}" method="POST">

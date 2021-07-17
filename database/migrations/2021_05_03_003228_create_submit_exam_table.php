@@ -16,6 +16,8 @@ class CreateSubmitExamTable extends Migration
         Schema::create('submit_exam', function (Blueprint $table) {
             $table->id();
 
+            $table->float('score')->nullable(true);
+
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('exam_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
 

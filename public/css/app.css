@@ -11181,12 +11181,17 @@ a.text-dark:focus {
     display: inline;
 }
 
-select.filter-by {
+select.filter-by,
+.select {
     background-color: #071038;
     color: #fff;
     width: 80%;
     font-size: 18px;
     border-radius: 5px;
+}
+
+.analysis .select {
+    background-color: #333;
 }
 
 form {
@@ -11307,3 +11312,25 @@ table td {
     color: #fff;
 }
 /* End show exam page */
+
+/* Start exam Analysis */
+
+.analysis .accordion .card {
+    background-color: #071038;
+    color: #fff;
+}
+
+.analysis .accordion .card .card-header h2 button {
+    color: #fff;
+    font-size: 25px;
+}
+
+.analysis .accordion .card .analysis-component .percentage {
+    font-size: 50px;
+}
+
+.analysis .accordion .card .analysis-component span {
+    color: #aaa;
+}
+
+/* End exam Analysis */
