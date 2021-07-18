@@ -50,9 +50,13 @@ Route::post('/users/editProfile', 'ProfileController@update');
 Route::resource('exams', 'ExamController');
 //teacher
 Route::post('exams/search', 'ExamController@search');
+Route::post('exams/grades/search', 'ExamController@gradesSearch');
 Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 Route::get('exams/analysis/{exam}', 'ExamController@analysis');
+Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
+Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
+Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
 Route::get('exams/create/manually/{isManually}', 'ExamController@createExamManuallyView');
 Route::post('exams/create/manually', 'ExamController@createExamManually');
 Route::get('exams/create/randomlly/{isRandomlly}', 'ExamController@createExamRandomllyView');

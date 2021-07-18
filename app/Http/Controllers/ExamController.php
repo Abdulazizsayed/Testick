@@ -109,6 +109,25 @@ class ExamController extends Controller
         ]);
     }
 
+    public function gradesSearch(HttpRequest $request)
+    {
+        // if ($request->filter_value == 'course code') {
+        //     $exams = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->get()->map(function ($item) {
+        //         return $item->exams;
+        //     })->collapse();
+        // } else {
+        //     $exams = Auth::user()->exams()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
+        // }
+        $exam = Exam::find($request->exam_id);
+        $students = $exam->studentsSubmitted()->where('name', 'LIKE', '%' . $request->search_input . '%')->withPivot('score')->get();
+
+        return response()->json([
+            'students' => $students->map(function ($student) {
+                return [$student->name, $student->pivot->score];
+            })
+        ]);
+    }
+
     public function addQuestion($examID)
     {
         if (auth()->user()->role == 1) {
@@ -120,19 +139,14 @@ class ExamController extends Controller
             if (!$validatedData->fails()) {
                 $dataKeys = array_keys($data);
 
-                if (count($dataKeys) > 6) 
-                {
+                if (count($dataKeys) > 6) {
                     for ($i = 6; $i < count($dataKeys); $i++) {
                         $examobj->questions()->attach($data[$dataKeys[$i]]);
                     }
-                }
-                else
-                {
+                } else {
                     echo "You should choose answers";
                 }
-            } 
-            else 
-            {
+            } else {
                 return response($validatedData->messages(), 200);
             }
         } else {
@@ -152,8 +166,7 @@ class ExamController extends Controller
 
     public function createExamManually()
     {
-        if (auth()->user()->role == 1) 
-        {
+        if (auth()->user()->role == 1) {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'Etitle' => 'required',
@@ -163,36 +176,54 @@ class ExamController extends Controller
                 'EDuration' => 'required|numeric',
                 'EAllow' => 'required|numeric'
             ]);
-            if (!$validatedData->fails()) 
-            {
-                $DExam =  [ 'title' => $data['Etitle'] , 'type' => $data['EType'] , 'date' => $data['EDate'] , 'duration' => $data['EDuration'] , 'allow_period' => $data['EAllow'] , 'course_id' => 1 /*$data['ECourse']*/ , 'creator_id' => auth()->user()->id ];
+            if (!$validatedData->fails()) {
+                $DExam =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => 1 /*$data['ECourse']*/, 'creator_id' => auth()->user()->id];
                 $examobj = Exam::create($DExam);
                 $dataKeys = array_keys($data);
-                if (count($dataKeys) > 11) 
-                {
-                    for ($i = 11; $i < count($dataKeys); $i++) 
-                    {
+                if (count($dataKeys) > 11) {
+                    for ($i = 11; $i < count($dataKeys); $i++) {
                         $examobj->questions()->attach($data[$dataKeys[$i]]);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
         return $this->createExamManuallyView(1);
     }
-    
+
 
     public function analysis(Exam $exam)
     {
         return view('exams.teacher.analysis')->with('exam', $exam);
     }
+
+    public function questionAnalysis(HttpRequest $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        return response()->json([
+            'solved' => $exam->studentsSubmitted()->count() > 0 ? round(($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->count() / $exam->studentsSubmitted()->count()) * 100, 2) : 0,
+            'avg' => round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score') * 100, 2)
+        ]);
+    }
+
+    public function chapterAnalysis(HttpRequest $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        return response()->json([
+            'absorbtion' => round($exam->chapterAbsorbtion($request->chapter), 2)
+        ]);
+    }
+
+    public function studentsGradesView(Exam $exam)
+    {
+        return view('exams.teacher.studentsGrades')->with([
+            'exam' => $exam
+        ]);
+    }
+
     public function createExamRandomllyView($isRandomlly)
     {
         if ($isRandomlly) {
@@ -200,6 +231,5 @@ class ExamController extends Controller
         } else {
             dd('Not found');
         }
-
     }
 }
