@@ -34,9 +34,12 @@ Route::post('QB/search', 'QBcontroller@search');
 
 // Course routes
 Route::resource('course', 'courseController');
+//teacher
 Route::post('/course/announcementLog', 'courseController@announcementLog');
 Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
-
+//student
+Route::get('/course/student/index', 'courseController@studentindex');
+Route::get('/course/student/courseView/{couresID}', 'courseController@studentCourseView');
 
 
 // User routes
@@ -50,10 +53,12 @@ Route::post('exams/grades/search', 'ExamController@gradesSearch');
 Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 Route::get('exams/analysis/{exam}', 'ExamController@analysis');
-Route::get('exams/create/{isManually}', 'ExamController@createExamView');
 Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
 Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
 Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
+Route::get('exams/create/manually/{isManually}', 'ExamController@createExamManuallyView');
+Route::post('exams/create/manually', 'ExamController@createExamManually');
+Route::get('exams/create/randomlly/{isRandomlly}', 'ExamController@createExamRandomllyView');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');

@@ -23,10 +23,19 @@ class courseController extends Controller
     {
         return view('course/index');
     }
-    
+    public function studentindex()
+    {
+        return view('course/student/index');
+    }
+
     public function announcementLog()
     {
         return view('course/announcementlog');
+    }
+
+    public function studentCourseView($courseID)
+    {
+        return view('/course/student/studentCourseView', ['course' => Course::find($courseID)]);
     }
 
     public function create($newCourse)
@@ -48,7 +57,7 @@ class courseController extends Controller
     }
 
     public function createAnnouncement()
-    {   
+    {
         if(auth()->user()->role == 1 )
         {
             $data = request::all();
@@ -57,7 +66,7 @@ class courseController extends Controller
                 'AContent' => 'required',
                 'courseID' => 'required',
             ]);
-            if (!$validatedData->fails()) 
+            if (!$validatedData->fails())
             {
                 $Adata = ['title' => $data['ATitle'] , 'content' => $data['AContent'] , 'publisher_id' => auth()->user()->id , 'course_id' => $data['courseID'] ];
                 $an = new Announcement();
@@ -73,16 +82,17 @@ class courseController extends Controller
                     Mail::to($user['email'])->send(new Gmail($details));
                 }
             }
-            else 
+            else
             {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
+        }
+        else
         {
             return view('errorPages/accessDenied');
         }
         return $this->index();
     }
+
 
 }
