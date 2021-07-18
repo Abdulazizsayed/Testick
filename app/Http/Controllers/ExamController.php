@@ -26,6 +26,11 @@ class ExamController extends Controller
         return view('exams.teacher.index')->with(['exams' => Auth::user()->exams]);
     }
 
+    public function studentIndexView()
+    {
+        return view('exams/teacher/student/index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
