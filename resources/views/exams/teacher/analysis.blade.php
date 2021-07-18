@@ -19,12 +19,23 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
+                            <h2 class="percentage text-warning">{{round($exam->maxScore(), 2)}}</h2>
                             <span>Maximum grade</span>
                         </div>
                         <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
-                            <span>Maximum grade</span>
+                            <h2 class="percentage text-warning">{{round($exam->minScore(), 2)}}</h2>
+                            <span>Minimum grade</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6 text-center analysis-component">
+                            <h2 class="percentage text-warning">{{round($exam->avgScore(), 2)}}</h2>
+                            <span>Average grade</span>
+                        </div>
+                        <div class="col-md-6 text-center analysis-component">
+                            <h2 class="percentage text-warning">{{round($exam->successPercentage(), 2)}}%</h2>
+                            <span>Success percentage</span>
                         </div>
                     </div>
                 </div>
@@ -40,20 +51,32 @@
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
-                    <select class="select ml-5 mb-4">
-                        <option value="" disabled selected>Choose a question</option>
-                        @foreach ($exam->questions as $question)
-                            <option value="{{$question->id}}">{{$question->content}}</option>
-                        @endforeach
-                    </select>
+                    <form class="question-analysis-form" action="" method="POST">
+                        @csrf
+                        <input class="exam-id" type="number" name="exam_id" value="{{$exam->id}}" hidden>
+                        <select class="select ml-5 mb-4">
+                            <option value="" disabled {{$exam->questions->count() == 0 ? 'selected' : ''}}>Choose a question</option>
+                            @foreach ($exam->questions as $question)
+                                <option value="{{$question->id}}"{{$loop->index == 0 ? ' selected' : ''}}>{{$question->content}}({{$question->difficulty}})</option>
+                            @endforeach
+                        </select>
+                    </form>
                     <div class="row">
                         <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
-                            <span>Maximum grade</span>
+                            <h2 class="percentage text-warning solved">
+                                @if ($exam->studentsSubmitted()->count() > 0)
+                                    {{round(($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->count() / $exam->studentsSubmitted()->count()) * 100, 2)}}%
+                                @else
+                                    0%
+                                @endif
+                            </h2>
+                            <span>Solved</span>
                         </div>
                         <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
-                            <span>Maximum grade</span>
+                            <h2 class="percentage text-warning avg">
+                                {{round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score') * 100, 2)}}
+                            </h2>
+                            <span>Average grades</span>
                         </div>
                     </div>
                 </div>
@@ -69,20 +92,22 @@
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                 <div class="card-body">
-                    <select class="select ml-5 mb-4">
-                        <option value="" disabled selected>Choose a chapter</option>
-                        @foreach ($exam->questions()->select('chapter')->distinct()->get() as $question)
-                            <option value="{{$question->chapter}}">{{$question->chapter}}</option>
-                        @endforeach
-                    </select>
+                    <form class="chapter-analysis-form" action="" method="POST">
+                        @csrf
+                        <input class="exam-id" type="number" name="exam_id" value="{{$exam->id}}" hidden>
+                        <select name="chapter" class="select ml-5 mb-4">
+                            <option value="" disabled{{$exam->questions()->select('chapter')->distinct()->count() == 0 ? ' selected' : ''}}>Choose a chapter</option>
+                            @foreach ($exam->questions()->select('chapter')->distinct()->get() as $question)
+                                <option value="{{$question->chapter}}"{{$loop->index == 0 ? ' selected' : ''}}>{{$question->chapter}}</option>
+                            @endforeach
+                        </select>
+                    </form>
                     <div class="row">
                         <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
-                            <span>Maximum grade</span>
-                        </div>
-                        <div class="col-md-6 text-center analysis-component">
-                            <h2 class="percentage text-warning">98%</h2>
-                            <span>Maximum grade</span>
+                            <h2 class="percentage text-warning chapter-absorbtion">
+                                {{round($exam->chapterAbsorbtion($exam->questions()->select('chapter')->distinct()->get()->first()), 2)}}%
+                            </h2>
+                            <span>Chapter absorbtion</span>
                         </div>
                     </div>
                 </div>

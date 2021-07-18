@@ -188,6 +188,23 @@ class ExamController extends Controller
     {
         return view('exams.teacher.analysis')->with('exam', $exam);
     }
+
+    public function questionAnalysis(HttpRequest $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        return response()->json([
+            'solved' => $exam->studentsSubmitted()->count() > 0 ? round(($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->count() / $exam->studentsSubmitted()->count()) * 100, 2) : 0,
+            'avg' => round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score') * 100, 2)
+        ]);
+    }
+
+    public function chapterAnalysis(HttpRequest $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        return response()->json([
+            'absorbtion' => round($exam->chapterAbsorbtion($request->chapter), 2)
+        ]);
+    }
     public function createExamRandomllyView($isRandomlly)
     {
         if ($isRandomlly) {
@@ -195,6 +212,5 @@ class ExamController extends Controller
         } else {
             dd('Not found');
         }
-
     }
 }

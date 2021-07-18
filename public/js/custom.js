@@ -279,3 +279,50 @@ $(".add-answer").on("click", function() {
     `;
     $(".answers").append(newAnswer);
 });
+
+// Get question analysis in specific exam
+$(".analysis .question-analysis-form").on("submit", function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "/exams/questionAnalysis",
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            $(".analysis .solved").html(data.solved + "%");
+            $(".analysis .avg").html(data.avg);
+        }
+    });
+});
+
+// Get chapter analysis in specific exam
+$(".analysis .chapter-analysis-form").on("submit", function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "/exams/chapterAnalysis",
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            $(".analysis .chapter-absorbtion").html(data.absorbtion + "%");
+        }
+    });
+});
+
+$(
+    ".analysis .question-analysis-form .select, .analysis .chapter-analysis-form .select"
+).on("change", function() {
+    $(
+        ".analysis .question-analysis-form, .analysis .chapter-analysis-form"
+    ).submit();
+});

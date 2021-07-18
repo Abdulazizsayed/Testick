@@ -16,6 +16,8 @@ class CreateExamQuestionTable extends Migration
         Schema::create('exam_question', function (Blueprint $table) {
             $table->id();
 
+            $table->float('weight')->nullable(false);
+
             $table->foreignId('exam_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('question_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
 
