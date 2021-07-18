@@ -110,19 +110,24 @@ class ExamController extends Controller
             $examobj = Exam::find($examID);
             $data = request::all();
             $validatedData = Validator::make($data, [
-                'question_bank' => 'required'
+                'questionbank' => 'required'
             ]);
             if (!$validatedData->fails()) {
                 $dataKeys = array_keys($data);
 
-                if (count($dataKeys) > 6) {
+                if (count($dataKeys) > 6) 
+                {
                     for ($i = 6; $i < count($dataKeys); $i++) {
                         $examobj->questions()->attach($data[$dataKeys[$i]]);
                     }
-                } else {
+                }
+                else
+                {
                     echo "You should choose answers";
                 }
-            } else {
+            } 
+            else 
+            {
                 return response($validatedData->messages(), 200);
             }
         } else {
@@ -131,7 +136,7 @@ class ExamController extends Controller
         return $this->addQuestionView($examobj);
     }
 
-    public function createExamView($isManually)
+    public function createExamManuallyView($isManually)
     {
         if ($isManually) {
             return view('exams.teacher.createExamManually');
@@ -139,6 +144,45 @@ class ExamController extends Controller
             dd('Not found');
         }
     }
+
+    public function createExamManually()
+    {
+        if (auth()->user()->role == 1) 
+        {
+            $data = request::all();
+            $validatedData = Validator::make($data, [
+                'Etitle' => 'required',
+                'EType' => 'required',
+                'EDate' => 'required|date',
+                'ECourse' => 'required',
+                'EDuration' => 'required|numeric',
+                'EAllow' => 'required|numeric'
+            ]);
+            if (!$validatedData->fails()) 
+            {
+                $DExam =  [ 'title' => $data['Etitle'] , 'type' => $data['EType'] , 'date' => $data['EDate'] , 'duration' => $data['EDuration'] , 'allow_period' => $data['EAllow'] , 'course_id' => 1 /*$data['ECourse']*/ , 'creator_id' => auth()->user()->id ];
+                $examobj = Exam::create($DExam);
+                $dataKeys = array_keys($data);
+                if (count($dataKeys) > 11) 
+                {
+                    for ($i = 11; $i < count($dataKeys); $i++) 
+                    {
+                        $examobj->questions()->attach($data[$dataKeys[$i]]);
+                    }
+                }
+            }
+            else
+            {
+                return response($validatedData->messages(), 200);
+            }
+        } 
+        else 
+        {
+            return view('errorPages/accessDenied');
+        }
+        return $this->createExamManuallyView(1);
+    }
+    
 
     public function analysis(Exam $exam)
     {
@@ -160,5 +204,13 @@ class ExamController extends Controller
         return response()->json([
             'absorbtion' => round($exam->chapterAbsorbtion($request->chapter), 2)
         ]);
+    }
+    public function createExamRandomllyView($isRandomlly)
+    {
+        if ($isRandomlly) {
+            return view('exams.teacher.createExamRandomlly');
+        } else {
+            dd('Not found');
+        }
     }
 }
