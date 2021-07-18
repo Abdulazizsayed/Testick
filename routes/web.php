@@ -50,6 +50,8 @@ Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 Route::get('exams/analysis/{exam}', 'ExamController@analysis');
 Route::get('exams/create/{isManually}', 'ExamController@createExamView');
+Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
+Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
