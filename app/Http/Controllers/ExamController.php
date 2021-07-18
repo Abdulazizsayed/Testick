@@ -104,6 +104,25 @@ class ExamController extends Controller
         ]);
     }
 
+    public function gradesSearch(HttpRequest $request)
+    {
+        // if ($request->filter_value == 'course code') {
+        //     $exams = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->get()->map(function ($item) {
+        //         return $item->exams;
+        //     })->collapse();
+        // } else {
+        //     $exams = Auth::user()->exams()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
+        // }
+        $exam = Exam::find($request->exam_id);
+        $students = $exam->studentsSubmitted()->where('name', 'LIKE', '%' . $request->search_input . '%')->withPivot('score')->get();
+
+        return response()->json([
+            'students' => $students->map(function ($student) {
+                return [$student->name, $student->pivot->score];
+            })
+        ]);
+    }
+
     public function addQuestion($examID)
     {
         if (auth()->user()->role == 1) {
@@ -159,6 +178,13 @@ class ExamController extends Controller
         $exam = Exam::find($request->exam_id);
         return response()->json([
             'absorbtion' => round($exam->chapterAbsorbtion($request->chapter), 2)
+        ]);
+    }
+
+    public function studentsGradesView(Exam $exam)
+    {
+        return view('exams.teacher.studentsGrades')->with([
+            'exam' => $exam
         ]);
     }
 }

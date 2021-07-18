@@ -133,6 +133,40 @@ $(document).on("keyup", ".question-banks .search-filter-input", function(e) {
     document.getElementById("search-form").submit();
 });
 
+// Search students grades by ajax
+$(document).on("keyup", ".students-grades .search-filter-input", function(e) {
+    document.getElementById("search-form").submit = function() {
+        $.ajax({
+            url: "/exams/grades/search",
+            type: "POST",
+            data: new FormData(this),
+            dataType: "JSON",
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                let studentsHolder = document.querySelector(".students-holder");
+                let content = "";
+
+                for (student of data.students) {
+                    content += `<tr>
+                                    <td>${student[0]}</td>
+                                    <td>${student[1]}</td>
+                                    <td>
+                                        <div class="btn btn-primary">Answers</div>
+                                    </td>
+                                </tr>`;
+                }
+
+                studentsHolder.innerHTML = content;
+            }
+        });
+    };
+
+    document.getElementById("search-form").submit();
+});
+
 // Edit question content
 $(document).on(
     "click",
