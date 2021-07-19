@@ -15,7 +15,6 @@ class ExamModelsQuestionTable extends Migration
     {
         Schema::create('exam_models_question', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('exam_models_id')->constrained('exam_models')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('question_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->integer('weight')->nullable(false);

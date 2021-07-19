@@ -283,4 +283,3 @@ use App\Course;
     </div>
 </div>
 @endsection
-

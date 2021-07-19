@@ -39,6 +39,7 @@ Route::post('/course/announcementLog', 'courseController@announcementLog');
 Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
 //student
 Route::get('/course/student/index', 'courseController@studentindex');
+Route::get('/course/student/courseView/{couresID}', 'courseController@studentCourseView');
 
 
 // User routes
@@ -48,9 +49,13 @@ Route::post('/users/editProfile', 'ProfileController@update');
 // Exam routes
 Route::resource('exams', 'ExamController');
 Route::post('exams/search', 'ExamController@search');
+Route::post('exams/grades/search', 'ExamController@gradesSearch');
 Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 Route::get('exams/analysis/{exam}', 'ExamController@analysis');
+Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
+Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
+Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
 Route::get('exams/create/manually/{isManually}', 'ExamController@createExamManuallyView');
 Route::post('exams/create/manually', 'ExamController@createExamManually');
 Route::get('exams/create/randomlly/{isRandomlly}', 'ExamController@createExamRandomllyView');
