@@ -8,6 +8,17 @@ use App\Course;
 <div class="container">
     <form action="/exams/create/randomlly"  enctype="multipart/form-data"  method = "post" >
     @csrf
+    @method('POST')
+    @if (session('status'))
+        <div class="alert alert-danger">
+            {{ session('status') }}
+        </div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="row pt-3" style="margin-left: 30px">
                     <h1>Create Exam Randomlly<h1>
                 </div>

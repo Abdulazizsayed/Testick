@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Exam;
+use App\examModels;
 use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Questioncontroller;
+use App\Http\Controllers\courseController;
+use DB;
 
 class ExamController extends Controller
 {
@@ -217,10 +221,12 @@ class ExamController extends Controller
             {
                 $chapterCounter = 2;
                 $questionCount = 1;
+                $QBid = $data[$keys[8]];
+                $numberOfModels = 2;
                 $Chapters = array();
                 $tempChapter = array();
                 $Questions = array();
-                for ($i = 8; $i < count($data); $i++) {
+                for ($i = 9; $i < count($data); $i++) {
                     if($keys[$i] == ("ch".$chapterCounter) || $i == count($data) -1 )
                     {
                         if($i == count($data) -1 ) // adding the value of last index of data
@@ -236,7 +242,7 @@ class ExamController extends Controller
                         array_push($tempChapter , $data[$keys[$i]]);
                     }
                 }
-                //dd($Chapters , $data , count($data) , $chapterCounter , $Questions);
+               
                 for($i = 0 ; $i < count($Chapters) ; $i++)
                 {
                     $tempQuestion = array();
@@ -248,16 +254,76 @@ class ExamController extends Controller
                             $j++;
                         }
                         else{
-                            //dd($j , $Chapters[$i][$j+2]);
                             array_push($tempQuestion , $Chapters[$i][0]  , $Chapters[$i][$j], $Chapters[$i][$j+1] ,$Chapters[$i][$j+2]);
                         }
                         array_push($Questions , $tempQuestion);
                         $tempQuestion = array();
                     }
-                    
-                    
                 }
-                dd($Chapters , $data , count($data) , $chapterCounter , $Questions);
+                $questionObj = new Questioncontroller();
+                $questionResults = $questionObj->findQuestions($Questions , $QBid);
+                if(count($questionResults['errorMessage']) != 0 ) // there are questions that is not found in the DB , will send an error message
+                {
+                    $error = join("\n",$questionResults['errorMessage']);
+                    return redirect('/exams/create/randomlly/1')->with('status',$error);
+                }
+                else
+                {
+                    $course = new courseController();
+                    $foundCourseStudents = $course->findCourseStudents($data['course']); 
+                    if($foundCourseStudents != null)
+                    {
+                        $DExam =  [ 'title' => $data['title'] , 'type' => $data['eType'] , 'date' => $data['date'] , 'duration' => $data['duration'] , 'allow_period' => $data['allow'] , 'course_id' => $data['course'] , 'creator_id' => auth()->user()->id ];
+                        $examobj = Exam::create($DExam);
+                        $examModels = array();
+                        for($i = 0 ; $i < $numberOfModels ; $i++)
+                        {
+                            $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                            $attachedQuestions = array();
+                            for($j = 0 ; $j < count($questionResults['foundQuestions']) ; $j++)
+                            {
+                                shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array 
+                                $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
+                                if($questionResults['foundQuestions'][$j]['type'] == 'Parent')
+                                {
+                                    for($k = 0 ; $k < count($selectedQuestion) ; $k++)
+                                    {
+                                        array_push($attachedQuestions , $selectedQuestion[$k]); // saving the randomly selected question
+                                        DB::table('exam_models_question')->insert(
+                                            ['exam_models_id' =>  $newModel['id'] , 'question_id' =>  $selectedQuestion[$k]['id'] , 'weight' => $questionResults['foundQuestions'][$j]['Weight'] ]
+                                        );
+                                    }    
+                                }
+                                else
+                                {
+                                    array_push($attachedQuestions , $selectedQuestion); // saving the randomly selected question
+                                    DB::table('exam_models_question')->insert(
+                                        ['exam_models_id' =>  $newModel['id'] , 'question_id' =>  $selectedQuestion['id'] , 'weight' => $questionResults['foundQuestions'][$j]['Weight'] ]
+                                    );
+                                }
+                            }
+                            array_push($examModels , $newModel); // savung the recently created model
+                        }
+                        //dd( $examModels,"all Done , connect each student to an exam now" , count($examModels) , $numberOfModels);
+                        //dd($foundCourseStudents);
+                        for($i = 0 ; $i < count($foundCourseStudents) ; $i++)
+                        {
+                            shuffle($examModels); // shuffling the question's array .
+                            $selectedModel = $examModels[0]; // taking the first index after being shuffled.
+                            $foundCourseStudents[$i]->examsAssigned()->attach($selectedModel['id']);
+                        }
+                        return redirect('/exams/create/randomlly/1')->with('success','Exam Created Successfully');
+                    }
+                    else
+                    {
+                        return redirect('/exams/create/randomlly/1')->with('status','There is no students on this course');
+                    }
+                    
+                    
+                    dd($Chapters , $data , count($data) , $chapterCounter , $Questions , $questionResults  , $examobj , $examModels);
+
+                }
+                // Access questions : $Questions[0]['Questions'][0]['id']
             }
             else
             {

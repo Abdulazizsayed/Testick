@@ -19,6 +19,11 @@ class Exam extends Model
     {
         return $this->hasMany(StudentAnswer::class);
     }
+    public function examModels()
+    {
+        return $this->hasMany(examModels::class);
+    }
+
 
     #many to many relationships
     public function students_submitted()
@@ -37,6 +42,6 @@ class Exam extends Model
     }
     public function students_assigned()
     {
-        return $this->belongsToMany('App\User', 'assign_exam', 'student_id', 'exam_id');
+        return $this->belongsToMany('App\User', 'assign_exam', 'student_id', 'model_id');
     }
 }

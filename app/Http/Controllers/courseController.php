@@ -89,4 +89,19 @@ class courseController extends Controller
         return $this->index();
     }
 
+    public function findCourseStudents($data)
+    {
+        $found = Course::find($data);
+        $courseUsers = $found->users;
+        $courseStudents = array();
+        for($i = 0 ; $i < count($courseUsers) ; $i++)
+        {
+            if($courseUsers[$i]['role'] == 0)
+            {
+                array_push($courseStudents , $courseUsers[$i]);
+            }
+        }
+        return $courseStudents;
+    }
+
 }

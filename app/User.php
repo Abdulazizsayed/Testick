@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function examsAssigned()
     {
-        return $this->belongsToMany('App\Exam', 'assign_exam', 'student_id', 'exam_id');
+        return $this->belongsToMany('App\examModels', 'assign_exam', 'student_id', 'model_id');
     }
 
     public function courses()
