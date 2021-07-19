@@ -40,4 +40,8 @@ class Question extends Model
     {
         return $this->belongsToMany('App\Exam');
     }
+    public function examModels()
+    {
+        return $this->belongsToMany('App\examModels');
+    }
 }

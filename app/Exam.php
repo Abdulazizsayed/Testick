@@ -20,6 +20,11 @@ class Exam extends Model
     {
         return $this->hasMany(StudentAnswer::class);
     }
+    public function examModels()
+    {
+        return $this->hasMany(examModels::class);
+    }
+
 
     #many to many relationships
     public function studentsSubmitted()
@@ -35,6 +40,11 @@ class Exam extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function students_assigned()
+    {
+        return $this->belongsToMany('App\User', 'assign_exam', 'student_id', 'model_id');
     }
 
     # Calculated fields
@@ -88,5 +98,6 @@ class Exam extends Model
         }
 
         return 0;
+
     }
 }
