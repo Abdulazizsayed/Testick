@@ -238,7 +238,6 @@ class ExamController extends Controller
         {
             $data = request::all();
             $keys = array_keys($data);
-            //dd($keys);
             $validatedData = Validator::make($data, [
                 'title' => 'required',
                 'eType' => 'required',
@@ -334,8 +333,6 @@ class ExamController extends Controller
                             }
                             array_push($examModels , $newModel); // savung the recently created model
                         }
-                        //dd( $examModels,"all Done , connect each student to an exam now" , count($examModels) , $numberOfModels);
-                        //dd($foundCourseStudents);
                         for($i = 0 ; $i < count($foundCourseStudents) ; $i++)
                         {
                             shuffle($examModels); // shuffling the question's array .
