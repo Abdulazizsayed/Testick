@@ -317,13 +317,8 @@ class ExamController extends Controller
                     else
                     {
                         return redirect('/exams/create/randomlly/1')->with('status','There is no students on this course');
-                    }
-                    
-                    
-                    dd($Chapters , $data , count($data) , $chapterCounter , $Questions , $questionResults  , $examobj , $examModels);
-
+                    }   
                 }
-                // Access questions : $Questions[0]['Questions'][0]['id']
             }
             else
             {
