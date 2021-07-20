@@ -57,13 +57,11 @@ Route::get('exams/analysis/{exam}', 'ExamController@analysis');
 Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
 Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
 Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
-Route::get('exams/create/manually/{isManually}', 'ExamController@createExamManuallyView');
+Route::get('exams/create/{isRandomlly}', 'ExamController@createExamView');
 Route::post('exams/create/manually', 'ExamController@createExamManually');
-Route::get('exams/create/randomlly/{isRandomlly}', 'ExamController@createExamRandomllyView');
+Route::post('exams/create/randomlly', 'ExamController@createExamRandomlly');
 //student
 Route::get('exams/student/index', 'ExamController@studentIndexView');
-Route::post('exams/create/randomlly', 'ExamController@createExamRandomlly');
-
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');

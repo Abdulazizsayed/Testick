@@ -360,3 +360,15 @@ $(
         ".analysis .question-analysis-form, .analysis .chapter-analysis-form"
     ).submit();
 });
+
+$(".add-check-box").on("change", function() 
+{
+    console.log($(this).attr("checked"));
+    $(this)
+        .parent()
+        .prev()
+        .children()
+        .prop("disabled", function(i, v) {
+            return !v;
+        });
+});
