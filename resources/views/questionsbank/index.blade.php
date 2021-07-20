@@ -52,7 +52,9 @@ use App\Subject;
         <tbody class="question-banks-holder">
             @foreach(auth()->user()->questionBanks as $questionBank)
             <tr>
-                <td>{{$questionBank->title}}</td>
+                <td>
+                    <a href='{{asset('questionsbank/' . $questionBank->id)}}'>{{$questionBank->title}}</a>
+                </td>
                 <td>{{$questionBank->subject->name}}</td>
                 <td>
                     <a class="btn btn-success" href="/QB/addQuestion/{{$questionBank->id}}">Add Question <i class="fa fa-plus fa-lg"></i></a>

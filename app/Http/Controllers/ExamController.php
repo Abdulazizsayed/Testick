@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Exam;
+use App\Question;
 use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
@@ -61,6 +62,19 @@ class ExamController extends Controller
     public function addQuestionView(Exam $exam)
     {
         return view('exams.teacher.addQuestion')->with('exam', $exam);
+    }
+
+    public function deleteQuestion($questionId, $examId)
+    {
+        if (Exam::find($examId)->questions()->detach($questionId)) {
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'fail'
+            ]);
+        }
     }
 
     /**

@@ -184,6 +184,107 @@ $(document).on(
     }
 );
 
+// Delete question from exam
+$(document).on("click", ".delete-question-btn.exam-delete", function() {
+    let question_id = $(this)
+        .next()
+        .val();
+    let exam_id = $(this)
+        .next()
+        .next()
+        .val();
+    let question_holder = $(this)
+        .parent()
+        .parent();
+
+    $.ajax({
+        url: "/exams/deleteQuestion/" + question_id + "/" + exam_id,
+        type: "POST",
+        data: [],
+        dataType: "JSON",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            if (data.status == "success") {
+                question_holder.attr("hidden", true);
+            } else {
+                alert("Question was not deleted!");
+            }
+        }
+    });
+});
+
+// Delete question from DB
+$(document).on(
+    "click",
+    ".delete-question-btn.question-bank-delete",
+    function() {
+        let question_id = $(this)
+            .next()
+            .val();
+        let question_holder = $(this)
+            .parent()
+            .parent();
+
+        $.ajax({
+            url: "/questions/" + question_id,
+            type: "POST",
+            data: [],
+            dataType: "JSON",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                console.log(data);
+                if (data.status == "success") {
+                    question_holder.attr("hidden", true);
+                } else {
+                    alert("Question was not deleted!");
+                }
+            }
+        });
+    }
+);
+
+// Delete answer from DB
+$(document).on("click", ".delete-answer-btn", function() {
+    let answer_id = $(this)
+        .next()
+        .val();
+    let answer_holder = $(this).parent();
+
+    $.ajax({
+        url: "/answers/" + answer_id,
+        type: "POST",
+        data: [],
+        dataType: "JSON",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            console.log(data);
+            if (data.status == "success") {
+                answer_holder.attr("hidden", true);
+            } else {
+                alert("answer was not deleted!");
+            }
+        }
+    });
+});
+
 // Discard editing question
 $(
     ".edit-question-form .discard-changing-question, .edit-answer-form .discard-changing-question"
@@ -211,7 +312,6 @@ $(".edit-question-form").on("submit", function(e) {
 
         success: function(data) {
             if (data.success == true) {
-                // console.log($(form));
                 $(form).attr("hidden", true);
                 questionContent = $(form)
                     .prev()
@@ -222,7 +322,16 @@ $(".edit-question-form").on("submit", function(e) {
                     .children()
                     .eq(0)
                     .html(data.content);
-                questionContent.addClass("bg-success");
+                if (data.weight) {
+                    $(".weight").html(data.weight);
+                } else {
+                    $(".type").html(data.type);
+                    $(".difficulty").html(data.difficulty);
+                    $(".chapter").html(data.chapter);
+                }
+                questionContent.append(
+                    "<i class='fa fa-check text-success fa-2x' title='Question Updated successfully'></i>"
+                );
             } else {
                 $(form).attr("hidden", true);
                 questionContent = $(form)
@@ -262,7 +371,17 @@ $(".edit-answer-form").on("submit", function(e) {
                 questionContent.html(
                     data.content + '<i class="fa fa-edit edit-answer-btn"></i>'
                 );
-                questionContent.addClass("bg-success");
+                questionContent.append(
+                    "<i class='fa fa-check' title='Answer Updated successfully'></i>"
+                );
+
+                if (data.is_correct == true) {
+                    questionContent.removeClass("text-danger");
+                    questionContent.addClass("text-success");
+                } else {
+                    questionContent.removeClass("text-success");
+                    questionContent.addClass("text-danger");
+                }
             } else {
                 $(form).attr("hidden", true);
                 questionContent = $(form)

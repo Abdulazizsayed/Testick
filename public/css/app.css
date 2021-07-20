@@ -11251,8 +11251,10 @@ table td {
     font-size: 15px;
 }
 
-.question-header i,
-.answers .answer i {
+.question-header i.fa-edit,
+.question-header i.fa-times,
+.answers .answer i.fa-edit,
+.answers .answer i.fa-times {
     color: #fff;
     font-size: 18px;
     cursor: pointer;
@@ -11264,8 +11266,10 @@ table td {
     transition: visibilty 0s, opacity 0.3s ease-in-out;
 }
 
-.question-header:hover i,
-.answers .answer:hover i {
+.question-header:hover i.fa-edit,
+.question-header:hover i.fa-times,
+.answers .answer:hover i.fa-edit,
+.answers .answer:hover i.fa-times {
     visibility: visible;
     opacity: 1;
 }

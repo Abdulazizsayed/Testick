@@ -30,6 +30,11 @@ class QBcontroller extends Controller
         return view('questionsbank/index');
     }
 
+    public function show($questionBankId)
+    {
+        return view('questionsbank.show')->with('questionBank', QuestionBank::findOrFail($questionBankId));
+    }
+
     public function QBcreateView()
     {
         return view('questionsbank/create');
@@ -42,16 +47,14 @@ class QBcontroller extends Controller
 
     public function QBcreate()
     {
-        if (auth()->user()->role == 1)
-        {
+        if (auth()->user()->role == 1) {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'QBfile' => 'mimes:xls,xlsx,csv',
                 'title' => 'required',
                 'sub' => 'required'
             ]);
-            if (!$validatedData->fails()) 
-            {
+            if (!$validatedData->fails()) {
                 $QuestionBankData = ['title' => $data['title'], 'instructor_id' => auth()->user()->id, 'subject_id' => $data['sub']];
                 $newQuestionBank = QuestionBank::create($QuestionBankData); // creating the new question bank
                 $path = $data['QBfile']->getRealPath();
@@ -63,16 +66,13 @@ class QBcontroller extends Controller
                 $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
                 $Questions = array(); // total questions
 
-                for ($row = 2; $row <= $lastRow; $row++)
-                {
+                for ($row = 2; $row <= $lastRow; $row++) {
                     $QuestionObj = new Question();
                     $QuestionFromDataBase;
-                    for ($col = 'A'; $col <= $highestColumn; $col++) 
-                    {
+                    for ($col = 'A'; $col <= $highestColumn; $col++) {
                         $Answers = array(); // total answers
                         $cellValue = $worksheet->getCell($col . $row)->getValue();
-                        if ($cellValue != null) 
-                        {
+                        if ($cellValue != null) {
                             if ($col == 'A') // Question
                             {
                                 $QuestionObj['content'] = $cellValue;
@@ -131,18 +131,15 @@ class QBcontroller extends Controller
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
         return redirect('/QB/index');
     }
+
     public function destroy($QuestionBankID)
     {
         $QBObj = QuestionBank::find($QuestionBankID);
@@ -151,8 +148,7 @@ class QBcontroller extends Controller
         $Questions = Question::where('question_bank_id', $QuestionBankID)->get(); // getting all questions
 
         $Answers = array();
-        if ($Questions != null)
-        {
+        if ($Questions != null) {
             for ($i = 0; $i < count($Questions); $i++) // getting all answers for the above questions
             {
                 $answer = Answer::where('question_id', $Questions[$i]->id)->get();
@@ -161,8 +157,7 @@ class QBcontroller extends Controller
             $A->delete($Answers);
             $Q->delete($Questions);
             $QBObj = QuestionBank::find($QuestionBankID);
-            if( $QBObj != null )
-            {
+            if ($QBObj != null) {
                 $QBObj->delete();
             }
         }
@@ -171,8 +166,7 @@ class QBcontroller extends Controller
 
     public function addQuestion($QuestionBankID)
     {
-        if (auth()->user()->role == 1) 
-        {
+        if (auth()->user()->role == 1) {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'chapter' => 'required',
@@ -180,8 +174,8 @@ class QBcontroller extends Controller
                 'difficulty' => 'required',
                 'Qcontent' => 'required'
             ]);
-            if (!$validatedData->fails()) 
-            {
+            if (!$validatedData->fails()) {
+
                 if (array_key_exists("parent", $data)) {
                     $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'], 'chapter' => $data['chapter'], 'parent_id' => $data['parent'], 'question_bank_id' => $QuestionBankID];
                     $forLoopLenght = count($data) - 7;
@@ -189,6 +183,7 @@ class QBcontroller extends Controller
                     $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'], 'chapter' => $data['chapter'], 'parent_id' => NULL, 'question_bank_id' => $QuestionBankID];
                     $forLoopLenght = count($data) - 6;
                 }
+
                 $QC = new Questioncontroller();
                 $question_obj = $QC->store($Qdata);
 
