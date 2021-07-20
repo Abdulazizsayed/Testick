@@ -5,11 +5,9 @@ use App\Course;
 @extends('layouts.app')
 @section('title', 'Announcement Log')
 @section('content')
-<div class="container">
-    <h2 class="title">Announcement Log of " {{$course->code}} "<h2>
-    <br>
+<div class="container courses">
 
-    @foreach($course->announcements as $announcement)
+    @foreach(auth()->user()->announcements as $announcement)
     <div style="background-color: #0A125A;border-radius: 25px;line-height: 20px; word-wrap: break-word;margin-top: 15px">
         <br>
         <h1 style="margin-left: 3%;margin-right: 5%"><b>{{Course::find($announcement->course_id)->code}}</b></h1>

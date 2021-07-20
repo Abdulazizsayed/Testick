@@ -21,16 +21,17 @@ class courseController extends Controller
 
     public function index()
     {
-        return view('course/index');
+        return view('course/teacher/index');
     }
+
+    public function announcementLogView()
+    {
+        return view('course/teacher/announcementlog');
+    }
+
     public function studentindex()
     {
         return view('course/student/index');
-    }
-
-    public function announcementLog()
-    {
-        return view('course/announcementlog');
     }
 
     public function studentCourseView($courseID)
@@ -47,7 +48,6 @@ class courseController extends Controller
             $subject_id = $subject->create($newCourse[1]);
             $course = array('code' => $newCourse[0] , 'subject_id' => $subject_id , 'level' => $newCourse[2] , 'semester' => $newCourse[3]);
             $newCreatedCourse = Course::create($course);
-            //dd("New created course: " , $newCreatedCourse);
             return $newCreatedCourse;
         }
         else{

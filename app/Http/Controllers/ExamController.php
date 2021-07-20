@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Exam;
 use App\examModels;
+use App\Question;
 use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
@@ -28,6 +29,11 @@ class ExamController extends Controller
     public function index()
     {
         return view('exams.teacher.index')->with(['exams' => Auth::user()->exams]);
+    }
+
+    public function studentIndexView()
+    {
+        return view('exams/teacher/student/index');
     }
 
     /**
@@ -154,12 +160,15 @@ class ExamController extends Controller
         return $this->addQuestionView($examobj);
     }
 
-    public function createExamManuallyView($isManually)
+    public function createExamView($isRandomlly)
     {
-        if ($isManually) {
+        if ($isRandomlly)
+        {
+            return view('exams.teacher.createExamRandomlly');
+        } 
+        else 
+        {
             return view('exams.teacher.createExamManually');
-        } else {
-            dd('Not found');
         }
     }
 
@@ -173,24 +182,62 @@ class ExamController extends Controller
                 'EDate' => 'required|date',
                 'ECourse' => 'required',
                 'EDuration' => 'required|numeric',
-                'EAllow' => 'required|numeric'
+                'EAllow' => 'required|numeric',
+                'questionbank' => 'required'
             ]);
             if (!$validatedData->fails()) {
-                $DExam =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => 1 /*$data['ECourse']*/, 'creator_id' => auth()->user()->id];
-                $examobj = Exam::create($DExam);
+                $examData =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => $data['ECourse'], 'creator_id' => auth()->user()->id];
+
                 $dataKeys = array_keys($data);
-                if (count($dataKeys) > 11) {
-                    for ($i = 11; $i < count($dataKeys); $i++) {
-                        $examobj->questions()->attach($data[$dataKeys[$i]]);
+                if (count($dataKeys) > 11)
+                {
+                    $examobj = Exam::create($examData);
+                    $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                    for ($i = 12; $i < count($dataKeys) ; $i = $i+2) 
+                    {
+                        if( Question::find($data[$dataKeys[$i]])->type != "Parent" )
+                        {
+                            if( count($newModel->questions()->where('question_id',$data[$dataKeys[$i]])->get()) == 0 )
+                            {
+                                $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $data[$dataKeys[$i]] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                DB::table('exam_models_question')->insert( $examModelQuestion );
+                            }
+                        }
+                        else
+                        {
+                            if( count($newModel->questions()->where('question_id',$data[$dataKeys[$i]])->get()) == 0 )
+                            {
+                                $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $data[$dataKeys[$i]] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                DB::table('exam_models_question')->insert( $examModelQuestion );
+                            }
+                            
+                            $subQuestions = Question::where('parent_id',$data[$dataKeys[$i]])->get();
+                            foreach( $subQuestions as $subQuestion )
+                            {
+                                if( count($newModel->questions()->where('question_id',$subQuestion['id'])->get()) == 0 )
+                                {
+                                    $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $subQuestion['id'] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                    DB::table('exam_models_question')->insert( $examModelQuestion );
+                                }
+                            }
+                        }
+                        
                     }
                 }
-            } else {
+                else
+                {
+                    echo "Your should choose questions";
+                }
+            } 
+            else
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        } else 
+        {
             return view('errorPages/accessDenied');
         }
-        return $this->createExamManuallyView(1);
+        return redirect('exams/create/manually/1'); 
     }
 
 
@@ -221,15 +268,6 @@ class ExamController extends Controller
         return view('exams.teacher.studentsGrades')->with([
             'exam' => $exam
         ]);
-    }
-
-    public function createExamRandomllyView($isRandomlly)
-    {
-        if ($isRandomlly) {
-            return view('exams.teacher.createExamRandomlly');
-        } else {
-            dd('Not found');
-        }
     }
 
     public function createExamRandomlly()
