@@ -72,60 +72,60 @@ class QBcontroller extends Controller
                     for ($col = 'A'; $col <= $highestColumn; $col++) {
                         $Answers = array(); // total answers
                         $cellValue = $worksheet->getCell($col . $row)->getValue();
-                        if ($cellValue != null) {
-                            if ($col == 'A') // Question
-                            {
-                                $QuestionObj['content'] = $cellValue;
-                            } else if ($col == 'B') // Type
-                            {
-                                $QuestionObj['type'] = $cellValue;
-                            } else if ($col == 'C') // Chapter
-                            {
-                                $QuestionObj->chapter = $cellValue;
-                            } else if ($col == 'D') // parent id
-                            {
-                                $QuestionObj['parent_id'] = $Questions[$cellValue - 2]['id'];
-                            } else if ($col == 'E') // Question Difficulity
-                            {
-                                $QuestionObj['difficulty'] = $cellValue;
-                                $questionController = new Questioncontroller();
-                                $insertQuestion = ['content' => $QuestionObj['content'], 'type' => $QuestionObj['type'], 'chapter' => $QuestionObj['chapter'], 'parent_id' => $QuestionObj['parent_id'], 'question_bank_id' => $newQuestionBank['id'], 'difficulty' =>  $QuestionObj['difficulty']];
-                                $QuestionFromDataBase = $questionController->store($insertQuestion);
-                                array_push($Questions, $QuestionFromDataBase);
-                            } else if ($col == 'F') // Correct Answer - the question ID is missing :)
-                            {
 
-                                if ($QuestionObj['type'] == "Essay") {
-                                    $insertAnswer = ['content' => $cellValue, 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
-                                    $answerController = new AnswerController();
-                                    $answerController->store($insertAnswer);
-                                } else if ($QuestionObj['type'] == "MSMCQ" ||  $QuestionObj['type'] == "SSMCQ") {
-                                    $answersArray = explode("~", $cellValue); // cutting string on ~ char
-                                    for ($ans = 0; $ans < count($answersArray); $ans++) {
-                                        $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
-                                        $answerController = new AnswerController();
-                                        $answerController->store($insertAnswer);
-                                    }
-                                } else if ($QuestionObj['type'] == "T/F") {
-                                    $correct = -1;
-                                    if ($cellValue == 'Yes') {
-                                        $correct = 1;
-                                    } else if ($cellValue == 'No') {
-                                        $correct = 0;
-                                    }
-                                    $insertAnswer = ['content' => $cellValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
+                        if ($col == 'A') // Question
+                        {
+                            $QuestionObj['content'] = $cellValue;
+                        } else if ($col == 'B') // Type
+                        {
+                            $QuestionObj['type'] = $cellValue;
+                        } else if ($col == 'C') // Chapter
+                        {
+                            $QuestionObj->chapter = $cellValue;
+                        } else if ($col == 'D') // parent id
+                        {
+                            if ($cellValue != null)
+                                $QuestionObj['parent_id'] = $Questions[$cellValue - 2]['id'];
+                        } else if ($col == 'E') // Question Difficulity
+                        {
+                            $QuestionObj['difficulty'] = $cellValue;
+                            $questionController = new Questioncontroller();
+                            $insertQuestion = ['content' => $QuestionObj['content'], 'type' => $QuestionObj['type'], 'chapter' => $QuestionObj['chapter'], 'parent_id' => $QuestionObj['parent_id'], 'question_bank_id' => $newQuestionBank['id'], 'difficulty' =>  $QuestionObj['difficulty']];
+                            $QuestionFromDataBase = $questionController->store($insertQuestion);
+                            array_push($Questions, $QuestionFromDataBase);
+                        } else if ($col == 'F') // Correct Answer - the question ID is missing :)
+                        {
+
+                            if ($QuestionObj['type'] == "Essay") {
+                                $insertAnswer = ['content' => $cellValue, 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
+                                $answerController = new AnswerController();
+                                $answerController->store($insertAnswer);
+                            } else if ($QuestionObj['type'] == "MSMCQ" ||  $QuestionObj['type'] == "SSMCQ") {
+                                $answersArray = explode("~", $cellValue); // cutting string on ~ char
+                                for ($ans = 0; $ans < count($answersArray); $ans++) {
+                                    $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 1, 'question_id' => $QuestionFromDataBase->id];
                                     $answerController = new AnswerController();
                                     $answerController->store($insertAnswer);
                                 }
-                            } else if ($col == 'G') // Wrong Answer -  the question ID is missing :)
-                            {
-                                if ($QuestionObj['type'] != "Essay") {
-                                    $answersArray = explode("~", $cellValue); // cutting string on ~ char
-                                    for ($ans = 0; $ans < count($answersArray); $ans++) {
-                                        $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
-                                        $answerController = new AnswerController();
-                                        $answerController->store($insertAnswer);
-                                    }
+                            } else if ($QuestionObj['type'] == "T/F") {
+                                $correct = -1;
+                                if ($cellValue == 'Yes') {
+                                    $correct = 1;
+                                } else if ($cellValue == 'No') {
+                                    $correct = 0;
+                                }
+                                $insertAnswer = ['content' => $cellValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
+                                $answerController = new AnswerController();
+                                $answerController->store($insertAnswer);
+                            }
+                        } else if ($col == 'G') // Wrong Answer -  the question ID is missing :)
+                        {
+                            if ($QuestionObj['type'] != "Essay") {
+                                $answersArray = explode("~", $cellValue); // cutting string on ~ char
+                                for ($ans = 0; $ans < count($answersArray); $ans++) {
+                                    $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
+                                    $answerController = new AnswerController();
+                                    $answerController->store($insertAnswer);
                                 }
                             }
                         }

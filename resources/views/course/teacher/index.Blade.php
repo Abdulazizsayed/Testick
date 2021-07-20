@@ -9,7 +9,7 @@ use App\Subject;
         <div class="col">
             <h2 class="title">Courses</h2>
         </div>
-        <form action="/course/announcementLog" enctype="multipart/form-data" method="post">
+        <form action="/course/teacher/announcementLog" enctype="multipart/form-data" method="get">
             @csrf
             <div class="col-md-auto">
                 <button class="btn btn-primary">Logs</button>
@@ -57,7 +57,7 @@ use App\Subject;
         </tbody>
     </table>
 
-    <form action="/course/createAnnouncement" enctype="multipart/form-data" method="post">
+    <form action="/course/teacher/createAnnouncement" enctype="multipart/form-data" method="post">
     @csrf
         <div class="row">
             <div class="col-8">
@@ -102,7 +102,7 @@ use App\Subject;
         </div>
 
         <div class="col-md-auto">
-            <button class="btn btn-success">Publish</button>
+            <button type="submit" class="btn btn-success">Publish</button>
         </div>
     </form>
     
