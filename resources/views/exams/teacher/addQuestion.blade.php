@@ -1,5 +1,6 @@
 <?php
 use App\QuestionBank;
+use App\Exam;
 ?>
 @extends('layouts.app')
 @section('title', 'Add quesiton to ' . $exam->title)
@@ -23,6 +24,14 @@ use App\QuestionBank;
                             <option value="" disabled selected >Question bank</option>
                             @foreach( Auth::user()->questionBanks as $questionBank)
                             <option value="{{$questionBank->id}}">{{$questionBank->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div style="float:right;width:40%;margin-left: 10px;">
+                        <select class="form-control" name="exammodels" id="exammodels" required style="background-color: #1A034A;color: white">
+                            <option value="" disabled selected >Exam Models</option>
+                            @foreach( Exam::find($exam->id)->examModels as $model)
+                            <option value="{{$model->id}}">{{$model->id}}</option>
                             @endforeach
                         </select>
                     </div>
