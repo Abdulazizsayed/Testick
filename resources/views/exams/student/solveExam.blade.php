@@ -17,12 +17,12 @@
                         <h6>Answer:</h6>
                         <ul class="answers">
                             @if ($question->type == 'Essay' or $question->type == 'Text Check')
-                                <input type="text" class="form-control" name="answer{{$question->id}}">
+                                <input type="text" class="form-control" name="{{$question->id}}">
                             @elseif($question->type == 'T/F')
                                 @foreach ($question->answers()->inRandomOrder()->get() as $answer)
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answer{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
+                                        <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
                                         <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                             {{$answer->content}}
                                         </label>
@@ -38,14 +38,14 @@
                                     <li>
                                         @if ($loop->index == $rand)
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="answer{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$trueAnswer->content}}">
+                                                <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$trueAnswer->content}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$trueAnswer->content}}
                                                 </label>
                                             </div>
                                         @else
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="answer{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
+                                                <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$answer->content}}
                                                 </label>
@@ -64,21 +64,21 @@
                                     <li>
                                         @if ($loop->index == $rand1)
                                             <div class="form-check">
-                                                <input class="form-check-input" name="answer{{$question->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$trueAnswer->content}}
                                                 </label>
                                             </div>
                                         @elseif($loop->index == $rand2)
                                             <div class="form-check">
-                                                <input class="form-check-input" name="answer{{$question->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$falseAnswer->content}}
                                                 </label>
                                             </div>
                                         @else
                                             <div class="form-check">
-                                                <input class="form-check-input" name="answer{{$question->id}}" type="checkbox" value="{{$answer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$answer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$answer->content}}
                                                 </label>
@@ -99,12 +99,12 @@
                                     <h6>Answer:</h6>
                                     <ul class="answers">
                                         @if ($child->type == 'Essay' or $child->type == 'Text Check')
-                                            <input type="text" class="form-control" name="answer{{$child->id . $question->id}}">
+                                            <input type="text" class="form-control" name="{{$child->id}}">
                                         @elseif($child->type == 'T/F')
                                             @foreach ($child->answers()->inRandomOrder()->get() as $answer)
                                             <li>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="answer{{$child->id . $question->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$answer->content}}">
+                                                    <input class="form-check-input" type="radio" name="{{$child->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$answer->content}}">
                                                     <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                         {{$answer->content}}
                                                     </label>
@@ -120,14 +120,14 @@
                                                 <li>
                                                     @if ($loop->index == $rand)
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="answer{{$child->id . $question->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$trueAnswer->content}}">
+                                                            <input class="form-check-input" type="radio" name="{{$child->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$trueAnswer->content}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$trueAnswer->content}}
                                                             </label>
                                                         </div>
                                                     @else
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="answer{{$child->id . $question->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$answer->content}}">
+                                                            <input class="form-check-input" type="radio" name="{{$child->id}}" id="child-answer{{$child->id . $loop->index}}" value="{{$answer->content}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$answer->content}}
                                                             </label>
@@ -146,21 +146,21 @@
                                                 <li>
                                                     @if ($loop->index == $rand1)
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="answer{{$child->id . $question->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$trueAnswer->content}}
                                                             </label>
                                                         </div>
                                                     @elseif($loop->index == $rand2)
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="answer{{$child->id . $question->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$falseAnswer->content}}
                                                             </label>
                                                         </div>
                                                     @else
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="answer{{$child->id . $question->id}}" type="checkbox" value="{{$answer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$answer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$answer->content}}
                                                             </label>
