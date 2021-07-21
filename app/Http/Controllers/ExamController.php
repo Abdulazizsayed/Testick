@@ -18,7 +18,7 @@ class ExamController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'teacher']);
+        $this->middleware(['auth']);
     }
 
     /**
@@ -366,5 +366,10 @@ class ExamController extends Controller
             return view('errorPages/accessDenied');
         }
         //return $this->createExamManuallyView(1);
+    }
+
+    public function enterExam($examId)
+    {
+        return view('exams.student.solveExam')->with('exam', Exam::find($examId)->examModels()->inRandomOrder()->first());
     }
 }

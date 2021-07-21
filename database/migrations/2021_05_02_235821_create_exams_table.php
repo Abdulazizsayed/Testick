@@ -17,7 +17,7 @@ class CreateExamsTable extends Migration
             $table->id();
             $table->string('title');
             $table->enum('type', ['Quiz', 'Midterm', 'Final']);
-            $table->date('date');
+            $table->dateTime('date');
             $table->float('duration');
             $table->float('allow_period');
 
