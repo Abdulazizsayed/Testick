@@ -135,26 +135,62 @@ class ExamController extends Controller
 
     public function addQuestion($examID)
     {
-        if (auth()->user()->role == 1) {
+        if (auth()->user()->role == 1) 
+        {
             $examobj = Exam::find($examID);
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'questionbank' => 'required'
             ]);
-            if (!$validatedData->fails()) {
+            if (!$validatedData->fails()) 
+            {
                 $dataKeys = array_keys($data);
-
-                if (count($dataKeys) > 6) {
-                    for ($i = 6; $i < count($dataKeys); $i++) {
-                        $examobj->questions()->attach($data[$dataKeys[$i]]);
+                if (count($dataKeys) > 6)
+                {
+                    $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                    for ($i = 7; $i < count($dataKeys) ; $i = $i+2) 
+                    {
+                        if( Question::find($data[$dataKeys[$i]])->type != "Parent" )
+                        {
+                            if( count($newModel->questions()->where('question_id',$data[$dataKeys[$i]])->get()) == 0 )
+                            {
+                                $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $data[$dataKeys[$i]] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                DB::table('exam_models_question')->insert( $examModelQuestion );
+                            }
+                        }
+                        else
+                        {
+                            if( count($newModel->questions()->where('question_id',$data[$dataKeys[$i]])->get()) == 0 )
+                            {
+                                $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $data[$dataKeys[$i]] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                DB::table('exam_models_question')->insert( $examModelQuestion );
+                            }
+                            
+                            $subQuestions = Question::where('parent_id',$data[$dataKeys[$i]])->get();
+                            foreach( $subQuestions as $subQuestion )
+                            {
+                                if( count($newModel->questions()->where('question_id',$subQuestion['id'])->get()) == 0 )
+                                {
+                                    $examModelQuestion = [ 'exam_models_id' => $newModel['id'] , 'question_id' => $subQuestion['id'] , 'weight' => $data[$dataKeys[$i-1]] ];
+                                    DB::table('exam_models_question')->insert( $examModelQuestion );
+                                }
+                            }
+                        }
+                        
                     }
-                } else {
-                    echo "You should choose answers";
                 }
-            } else {
+                else
+                {
+                    echo "Your should choose questions";
+                }
+            } 
+            else 
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
         return $this->addQuestionView($examobj);
