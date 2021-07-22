@@ -39,7 +39,7 @@ use App\QuestionBank;
                                 <option value="SSMCQ">SSMCQ</option>
                                 <option value="MSMCQ">MSMCQ</option>
                                 <option value="Text Check">Text Check</option>
-                                <option value="Eassay">Eassay</option>
+                                <option value="Essay">Essay</option>
                             </select>
                         </div>
                         <div style="float:right;width:20%;margin-left: 10px;">

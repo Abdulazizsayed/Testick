@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Exam', 'submit_exam', 'student_id', 'exam_id');
     }
 
+    public function examsAssigned()
+    {
+        return $this->belongsToMany('App\examModels', 'assign_exam', 'student_id', 'model_id');
+    }
+
     public function courses()
     {
         return $this->belongsToMany('App\Course', 'user_course');

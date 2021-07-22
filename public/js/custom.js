@@ -133,6 +133,40 @@ $(document).on("keyup", ".question-banks .search-filter-input", function(e) {
     document.getElementById("search-form").submit();
 });
 
+// Search students grades by ajax
+$(document).on("keyup", ".students-grades .search-filter-input", function(e) {
+    document.getElementById("search-form").submit = function() {
+        $.ajax({
+            url: "/exams/grades/search",
+            type: "POST",
+            data: new FormData(this),
+            dataType: "JSON",
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                let studentsHolder = document.querySelector(".students-holder");
+                let content = "";
+
+                for (student of data.students) {
+                    content += `<tr>
+                                    <td>${student[0]}</td>
+                                    <td>${student[1]}</td>
+                                    <td>
+                                        <div class="btn btn-primary">Answers</div>
+                                    </td>
+                                </tr>`;
+                }
+
+                studentsHolder.innerHTML = content;
+            }
+        });
+    };
+
+    document.getElementById("search-form").submit();
+});
+
 // Edit question content
 $(document).on(
     "click",
@@ -149,6 +183,107 @@ $(document).on(
             .focus();
     }
 );
+
+// Delete question from exam
+$(document).on("click", ".delete-question-btn.exam-delete", function() {
+    let question_id = $(this)
+        .next()
+        .val();
+    let exam_id = $(this)
+        .next()
+        .next()
+        .val();
+    let question_holder = $(this)
+        .parent()
+        .parent();
+
+    $.ajax({
+        url: "/exams/deleteQuestion/" + question_id + "/" + exam_id,
+        type: "POST",
+        data: [],
+        dataType: "JSON",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            if (data.status == "success") {
+                question_holder.attr("hidden", true);
+            } else {
+                alert("Question was not deleted!");
+            }
+        }
+    });
+});
+
+// Delete question from DB
+$(document).on(
+    "click",
+    ".delete-question-btn.question-bank-delete",
+    function() {
+        let question_id = $(this)
+            .next()
+            .val();
+        let question_holder = $(this)
+            .parent()
+            .parent();
+
+        $.ajax({
+            url: "/questions/" + question_id,
+            type: "POST",
+            data: [],
+            dataType: "JSON",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                console.log(data);
+                if (data.status == "success") {
+                    question_holder.attr("hidden", true);
+                } else {
+                    alert("Question was not deleted!");
+                }
+            }
+        });
+    }
+);
+
+// Delete answer from DB
+$(document).on("click", ".delete-answer-btn", function() {
+    let answer_id = $(this)
+        .next()
+        .val();
+    let answer_holder = $(this).parent();
+
+    $.ajax({
+        url: "/answers/" + answer_id,
+        type: "POST",
+        data: [],
+        dataType: "JSON",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            console.log(data);
+            if (data.status == "success") {
+                answer_holder.attr("hidden", true);
+            } else {
+                alert("answer was not deleted!");
+            }
+        }
+    });
+});
 
 // Discard editing question
 $(
@@ -177,7 +312,6 @@ $(".edit-question-form").on("submit", function(e) {
 
         success: function(data) {
             if (data.success == true) {
-                // console.log($(form));
                 $(form).attr("hidden", true);
                 questionContent = $(form)
                     .prev()
@@ -188,7 +322,16 @@ $(".edit-question-form").on("submit", function(e) {
                     .children()
                     .eq(0)
                     .html(data.content);
-                questionContent.addClass("bg-success");
+                if (data.weight) {
+                    $(".weight").html(data.weight);
+                } else {
+                    $(".type").html(data.type);
+                    $(".difficulty").html(data.difficulty);
+                    $(".chapter").html(data.chapter);
+                }
+                questionContent.append(
+                    "<i class='fa fa-check text-success fa-2x' title='Question Updated successfully'></i>"
+                );
             } else {
                 $(form).attr("hidden", true);
                 questionContent = $(form)
@@ -228,7 +371,17 @@ $(".edit-answer-form").on("submit", function(e) {
                 questionContent.html(
                     data.content + '<i class="fa fa-edit edit-answer-btn"></i>'
                 );
-                questionContent.addClass("bg-success");
+                questionContent.append(
+                    "<i class='fa fa-check' title='Answer Updated successfully'></i>"
+                );
+
+                if (data.is_correct == true) {
+                    questionContent.removeClass("text-danger");
+                    questionContent.addClass("text-success");
+                } else {
+                    questionContent.removeClass("text-success");
+                    questionContent.addClass("text-danger");
+                }
             } else {
                 $(form).attr("hidden", true);
                 questionContent = $(form)
@@ -278,4 +431,63 @@ $(".add-answer").on("click", function() {
     </div>
     `;
     $(".answers").append(newAnswer);
+});
+
+// Get question analysis in specific exam
+$(".analysis .question-analysis-form").on("submit", function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "/exams/questionAnalysis",
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            $(".analysis .solved").html(data.solved + "%");
+            $(".analysis .avg").html(data.avg);
+        }
+    });
+});
+
+// Get chapter analysis in specific exam
+$(".analysis .chapter-analysis-form").on("submit", function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "/exams/chapterAnalysis",
+        type: "POST",
+        data: new FormData(this),
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            $(".analysis .chapter-absorbtion").html(data.absorbtion + "%");
+        }
+    });
+});
+
+$(
+    ".analysis .question-analysis-form .select, .analysis .chapter-analysis-form .select"
+).on("change", function() {
+    $(
+        ".analysis .question-analysis-form, .analysis .chapter-analysis-form"
+    ).submit();
+});
+
+$(".add-check-box").on("change", function() 
+{
+    console.log($(this).attr("checked"));
+    $(this)
+        .parent()
+        .prev()
+        .children()
+        .prop("disabled", function(i, v) {
+            return !v;
+        });
 });

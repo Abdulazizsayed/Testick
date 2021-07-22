@@ -11181,12 +11181,17 @@ a.text-dark:focus {
     display: inline;
 }
 
-select.filter-by {
+select.filter-by,
+.select {
     background-color: #071038;
     color: #fff;
     width: 80%;
     font-size: 18px;
     border-radius: 5px;
+}
+
+.analysis .select {
+    background-color: #333;
 }
 
 form {
@@ -11246,8 +11251,10 @@ table td {
     font-size: 15px;
 }
 
-.question-header i,
-.answers .answer i {
+.question-header i.fa-edit,
+.question-header i.fa-times,
+.answers .answer i.fa-edit,
+.answers .answer i.fa-times {
     color: #fff;
     font-size: 18px;
     cursor: pointer;
@@ -11259,8 +11266,10 @@ table td {
     transition: visibilty 0s, opacity 0.3s ease-in-out;
 }
 
-.question-header:hover i,
-.answers .answer:hover i {
+.question-header:hover i.fa-edit,
+.question-header:hover i.fa-times,
+.answers .answer:hover i.fa-edit,
+.answers .answer:hover i.fa-times {
     visibility: visible;
     opacity: 1;
 }
@@ -11307,3 +11316,25 @@ table td {
     color: #fff;
 }
 /* End show exam page */
+
+/* Start exam Analysis */
+
+.analysis .accordion .card {
+    background-color: #071038;
+    color: #fff;
+}
+
+.analysis .accordion .card .card-header h2 button {
+    color: #fff;
+    font-size: 25px;
+}
+
+.analysis .accordion .card .analysis-component .percentage {
+    font-size: 50px;
+}
+
+.analysis .accordion .card .analysis-component span {
+    color: #aaa;
+}
+
+/* End exam Analysis */

@@ -35,8 +35,8 @@ Route::post('QB/search', 'QBcontroller@search');
 // Course routes
 Route::resource('course', 'courseController');
 //teacher
-Route::post('/course/announcementLog', 'courseController@announcementLog');
-Route::post('/course/createAnnouncement', 'courseController@createAnnouncement');
+Route::get('/course/teacher/announcementLog', 'courseController@announcementLogView');
+Route::post('/course/teacher/createAnnouncement', 'courseController@createAnnouncement');
 //student
 Route::get('/course/student/index', 'courseController@studentindex');
 Route::get('/course/student/courseView/{couresID}', 'courseController@studentCourseView');
@@ -48,19 +48,30 @@ Route::post('/users/editProfile', 'ProfileController@update');
 
 // Exam routes
 Route::resource('exams', 'ExamController');
+//teacher
 Route::post('exams/search', 'ExamController@search');
+Route::post('exams/grades/search', 'ExamController@gradesSearch');
+Route::post('exams/deleteQuestion/{questionId}/{examId}', 'ExamController@deleteQuestion');
 Route::get('exams/addQuestion/{exam}', 'ExamController@addQuestionView');
 Route::post('exams/addQuestion/{exam}', 'ExamController@addQuestion');
 Route::get('exams/analysis/{exam}', 'ExamController@analysis');
-Route::get('exams/create/manually/{isManually}', 'ExamController@createExamManuallyView');
+Route::post('exams/questionAnalysis', 'ExamController@questionAnalysis');
+Route::post('exams/chapterAnalysis', 'ExamController@chapterAnalysis');
+Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
+Route::get('exams/create/{isRandomlly}', 'ExamController@createExamView');
 Route::post('exams/create/manually', 'ExamController@createExamManually');
-Route::get('exams/create/randomlly/{isRandomlly}', 'ExamController@createExamRandomllyView');
+Route::post('exams/create/randomlly', 'ExamController@createExamRandomlly');
+//student
+Route::get('exams/student/index', 'ExamController@studentIndexView');
+Route::get('exams/student/enterExam/{examId}', 'ExamController@enterExam');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
+Route::post('questions/{question}', 'Questioncontroller@destroy');
 
 // Answer routes
 Route::put('answers/updateQuestionAnswer/{answer}', 'AnswerController@updateQuestionAnswer');
+Route::post('answers/{answer}', 'AnswerController@destroy');
 
 // Error routes
 Route::get('errorPages/accessDenied', 'ErrorController@accessDenied');

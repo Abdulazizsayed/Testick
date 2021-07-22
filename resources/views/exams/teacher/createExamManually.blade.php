@@ -122,6 +122,7 @@ use App\Course;
                     <th scope="col">Type</th>
                     <th scope="col">Difficulty</th>
                     <th scope="col">Chapter</th>
+                    <th scope="col">Weight</th>
                     <th scope="col">Add to Exam</th>
                 </tr>
             </thead>
@@ -133,7 +134,10 @@ use App\Course;
                     <td>{{$question->difficulty}}</td>
                     <td>{{$question->chapter}}</td>
                     <td>
-                        <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}"> 
+                        <input id="Weight.{{$question->id}}" name="Weight.{{$question->id}}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
+                    </td>
+                    <td>
+                        <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}" class="add-check-box"> 
                     </td>
                 </tr>
                 @endforeach

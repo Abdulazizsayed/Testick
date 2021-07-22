@@ -14,11 +14,12 @@
             <h2 class="title">Exams</h2>
         </div>
         <div class="col-md-auto">
-            <a class="btn create-exam-btn" href="{{asset('exams/create/manually/1')}}">Create manually</a>
+            <a class="btn create-exam-btn" href="{{asset('exams/create/0')}}">Create manually</a>
         </div>
         <div class="col col-lg-2">
-            <a class="btn create-exam-btn" href="{{asset('exams/create/randomlly/1')}}">Create randomly</a>
+            <a class="btn create-exam-btn" href="{{asset('exams/create/1')}}">Create randomly</a>
         </div>
+    </div>
 
     <p class="pr-5 pl-5 pt-3 desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi illum, architecto impedit odit fuga quia harum beatae? Tenetur perferendis culpa officia. Ut totam error eveniet quasi cum repudiandae et fugiat!</p>
 
@@ -45,32 +46,34 @@
     <table class="table mt-5">
         <thead class="thead-blue">
             <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Course code</th>
-                <th scope="col">Subject</th>
-                <th scope="col">Type</th>
-                <th scope="col">Duration(hours)</th>
-                <th scope="col">Allow period(mins)</th>
-                <th scope="col">Date</th>
-                <th scope="col">Operations</th>
+                <th class="text-center" scope="col">Title</th>
+                <th class="text-center" scope="col">Course code</th>
+                <th class="text-center" scope="col">Subject</th>
+                <th class="text-center" scope="col">Type</th>
+                <th class="text-center" scope="col">Duration(hours)</th>
+                <th class="text-center" scope="col">Allow period(mins)</th>
+                <th class="text-center" scope="col">Date</th>
+                <th class="text-center" scope="col">Weight</th>
+                <th class="text-center" scope="col">Operations</th>
             </tr>
         </thead>
         <tbody class="exams-holder">
             @foreach ($exams as $exam)
             <tr>
-                <td>
+                <td class="text-center">
                     <a href='{{asset('exams/' . $exam->id)}}'>{{$exam->title}}</a>
                 </td>
-                <td>{{$exam->course->code}}</td>
-                <td>{{$exam->course->subject->name}}</td>
-                <td>{{$exam->type}}</td>
-                <td>{{$exam->duration}}</td>
-                <td>{{$exam->allow_period}}</td>
-                <td>{{$exam->date}}</td>
-                <td>
+                <td class="text-center">{{$exam->course->code}}</td>
+                <td class="text-center">{{$exam->course->subject->name}}</td>
+                <td class="text-center">{{$exam->type}}</td>
+                <td class="text-center">{{$exam->duration}}</td>
+                <td class="text-center">{{$exam->allow_period}}</td>
+                <td class="text-center">{{$exam->date}}</td>
+                <td class="text-center">{{$exam->weight()}}</td>
+                <td class="text-center">
                 @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
-                    <button class="btn btn-primary">Analysis <i class="fa fa-pie-chart fa-lg"></i></button>
-                    <button class="btn btn-success">Students grades <i class="fa fa-percent fa-lg"></i></button>
+                    <a class="btn btn-primary" href="{{asset('exams/analysis/' . $exam->id)}}">Analysis <i class="fa fa-pie-chart fa-lg"></i></a>
+                    <a class="btn btn-success" href="{{asset('exams/studentsGrades/' . $exam->id)}}">Students grades <i class="fa fa-percent fa-lg"></i></a>
                 @else
                     <form action="/exams/{{$exam->id}}" method="POST">
                         @csrf
