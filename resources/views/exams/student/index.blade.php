@@ -56,9 +56,9 @@ use Carbon\Carbon;
         </thead>
         <tbody class="exams-holder">
             @foreach (Auth::user()->exams as $exam)
-                @if( \Carbon\Carbon::parse($exam->date)->gt(\Carbon\Carbon::now()) )
+                @if( \Carbon\Carbon::parse($exam->date)->gte(\Carbon\Carbon::now()) )
                     <tr>
-                        <td>{{$exam->title}}</td>
+                        <td><a href="{{asset('exams/student/enterExam/'.$exam->id)}}">{{$exam->title}}</a></td>
                         <td>{{Course::find($exam->course_id)->code}}</td>
                         <td>{{$exam->type}}</td>
                         <td>{{$exam->date}}</td>

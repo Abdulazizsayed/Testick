@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $exam->creator->title)
+@section('title', $exam->exam->title)
 
 @section('scripts')
 <script src="{{ asset('js/solveExam.js') }}" defer></script>
@@ -8,11 +8,11 @@
 
 @section('content')
 <div class="container exams-show">
-    <input type="number" class="duration" value="{{$exam->creator->duration}}" hidden>
+    <input type="number" class="duration" value="{{$exam->exam->duration}}" hidden>
     <div class="timer">
         <span class="hours">00</span>:<span class="mins">00</span>:<span class="seconds">00</span>
     </div>
-    <h2 class="title text-center">{{$exam->creator->title}}</h2>
+    <h2 class="title text-center">{{$exam->exam->title}}</h2>
 
     <form action="/exams/student/markExam/{{$exam->id}}" enctype="multipart/form-data" method="POST" onsubmit="setFormSubmitting()">
      @csrf
