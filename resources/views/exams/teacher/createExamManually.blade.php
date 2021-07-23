@@ -40,7 +40,7 @@ use App\Course;
                 <label for="title" class="col-md-4 col-form-label">date</label>
             </div>
             <div style="float:right;margin-left: 70px;width: 500px">
-                <input id="EDate" name="EDate" type="date" class="form-control @error('EDate') is-invalid @enderror" EDate="EDate" value="{{ old('EDate') }}" required  autocomplete="EDate" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
+                <input id="EDate" name="EDate" type="datetime-local" class="form-control @error('EDate') is-invalid @enderror" EDate="EDate" value="{{ old('EDate') }}" required  autocomplete="EDate" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
                 @error('EDate')
                 <span class="invalid-feedback" role="alert">
                     <strong></strong>
@@ -127,7 +127,7 @@ use App\Course;
                 </tr>
             </thead>
             <tbody class="exams-holder">
-                @foreach(QuestionBank::find(2)->questions as $question)
+                @foreach(QuestionBank::find(1)->questions as $question)
                 <tr>
                     <td>{{$question->content}}</td>
                     <td>{{$question->type}}</td>

@@ -52,7 +52,7 @@ use App\Course;
                     <label for="title" class="col-md-4 col-form-label">date</label>
                 </div>
                 <div style="float:right;margin-left: 70px;width: 600px">
-                    <input id="date" name="date" type="date" class="form-control @error('date') is-invalid @enderror" title="date" value="{{ old('date') }}" required  autocomplete="date" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
+                    <input id="date" name="date" type="datetime-local" class="form-control @error('date') is-invalid @enderror" title="date" value="{{ old('date') }}" required  autocomplete="date" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
                     @error('date')
                     <span class="invalid-feedback" role="alert">
                             <strong></strong>
