@@ -10,7 +10,7 @@ class examModels extends Model
         'exam_id'
     ];
 
-    public function creator()
+    public function exam()
     {
         return $this->belongsTo(Exam::class, 'exam_id');
     }
@@ -20,8 +20,8 @@ class examModels extends Model
         return $this->belongsToMany('App\Question');
     }
 
-    public function students_assigned()
+    public function studentsAssigned()
     {
-        return $this->belongsToMany('App\User', 'assign_exam', 'student_id', 'model_id');
+        return $this->belongsToMany('App\User', 'assign_model', 'model_id', 'student_id');
     }
 }

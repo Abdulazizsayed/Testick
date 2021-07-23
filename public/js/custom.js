@@ -480,8 +480,8 @@ $(
     ).submit();
 });
 
-$(".add-check-box").on("change", function() 
-{
+// Enable weight input when choosing the question
+$(".add-check-box").on("change", function() {
     console.log($(this).attr("checked"));
     $(this)
         .parent()

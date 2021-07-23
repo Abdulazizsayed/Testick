@@ -11338,3 +11338,21 @@ table td {
 }
 
 /* End exam Analysis */
+
+/* Start Solve exam page */
+
+.exams-show {
+    position: relative;
+}
+
+.exams-show .timer {
+    position: fixed;
+    right: 20px;
+    top: 40px;
+    padding: 5px 35px;
+    background-color: #ddd;
+    color: #333;
+    font-size: 28px;
+}
+
+/* End Solve exam page */
