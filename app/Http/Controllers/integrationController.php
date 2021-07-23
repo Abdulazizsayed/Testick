@@ -73,6 +73,6 @@ class integrationController extends Controller
            $foundUser =  $user->create($users[$i]);
            $foundUser->courses()->attach($myCourse['id']);
         }
-        // a view will be returned here
+        return redirect()->away('http://localhost/integrationForm/ContactFrom_v12/integrationForm.php');
     }
 }

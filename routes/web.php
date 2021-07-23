@@ -36,7 +36,6 @@ Route::post('QB/search', 'QBcontroller@search');
 Route::resource('course', 'courseController');
 //teacher
 Route::get('/course/teacher/announcementLog', 'courseController@announcementLogView');
-Route::get('/course/teacher/memberList/{courseid}', 'courseController@memberlistView');
 Route::post('/course/teacher/createAnnouncement', 'courseController@createAnnouncement');
 //student
 Route::get('/course/student/index', 'courseController@studentindex');
@@ -62,11 +61,9 @@ Route::get('exams/studentsGrades/{exam}', 'ExamController@studentsGradesView');
 Route::get('exams/create/{isRandomlly}', 'ExamController@createExamView');
 Route::post('exams/create/manually', 'ExamController@createExamManually');
 Route::post('exams/create/randomlly', 'ExamController@createExamRandomlly');
-Route::get('exams/answers/{examId}/{studentId}', 'ExamController@studentAnswers');
 //student
 Route::get('exams/student/index', 'ExamController@studentIndexView');
 Route::get('exams/student/enterExam/{examId}', 'ExamController@enterExam');
-Route::get('exams/student/answers/{examId}', 'ExamController@myAnswers');
 Route::post('exams/student/markExam/{examId}', 'ExamController@markExam');
 
 // Question routes

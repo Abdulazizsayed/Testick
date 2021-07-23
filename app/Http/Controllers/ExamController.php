@@ -415,17 +415,11 @@ class ExamController extends Controller
                                 array_push($examModels, $newModel); // saving the recently created model
                             }
 
-                            for ($i = 0; $i < count($foundCourseStudents); $i++) {
-                                shuffle($examModels); // shuffling the question's array .
-                                $selectedModel = $examModels[random_int(0, count($examModels) -1 )]; // taking the first index after being shuffled.
-                                $foundCourseStudents[$i]->examsAssigned()->attach($selectedModel['id']);
-                            }
-                            return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
-                        } 
-                        else 
-                        {
-                            return redirect('/exams/create/1')->with('status', 'There is no students on this course');
-                        }
+                        return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
+                    } 
+                    else 
+                    {
+                        return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                     }
                 }
                 else
