@@ -5,7 +5,8 @@
 @section('content')
 <div class="container exams-show">
     <h2 class="title text-center">{{$exam->creator->title}}</h2>
-    <form action="">
+    <form action="/exams/student/markExam/{{$exam->id}}" enctype="multipart/form-data" method="POST">
+     @csrf
         @foreach ($exam->questions()->inRandomOrder()->withPivot('weight')->get() as $question)
             <div class="question">
                 <div class="question-header parent">
@@ -59,26 +60,35 @@
                                     while( in_array( ($rand2 = mt_rand(1,5)), array($rand1) ) );
                                     $trueAnswer = $question->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                     $falseAnswer = $question->answers()->where('is_correct', 0)->inRandomOrder()->first();
+                                    $trueAnswersCount = 0;
                                 @endphp
                                 @foreach ($question->answers()->whereNotIn('id', [$trueAnswer->id, $falseAnswer->id])->inRandomOrder()->limit(5)->get() as $answer)
                                     <li>
                                         @if ($loop->index == $rand1)
+                                                @php
+                                                    $trueAnswersCount++;
+                                                @endphp
                                             <div class="form-check">
-                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id .'-'. $loop->index}}" type="checkbox" value="{{$trueAnswer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$trueAnswer->content}}
                                                 </label>
                                             </div>
                                         @elseif($loop->index == $rand2)
                                             <div class="form-check">
-                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id .'-'. $loop->index}}" type="checkbox" value="{{$falseAnswer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$falseAnswer->content}}
                                                 </label>
                                             </div>
                                         @else
+                                            @if ($answer->is_correct)
+                                                @php
+                                                    $trueAnswersCount++;
+                                                @endphp
+                                            @endif
                                             <div class="form-check">
-                                                <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$answer->content}}" id="answer{{$question->id . $loop->index}}">
+                                                <input class="form-check-input" name="{{$question->id .'-'. $loop->index}}" type="checkbox" value="{{$answer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
                                                     {{$answer->content}}
                                                 </label>
@@ -86,6 +96,7 @@
                                         @endif
                                     </li>
                                 @endforeach
+                                <input type="text" name="{{$question->id}}" value="{{$trueAnswersCount+3}}*{{$trueAnswersCount-5}}*{{$trueAnswersCount}}" hidden>
                             @endif
                         </ul>
                     @else
@@ -141,26 +152,35 @@
                                                 while( in_array( ($rand2 = mt_rand(1,5)), array($rand1) ) );
                                                 $trueAnswer = $child->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                                 $falseAnswer = $child->answers()->where('is_correct', 0)->inRandomOrder()->first();
+                                                $trueAnswersCount = 0;
                                             @endphp
                                             @foreach ($child->answers()->whereNotIn('id', [$trueAnswer->id, $falseAnswer->id])->inRandomOrder()->limit(5)->get() as $answer)
                                                 <li>
                                                     @if ($loop->index == $rand1)
+                                                        @php
+                                                            $trueAnswersCount++;
+                                                        @endphp
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$trueAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id.'-'.$loop->index }}" type="checkbox" value="{{$trueAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$trueAnswer->content}}
                                                             </label>
                                                         </div>
                                                     @elseif($loop->index == $rand2)
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$falseAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id.'-'.$loop->index }}" type="checkbox" value="{{$falseAnswer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$falseAnswer->content}}
                                                             </label>
                                                         </div>
                                                     @else
+                                                        @if ($answer->is_correct)
+                                                            @php
+                                                                $trueAnswersCount++;
+                                                            @endphp
+                                                        @endif
                                                         <div class="form-check">
-                                                            <input class="form-check-input" name="{{$child->id}}" type="checkbox" value="{{$answer->content}}" id="child-answer{{$child->id . $loop->index}}">
+                                                            <input class="form-check-input" name="{{$child->id.'-'.$loop->index }}" type="checkbox" value="{{$answer->content}}" id="child-answer{{$child->id . $loop->index}}">
                                                             <label class="form-check-label" for="child-answer{{$child->id . $loop->index}}">
                                                                 {{$answer->content}}
                                                             </label>
@@ -168,6 +188,7 @@
                                                     @endif
                                                 </li>
                                             @endforeach
+                                            <input type="text" name="{{$question->id}}" value="{{$trueAnswersCount+3}}*{{$trueAnswersCount-5}}*{{$trueAnswersCount}}" hidden>
                                         @endif
                                     </ul>
                                 </div>
