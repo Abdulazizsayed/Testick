@@ -7,6 +7,7 @@ use App\Exam;
 use App\examModels;
 use App\Question;
 use App\Answer;
+use Carbon\Carbon;
 use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
@@ -237,46 +238,61 @@ class ExamController extends Controller
                 $examData =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => $data['ECourse'], 'creator_id' => auth()->user()->id];
 
                 $dataKeys = array_keys($data);
-                if (count($dataKeys) > 11) {
-                    $examobj = Exam::create($examData);
-                    $newModel = examModels::create(['exam_id' => $examobj['id']]);
-                    for ($i = 12; $i < count($dataKeys); $i = $i + 2) {
-                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") 
+                if( \Carbon\Carbon::parse($data['EDate'])->gte(\Carbon\Carbon::now()) )
+                {
+                    if (count($dataKeys) > 11) 
+                    {
+                        $examobj = Exam::create($examData);
+                        $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                        for ($i = 12; $i < count($dataKeys); $i = $i + 2) 
                         {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
-                                $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
-                                DB::table('exam_models_question')->insert($examModelQuestion);
-                            }
-                        } 
-                        else 
-                        {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) 
+                            if (Question::find($data[$dataKeys[$i]])->type != "Parent") 
                             {
-                                $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
-                                DB::table('exam_models_question')->insert($examModelQuestion);
-                            }
-
-                            $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
-                            foreach ($subQuestions as $subQuestion) 
-                            {
-                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) 
-                                {
-                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
+                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
+                                }
+                            } 
+                            else 
+                            {
+                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) 
+                                {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
+                                    DB::table('exam_models_question')->insert($examModelQuestion);
+                                }
+
+                                $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
+                                foreach ($subQuestions as $subQuestion) 
+                                {
+                                    if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) 
+                                    {
+                                        $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
+                                        DB::table('exam_models_question')->insert($examModelQuestion);
+                                    }
                                 }
                             }
                         }
+                    } 
+                    else 
+                    {
+                        echo "Your should choose questions";
                     }
-                } else {
-                    echo "Your should choose questions";
                 }
-            } else {
+                else
+                {
+                    dd("Your should choose date in future or at least today");
+                }
+            } 
+            else 
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
-        return redirect('exams/create/manually/1');
+        return redirect('exams/create/0');
     }
 
 

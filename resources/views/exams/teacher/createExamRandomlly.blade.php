@@ -116,7 +116,7 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
+                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
                            
@@ -191,7 +191,7 @@ use App\Course;
                         
                     </div>
                     <br>
-                   
+                </div>  
                 <br>
             </div>
             <div class="form-group row" style="margin-left: 0px;width: 1000px;border: 2px solid gray;border-radius: 10px">
@@ -200,7 +200,7 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch2" id="ch2" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
+                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
                         </select>
@@ -273,7 +273,7 @@ use App\Course;
                         
                     </div>
                     <br>
-                   
+                </div>   
                 <br>
             </div>            
             <div class="col-md-auto"  style="margin-top: 170">

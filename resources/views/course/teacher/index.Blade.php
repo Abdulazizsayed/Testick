@@ -22,7 +22,7 @@ use App\Subject;
         <div class="col-md-4">
             <span class='label'>Filter</span>
             <select class="filter-by" name="filter-by">
-                <option value="1">Title</option>
+                <option value="1">name</option>
                 <option value="3">Subject</option>
             </select>
         </div>
@@ -30,7 +30,7 @@ use App\Subject;
             <span class='label'>Search by <span class="selected-filter">Title</span></span>
             <form id="search-form" autocomplete="off">
                 @csrf
-                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter exam Title">
+                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter course name">
                 <input class='filter-value' name='filter_value' type="text" value="title" hidden>
             </form>
         </div>

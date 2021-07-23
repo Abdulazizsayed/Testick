@@ -64,6 +64,19 @@
                 y.innerHTML=("&#8594;");
             }
         }
+        function myFunction5() {
+            var x = document.getElementById("pabout");
+            var y = document.getElementById("arrabout");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                y.innerHTML=("&#8595;");
+
+            } else {
+                x.style.display = "none";
+                y.innerHTML=("&#8594;");
+            }
+        }
+        
     </script>
 <div class="container home">
     <section>
@@ -92,7 +105,6 @@
     </section>
     <hr>
     <section>
-
         <div>
             <div style=" display: inline-block;"> <header>Question Banks</header></div>
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction3()" id="arrpqbank"> &#8594;</h1></div>
@@ -106,6 +118,14 @@
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction4()" id="arrea"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="pea">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+    </section>
+    <hr>
+    <section>
+        <div>
+            <div style=" display: inline-block;"><header>About</header></div>
+            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction5()" id="arrabout"> &#8594;</h1></div>
+        </div>
+        <p style="display: none" id="pabout">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>
 
 </div>

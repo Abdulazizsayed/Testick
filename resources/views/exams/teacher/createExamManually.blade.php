@@ -127,7 +127,7 @@ use App\Course;
                 </tr>
             </thead>
             <tbody class="exams-holder">
-                @foreach(QuestionBank::find(1)->questions as $question)
+                @foreach(QuestionBank::find(2)->questions as $question)
                 <tr>
                     <td>{{$question->content}}</td>
                     <td>{{$question->type}}</td>
