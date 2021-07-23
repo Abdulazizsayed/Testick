@@ -39,9 +39,9 @@ use App\Course;
                                 <select class="form-control" name="eType" id="ET" style="background-color: #1A034A;color: white;width: 185px" required >
                                     <option value="" disabled selected >Exam Type</option>
 
-                                        <option value="1">MCQ</option>
-                                        <option value="2">ESSAY</option>
-                                        <option value="3">Two</option>
+                                        <option value="1">Final</option>
+                                        <option value="2">Midterm</option>
+                                        <option value="3">Quiz</option>
 
                                 </select>
                             </div>
@@ -80,6 +80,9 @@ use App\Course;
                             <strong></strong>
                         </span>
                     @enderror
+                </div>
+                <div style="margin-left: 50px;">
+                    <input name = "modelsNumber" id="modelsNumber" placeholder = "Models Number" style="background-color: #1A034A;color: white;width: 185px">
                 </div>
             </div>
             <br>
@@ -128,13 +131,7 @@ use App\Course;
                             <label for="title" class="col-md-4 col-form-label">Weight</label>
                         </div>
                         <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch1w1" id="ch1w1" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                
-                            </select>
+                        <input name="ch1w1" id="ch1w1" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
                         </div>
 
                         <div style="margin-left: 10px">
@@ -160,15 +157,7 @@ use App\Course;
                         <div style="float:left;">
                             <label for="title" class="col-md-4 col-form-label">Weight</label>
                         </div>
-                        <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch1w2" id="ch1w2" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
+                        <input name="ch1w2" id="ch1w2" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
                         
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch1w2Q2Diff" id="ch1w2Q2Diff" style="background-color: #1A034A;color: white;" required >
@@ -191,7 +180,7 @@ use App\Course;
                         
                     </div>
                     <br>
-                   
+                </div>  
                 <br>
             </div>
             <div class="form-group row" style="margin-left: 0px;width: 1000px;border: 2px solid gray;border-radius: 10px">
@@ -211,13 +200,7 @@ use App\Course;
                             <label for="title" class="col-md-4 col-form-label">Weight</label>
                         </div>
                         <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch2w1" id="ch2w1" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                               
-                            </select>
+                        <input name="ch2w1" id="ch2w1" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
                         </div>
 
                         <div style="margin-left: 10px">
@@ -244,13 +227,7 @@ use App\Course;
                             <label for="title" class="col-md-4 col-form-label">Weight</label>
                         </div>
                         <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch2w2" id="ch2w2" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
+                        <input name="ch2w2" id="ch2w2" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
                         </div>
                         
                         <div style="margin-left: 10px">
@@ -273,7 +250,7 @@ use App\Course;
                         
                     </div>
                     <br>
-                   
+                </div>   
                 <br>
             </div>            
             <div class="col-md-auto"  style="margin-top: 170">

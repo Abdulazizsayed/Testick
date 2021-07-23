@@ -17,7 +17,7 @@ class ExamModelsQuestionTable extends Migration
             $table->id();
             $table->foreignId('exam_models_id')->constrained('exam_models')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('question_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('weight')->nullable(false);
+            $table->float('weight')->nullable(false);
             $table->timestamps();
         });
     }
