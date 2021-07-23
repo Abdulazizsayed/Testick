@@ -2,10 +2,18 @@
 
 @section('title', $exam->creator->title)
 
+@section('scripts')
+<script src="{{ asset('js/solveExam.js') }}" defer></script>
+@endsection
+
 @section('content')
 <div class="container exams-show">
+    <input type="number" class="duration" value="{{$exam->creator->duration}}" hidden>
+    <div class="timer">
+        <span class="hours">00</span>:<span class="mins">00</span>:<span class="seconds">00</span>
+    </div>
     <h2 class="title text-center">{{$exam->creator->title}}</h2>
-    <form action="">
+    <form action=""  onsubmit="setFormSubmitting()">
         @csrf
         @foreach ($exam->questions()->inRandomOrder()->withPivot('weight')->get() as $question)
             @if ($question->parent)
@@ -15,7 +23,7 @@
             @endif
             <div class="question">
                 <div class="question-header parent">
-                    <h4 class="question-content">{{$loop->index + 1 . ') ' . $question->content}}</h4>
+                    <h4 class="question-content">{{$question->content}}</h4>
                     <span class="type-chapter">(Type: {{$question->type}} - Weight: <span class="weight">{{$question->pivot->weight}}</span>)</span>
                 </div>
                 <div class="question-childs">
@@ -65,6 +73,8 @@
                                     while( in_array( ($rand2 = mt_rand(1,5)), array($rand1) ) );
                                     $trueAnswer = $question->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                     $falseAnswer = $question->answers()->where('is_correct', 0)->inRandomOrder()->first();
+
+                                    $trueAnswersCount = 1;
                                 @endphp
                                 @foreach ($question->answers()->whereNotIn('id', [$trueAnswer->id, $falseAnswer->id])->inRandomOrder()->limit(5)->get() as $answer)
                                     <li>
@@ -83,6 +93,11 @@
                                                 </label>
                                             </div>
                                         @else
+                                            @if ($answer->is_correct)
+                                                @php
+                                                    $trueAnswersCount++;
+                                                @endphp
+                                            @endif
                                             <div class="form-check">
                                                 <input class="form-check-input" name="{{$question->id}}" type="checkbox" value="{{$answer->content}}" id="answer{{$question->id . $loop->index}}">
                                                 <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
@@ -92,6 +107,7 @@
                                         @endif
                                     </li>
                                 @endforeach
+                                <input type="number" name="{{$question->id}}" value="{{$trueAnswersCount}}" hidden>
                             @endif
                         </ul>
                     @else

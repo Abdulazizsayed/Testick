@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function announcements()
     {
-        return $this->hasMany(Announcement::class,'publisher_id');
+        return $this->hasMany(Announcement::class, 'publisher_id');
     }
 
     #polymorphic relationships
@@ -67,6 +67,11 @@ class User extends Authenticatable
     public function examsSubmitted()
     {
         return $this->belongsToMany('App\Exam', 'submit_exam', 'student_id', 'exam_id');
+    }
+
+    public function assignedModels()
+    {
+        return $this->belongsToMany('App\examModels', 'assign_model', 'student_id', 'model_id');
     }
 
     public function examsAssigned()

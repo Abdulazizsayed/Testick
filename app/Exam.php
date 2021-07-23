@@ -20,6 +20,7 @@ class Exam extends Model
     {
         return $this->hasMany(StudentAnswer::class);
     }
+
     public function examModels()
     {
         return $this->hasMany(examModels::class);
@@ -30,6 +31,11 @@ class Exam extends Model
     public function studentsSubmitted()
     {
         return $this->belongsToMany('App\User', 'submit_exam', 'exam_id', 'student_id');
+    }
+
+    public function studentsEntered()
+    {
+        return $this->belongsToMany('App\User', 'enter_exam', 'exam_id', 'student_id');
     }
 
     public function questions()
@@ -98,6 +104,5 @@ class Exam extends Model
         }
 
         return 0;
-
     }
 }
