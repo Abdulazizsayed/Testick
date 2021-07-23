@@ -52,7 +52,7 @@ use App\Course;
                     <label for="title" class="col-md-4 col-form-label">date</label>
                 </div>
                 <div style="float:right;margin-left: 70px;width: 600px">
-                    <input id="date" name="date" type="date" class="form-control @error('date') is-invalid @enderror" title="date" value="{{ old('date') }}" required  autocomplete="date" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
+                    <input id="date" name="date" type="datetime-local" class="form-control @error('date') is-invalid @enderror" title="date" value="{{ old('date') }}" required  autocomplete="date" autofocus style="border-radius: 25px;"placeholder="Enter date of the exam">
                     @error('date')
                     <span class="invalid-feedback" role="alert">
                             <strong></strong>
@@ -119,7 +119,7 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
+                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
                            
@@ -189,7 +189,7 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch2" id="ch2" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
+                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
                         </select>
