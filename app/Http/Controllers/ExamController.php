@@ -309,12 +309,12 @@ class ExamController extends Controller
             if (!$validatedData->fails()) {
                 $chapterCounter = 2;
                 $questionCount = 1;
-                $QBid = $data[$keys[8]];
-                $numberOfModels = 2;
+                $QBid = $data[$keys[9]];
+                $numberOfModels = $data[$keys[7]];
                 $Chapters = array();
                 $tempChapter = array();
                 $Questions = array();
-                for ($i = 9; $i < count($data); $i++) {
+                for ($i = 10; $i < count($data); $i++) {
                     if ($keys[$i] == ("ch" . $chapterCounter) || $i == count($data) - 1) {
                         if ($i == count($data) - 1) // adding the value of last index of data
                         {
@@ -342,15 +342,18 @@ class ExamController extends Controller
                         $tempQuestion = array();
                     }
                 }
+                
                 $questionObj = new Questioncontroller();
                 $questionResults = $questionObj->findQuestions($Questions, $QBid);
+                
                 if (count($questionResults['errorMessage']) != 0) // there are questions that is not found in the DB , will send an error message
                 {
                     $error = join("\n", $questionResults['errorMessage']);
-                    return redirect('/exams/create/randomlly/1')->with('status', $error);
+                    return redirect('/exams/create/1')->with('status', $error);
                 } else {
                     $course = new courseController();
                     $foundCourseStudents = $course->findCourseStudents($data['course']);
+                    
                     if ($foundCourseStudents != null) {
                         $DExam =  ['title' => $data['title'], 'type' => $data['eType'], 'date' => $data['date'], 'duration' => $data['duration'], 'allow_period' => $data['allow'], 'course_id' => $data['course'], 'creator_id' => auth()->user()->id];
                         $examobj = Exam::create($DExam);
@@ -362,11 +365,23 @@ class ExamController extends Controller
                                 shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array
                                 $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
                                 if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
+                                    $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
+                                    $WeightCount = 0;
+                                    
                                     for ($k = 0; $k < count($selectedQuestion); $k++) {
                                         array_push($attachedQuestions, $selectedQuestion[$k]); // saving the randomly selected question
-                                        DB::table('exam_models_question')->insert(
-                                            ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
-                                        );
+                                        if($k == 0) // weight for the parent only
+                                        {
+                                            
+                                            DB::table('exam_models_question')->insert(
+                                                ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
+                                            );
+                                        }
+                                        else{ // weight of the child
+                                            DB::table('exam_models_question')->insert(
+                                                ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $childWeight]
+                                            );
+                                        }
                                     }
                                 } else {
                                     array_push($attachedQuestions, $selectedQuestion); // saving the randomly selected question
@@ -375,16 +390,18 @@ class ExamController extends Controller
                                     );
                                 }
                             }
-                            array_push($examModels, $newModel); // savung the recently created model
+
+                            array_push($examModels, $newModel); // saving the recently created model
                         }
+
                         for ($i = 0; $i < count($foundCourseStudents); $i++) {
                             shuffle($examModels); // shuffling the question's array .
-                            $selectedModel = $examModels[0]; // taking the first index after being shuffled.
+                            $selectedModel = $examModels[random_int(0, count($examModels) -1 )]; // taking the first index after being shuffled.
                             $foundCourseStudents[$i]->examsAssigned()->attach($selectedModel['id']);
                         }
-                        return redirect('/exams/create/randomlly/1')->with('success', 'Exam Created Successfully');
+                        return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
                     } else {
-                        return redirect('/exams/create/randomlly/1')->with('status', 'There is no students on this course');
+                        return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                     }
                 }
             } else {
@@ -393,7 +410,6 @@ class ExamController extends Controller
         } else {
             return view('errorPages/accessDenied');
         }
-        //return $this->createExamManuallyView(1);
     }
 
     public function enterExam($examId)
