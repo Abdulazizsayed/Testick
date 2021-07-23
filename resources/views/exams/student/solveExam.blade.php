@@ -8,6 +8,11 @@
     <form action="/exams/student/markExam/{{$exam->id}}" enctype="multipart/form-data" method="POST">
      @csrf
         @foreach ($exam->questions()->inRandomOrder()->withPivot('weight')->get() as $question)
+            @if ($question->parent)
+                @if($exam->questions->contains('id', $question->parent->id))
+                    @continue
+                @endif
+            @endif
             <div class="question">
                 <div class="question-header parent">
                     <h4 class="question-content">{{$loop->index + 1 . ') ' . $question->content}}</h4>
