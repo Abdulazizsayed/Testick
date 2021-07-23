@@ -36,6 +36,7 @@ Route::post('QB/search', 'QBcontroller@search');
 Route::resource('course', 'courseController');
 //teacher
 Route::get('/course/teacher/announcementLog', 'courseController@announcementLogView');
+Route::get('/course/teacher/memberList/{courseid}', 'courseController@memberlistView');
 Route::post('/course/teacher/createAnnouncement', 'courseController@createAnnouncement');
 //student
 Route::get('/course/student/index', 'courseController@studentindex');
@@ -66,6 +67,7 @@ Route::get('exams/answers/{examId}/{studentId}', 'ExamController@studentAnswers'
 Route::get('exams/student/index', 'ExamController@studentIndexView');
 Route::get('exams/student/enterExam/{examId}', 'ExamController@enterExam');
 Route::get('exams/student/answers/{examId}', 'ExamController@myAnswers');
+Route::post('exams/student/markExam/{examId}', 'ExamController@markExam');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');

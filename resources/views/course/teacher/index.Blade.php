@@ -48,7 +48,9 @@ use App\Subject;
         <tbody class="question-banks-holder">
             @foreach(auth()->user()->courses as $course)
             <tr>
-                <td>{{$course->code}}</td>
+                <td>
+                    <a href="/course/teacher/memberList/{{$course->id}}">{{$course->code}}</a>
+                </td>
                 <td>{{$course->semester}}</td>
                 <td>{{$course->level}}</td>
                 <td>{{Subject::find( $course->subject_id )->name}}</td>

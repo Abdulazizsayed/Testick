@@ -20,7 +20,7 @@ class CreateStudentAnswersTable extends Migration
 
             $table->foreignId('question_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('exam_models_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });
