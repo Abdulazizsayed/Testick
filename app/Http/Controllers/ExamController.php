@@ -241,21 +241,27 @@ class ExamController extends Controller
                     $examobj = Exam::create($examData);
                     $newModel = examModels::create(['exam_id' => $examobj['id']]);
                     for ($i = 12; $i < count($dataKeys); $i = $i + 2) {
-                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") {
+                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") 
+                        {
                             if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
                                 $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                 DB::table('exam_models_question')->insert($examModelQuestion);
                             }
-                        } else {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
+                        } 
+                        else 
+                        {
+                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) 
+                            {
                                 $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                 DB::table('exam_models_question')->insert($examModelQuestion);
                             }
 
                             $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
-                            foreach ($subQuestions as $subQuestion) {
-                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) {
-                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]];
+                            foreach ($subQuestions as $subQuestion) 
+                            {
+                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) 
+                                {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
                                 }
                             }

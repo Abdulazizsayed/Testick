@@ -5,7 +5,6 @@
 @section('content')
 <div class="container exams-show">
     <h2 class="title text-center">{{$exam->creator->title}}</h2>
-
     <form action="/exams/student/markExam/{{$exam->id}}" enctype="multipart/form-data" method="POST">
      @csrf
         @foreach ($exam->questions()->inRandomOrder()->withPivot('weight')->get() as $question)

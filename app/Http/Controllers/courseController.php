@@ -34,6 +34,11 @@ class courseController extends Controller
         return view('course/student/index');
     }
 
+    public function memberlistView($cousreID)
+    {
+        return view('course/teacher/memberlist',['id' => $cousreID]);
+    }
+
     public function studentCourseView($courseID)
     {
         return view('/course/student/studentCourseView', ['course' => Course::find($courseID)]);
