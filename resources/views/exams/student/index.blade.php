@@ -1,7 +1,6 @@
 <?php
 use App\Course;
 use Carbon\Carbon;
-$date = Carbon::now();
 ?>
 @extends('layouts.app')
 @section('title', 'Exams')
@@ -57,12 +56,14 @@ $date = Carbon::now();
         </thead>
         <tbody class="exams-holder">
             @foreach (Auth::user()->exams as $exam)
-            <tr>
-                <td>{{$exam->title}}</td>
-                <td>{{Course::find($exam->course_id)->code}}</td>
-                <td>{{$exam->type}}</td>
-                <td>{{$exam->date}}</td>
-            </tr>
+                @if( \Carbon\Carbon::parse($exam->date)->gt(\Carbon\Carbon::now()) )
+                    <tr>
+                        <td>{{$exam->title}}</td>
+                        <td>{{Course::find($exam->course_id)->code}}</td>
+                        <td>{{$exam->type}}</td>
+                        <td>{{$exam->date}}</td>
+                    </tr>                 
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -105,12 +106,14 @@ $date = Carbon::now();
         </thead>
         <tbody class="exams-holder">
             @foreach (Auth::user()->exams as $exam)
-            <tr>
-                <td>{{$exam->title}}</td>
-                <td>{{Course::find($exam->course_id)->code}}</td>
-                <td>{{$exam->type}}</td>
-                <td>{{$exam->date}}</td>
-            </tr>
+                @if( \Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()) )
+                    <tr>
+                        <td>{{$exam->title}}</td>
+                        <td>{{Course::find($exam->course_id)->code}}</td>
+                        <td>{{$exam->type}}</td>
+                        <td>{{$exam->date}}</td>
+                    </tr>
+               @endif
             @endforeach
         </tbody>
     </table>
