@@ -79,6 +79,11 @@
         
     </script>
 <div class="container home">
+    @if (session('status'))
+        <div class="alert {{session('class') ? session('class') : 'alert-success'}}">
+            {{ session('status') }}
+        </div>
+    @endif
     <section>
         <div>
             <div style=" display: inline-block;"><header>Testick</header></div>
