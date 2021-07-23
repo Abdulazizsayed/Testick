@@ -64,6 +64,7 @@ Route::post('exams/create/randomlly', 'ExamController@createExamRandomlly');
 //student
 Route::get('exams/student/index', 'ExamController@studentIndexView');
 Route::get('exams/student/enterExam/{examId}', 'ExamController@enterExam');
+Route::post('exams/student/markExam/{examId}', 'ExamController@markExam');
 
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
