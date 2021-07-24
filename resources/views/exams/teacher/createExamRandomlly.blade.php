@@ -116,24 +116,20 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
+                            @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
-                           
                         </select>
                     </div>
                     <br>
                     <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
                         <div style=";margin-left: 10px;">
                             <select class="form-control" name="ch1w1" id="ch1w1" style="background-color: #1A034A;color: white;" required >
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                                
+
                             </select>
                         </div>
 
@@ -141,7 +137,7 @@ use App\Course;
                             <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
                                 <option value="Easy">Easy</option>
                                 <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
+                                <option value="Hard">Hard</option>
                             </select>
                         </div>
                         <div style="margin-left: 20px">
@@ -157,9 +153,6 @@ use App\Course;
                     </div>
                     <br>
                     <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
                         <div style=";margin-left: 10px;">
                             <select class="form-control" name="ch1w2" id="ch1w2" style="background-color: #1A034A;color: white;" required >
                                 <option value="1">1</option>
@@ -169,12 +162,12 @@ use App\Course;
                                 <option value="5">5</option>
                             </select>
                         </div>
-                        
+
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch1w2Q2Diff" id="ch1w2Q2Diff" style="background-color: #1A034A;color: white;" required >
                                 <option value="Easy">Easy</option>
                                 <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
+                                <option value="Hard">Hard</option>
                             </select>
                         </div>
                         <div style="margin-left: 20px">
@@ -188,94 +181,13 @@ use App\Course;
 
                             </select>
                         </div>
-                        
+
                     </div>
                     <br>
-                   
+
                 <br>
             </div>
-            <div class="form-group row" style="margin-left: 0px;width: 1000px;border: 2px solid gray;border-radius: 10px">
-                <div style="margin-left: 25px;margin-top: 20px">
 
-                    <div style="margin-left: 10px">
-                        <select class="form-control" name="ch2" id="ch2" style="background-color: #1A034A;color: white;width: 250px" required >
-                            <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(53)->questions()->select('chapter')->distinct()->get() as $question)
-                            <option value="{{$question->chapter}}">{{$question->chapter}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <br>
-                    <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
-                        <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch2w1" id="ch2w1" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                               
-                            </select>
-                        </div>
-
-                        <div style="margin-left: 10px">
-                            <select class="form-control" name="ch2w1Q2Diff" id="ch2w1Q2Diff" style="background-color: #1A034A;color: white;" required >
-                                <option value="Easy">Easy</option>
-                                <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
-                            </select>
-                        </div>
-                        <div style="margin-left: 20px">
-                            <select class="form-control" name="ch2w1Q1type" id="ch2w1Q1type" style="background-color: #1A034A;color: white;" required >
-                            <option value="MSMCQ">MSMCQ</option>
-                                <option value="SSMCQ">SSMCQ</option>
-                                <option value="Essay">Essay</option>
-                                <option value="T/F">T/F</option>
-                                <option value="Parent">Parent</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
-                        <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch2w2" id="ch2w2" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
-                        
-                        <div style="margin-left: 10px">
-                            <select class="form-control" name="ch2w2Q2Diff" id="ch2w2Q2Diff" style="background-color: #1A034A;color: white;" required >
-                                <option value="Easy">Easy</option>
-                                <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
-                            </select>
-                        </div>
-                        <div style="margin-left: 20px">
-                            <select class="form-control" name="ch2w2Q2type" id="ch2w2Q2type" style="background-color: #1A034A;color: white;" required >
-                            <option value="MSMCQ">MSMCQ</option>
-                                <option value="SSMCQ">SSMCQ</option>
-                                <option value="Essay">Essay</option>
-                                <option value="T/F">T/F</option>
-                                <option value="Parent">Parent</option>
-
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <br>
-                   
-                <br>
-            </div>            
             <div class="col-md-auto"  style="margin-top: 170">
                 <button type="submit" class="btn btn-primary">Create</button>
             </div>

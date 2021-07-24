@@ -220,7 +220,7 @@ class QBcontroller extends Controller
     {
         if ($request->filter_value == 'subject') {
             $questionBanks = Subject::where('name', 'like', '%' . $request->search_input . '%')->get()->map(function ($item) {
-                return $item->questionBanks;
+                return Auth::user()->questionBanks()->where('subject_id', $item->id)->get();
             })->collapse();
         } else {
             $questionBanks = Auth::user()->questionBanks()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();

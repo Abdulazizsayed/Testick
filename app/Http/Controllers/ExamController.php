@@ -225,27 +225,21 @@ class ExamController extends Controller
                     $examobj = Exam::create($examData);
                     $newModel = examModels::create(['exam_id' => $examobj['id']]);
                     for ($i = 12; $i < count($dataKeys); $i = $i + 2) {
-                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") 
-                        {
+                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") {
                             if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
                                 $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                 DB::table('exam_models_question')->insert($examModelQuestion);
                             }
-                        } 
-                        else 
-                        {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) 
-                            {
+                        } else {
+                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
                                 $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                 DB::table('exam_models_question')->insert($examModelQuestion);
                             }
 
                             $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
-                            foreach ($subQuestions as $subQuestion) 
-                            {
-                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) 
-                                {
-                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
+                            foreach ($subQuestions as $subQuestion) {
+                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]] / count($subQuestions)];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
                                 }
                             }
@@ -455,7 +449,6 @@ class ExamController extends Controller
         }
 
         $model = $student->assignedModels()->where('exam_id', $examId)->get();
-        dd($model);
         return view('exams.studentAnswers')->with([
             'exam' => $model,
             'student' => $student
@@ -464,109 +457,79 @@ class ExamController extends Controller
 
     public function markExam($examModelId)
     {
-        if (auth()->user()->role == 0) 
-        {   
+        if (auth()->user()->role == 0) {
             $data = Request::all();
             $keys = array_keys($data);
             $newKeys = array();
             $remenderOfKeys = array();
-            for( $i = 1 ; $i < count($keys) ; $i++ )
-            {
-                if( strpos($keys[$i], '-') !== false )
-                {
+            for ($i = 1; $i < count($keys); $i++) {
+                if (strpos($keys[$i], '-') !== false) {
                     $pieces = explode("-", $keys[$i]);
                     array_push($newKeys, $pieces[0]);
                     array_push($remenderOfKeys, $pieces[1]);
-                }
-                else
-                {
+                } else {
                     array_push($newKeys, $keys[$i]);
                 }
             }
-            
-            for( $i = 1 ; $i < count($data) ; $i++ )
-            {
-                if( $data[$keys[$i]] == null )
-                {
-                    $studentAnswer = [ 'content' => "null" , 'score' => 0.0 ,'question_id' => $keys[$i] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+
+            for ($i = 1; $i < count($data); $i++) {
+                if ($data[$keys[$i]] == null) {
+                    $studentAnswer = ['content' => "null", 'score' => 0.0, 'question_id' => $keys[$i], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                     $studentAnswerController = new StudentAnswerController();
                     $studentAnswerController->store($studentAnswer);
                 }
             }
 
             $examModel = examModels::find($examModelId);
-            foreach( $examModel->questions as $question )
-            {
-                if( in_array( $question["id"] ,$newKeys ) )
-                {
-                    $questionRightAnswers = Answer::where("question_id",$question["id"])->where("is_correct",1)->get();
-                    if( $question["type"] == "T/F" || $question["type"] == "SSMCQ" )
-                    {
+            foreach ($examModel->questions as $question) {
+                if (in_array($question["id"], $newKeys)) {
+                    $questionRightAnswers = Answer::where("question_id", $question["id"])->where("is_correct", 1)->get();
+                    if ($question["type"] == "T/F" || $question["type"] == "SSMCQ") {
                         $flag = 0;
-                        foreach($questionRightAnswers as $Answers )
-                        {
-                            if( $data[$question["id"]] == $Answers["content"] )
-                            {
+                        foreach ($questionRightAnswers as $Answers) {
+                            if ($data[$question["id"]] == $Answers["content"]) {
                                 $flag = 1;
                             }
                         }
-                        if( $flag == 1 )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $data[$question["id"]] , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $data[$question["id"]] , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($flag == 1) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif($question["type"] == "Essay" && $data[$question["id"]] != null)
-                    {
-                        $similarty = ExamController::connectToFlaskAPI( $data[$question["id"]] , $questionRightAnswers[0]['content']);
-                        $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                        if( $similarty > 0.9 )
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $similarty * $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                    } elseif ($question["type"] == "Essay" && $data[$question["id"]] != null) {
+                        $similarty = ExamController::connectToFlaskAPI($data[$question["id"]], $questionRightAnswers[0]['content']);
+                        $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                        if ($similarty > 0.9) {
+                            $studentAnswer = ['content' => $answerString, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $answerString, 'score' => $similarty * $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif( $question["type"] == "MSMCQ" )
-                    {
+                    } elseif ($question["type"] == "MSMCQ") {
                         $counter = 0;
                         $answerString = "";
                         $pieces = explode("*", $data[$question["id"]]);
-                        for( $i = 0 ; $i < count($remenderOfKeys) ; $i++ )
-                        {
-                            foreach( $questionRightAnswers as $Answer )
-                            {
-                                if( $Answer['content'] == $data[$question["id"]."-".$remenderOfKeys[$i]] )
-                                {
-                                    $answerString .= $data[$question["id"]."-".$remenderOfKeys[$i]] ." ";
-                                    $counter ++;
+                        for ($i = 0; $i < count($remenderOfKeys); $i++) {
+                            foreach ($questionRightAnswers as $Answer) {
+                                if ($Answer['content'] == $data[$question["id"] . "-" . $remenderOfKeys[$i]]) {
+                                    $answerString .= $data[$question["id"] . "-" . $remenderOfKeys[$i]] . " ";
+                                    $counter++;
                                 }
                             }
                         }
-                        if( $counter == $pieces[2] )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($counter == $pieces[2]) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $answerString, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $answerString, 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif( $question["type"] == "Text Check" && $data[$question["id"]] != null )
-                    {
+                    } elseif ($question["type"] == "Text Check" && $data[$question["id"]] != null) {
                         $teacherAnswer = str_replace(' ', '', $questionRightAnswers[0]['content']);
                         $studentAnswer = str_replace(' ', '', $data[$question["id"]]);
 
@@ -576,34 +539,27 @@ class ExamController extends Controller
                         $teacherAnswer = strtolower($teacherAnswer);
                         $studentAnswer = strtolower($studentAnswer);
 
-                        if( $teacherAnswer == $studentAnswer )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $studentAnswer , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $studentAnswer , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($teacherAnswer == $studentAnswer) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $studentAnswer, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $studentAnswer, 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
-                        $studentAnswerController->store($studentAnswer);   
+                        $studentAnswerController->store($studentAnswer);
                     }
-                }
-                else
-                {
-                    $studentAnswer = [ 'content' => "null" , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                } else {
+                    $studentAnswer = ['content' => "null", 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                     $studentAnswerController = new StudentAnswerController();
                     $studentAnswerController->store($studentAnswer);
                 }
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
     }
 
-    public function connectToFlaskAPI($studentAnswer , $teacherAnswer)
+    public function connectToFlaskAPI($studentAnswer, $teacherAnswer)
     {
         $client = new \GuzzleHttp\Client();
 
@@ -611,12 +567,11 @@ class ExamController extends Controller
 
         $response = $client->post($url, [
             'json' => [
-                'studentAnswer' => $studentAnswer ,
+                'studentAnswer' => $studentAnswer,
                 'teacherAnswer' => $teacherAnswer
             ]
         ]);
-        $contents = json_decode($response->getBody() , true);
+        $contents = json_decode($response->getBody(), true);
         return $contents['similarity'];
     }
-
 }
