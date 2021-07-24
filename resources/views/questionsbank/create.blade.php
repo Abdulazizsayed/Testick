@@ -60,7 +60,7 @@
 
     <div class="row1" style="margin-left: 70px; margin-top: 5% ">
         <div>
-            <img style="width: 90%;height: 70%" src="https://cdn.discordapp.com/attachments/632672262444679169/868256705706852352/QB-Photo.jpg">
+            <img style="width: 90%;height: 70%" src="https://cdn.discordapp.com/attachments/632672262444679169/868591696181616690/unknown.png">
         </div>
 
         <div style="margin-top: 3%;margin-left: 15%">
@@ -91,15 +91,9 @@
             <span> will be used.</span>
         </div>
         <div style="margin-top: 1%">
-            <span>6. For T/F Question: add Yes if the correct answer is false in Canswer Cell ONLY, Wrong answer cell will NOT be used.</span>
-            <span style="color:#FD6464"><b>Yes</b></span>
-            <span> if the correct answer is true or </span>
-            <span style="color:#FD6464"><b>No</b></span>
-            <span> if the correct answer is false in Canswer Cell </span>
-            <span style="color:#FD6464"><b>ONLY</b></span>
-            <span>, Wrong answer cell will </span>
-            <span style="color:#FD6464"><b>NOT</b></span>
-            <span> be used.</span>
+            <span>6. For T/F Question: if it is the correct answer add <span style="color:#FD6464"><b>TRUE</b></span>
+            Canswer Cell and add <span style="color:#FD6464"><b>FALSE</b></span> in Wrong answer cell as well.  And
+            <span style="color:#FD6464"><b>vise versa</b></span> </span>
         </div>
         <div style="margin-top: 3%;margin-bottom: 2%">
             <h5>PLEASE note that it is very important to construct your file correctly, to avoid any errors and to work effectively in the analysis section. </h5>
