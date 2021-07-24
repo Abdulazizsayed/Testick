@@ -353,41 +353,57 @@ class ExamController extends Controller
                             $DExam =  ['title' => $data['title'], 'type' => $data['eType'], 'date' => $data['date'], 'duration' => $data['duration'], 'allow_period' => $data['allow'], 'course_id' => $data['course'], 'creator_id' => auth()->user()->id];
                             $examobj = Exam::create($DExam);
                             $examModels = array();
-                            for ($i = 0; $i < $numberOfModels; $i++) {
+                            for ($i = 0; $i < $numberOfModels; $i++) { // creating new models
                                 $newModel = examModels::create(['exam_id' => $examobj['id']]);
                                 $attachedQuestions = array();
                                 for ($j = 0; $j < count($questionResults['foundQuestions']); $j++) {
                                     shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array
                                     $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
-                                    if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
-                                        $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
-                                        $WeightCount = 0;
-
-                                        for ($k = 0; $k < count($selectedQuestion); $k++) {
-                                            array_push($attachedQuestions, $selectedQuestion[$k]); // saving the randomly selected question
-                                            if ($k == 0) // weight for the parent only
-                                            {
-
-                                                DB::table('exam_models_question')->insert(
-                                                    ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
-                                                );
-                                            } else { // weight of the child
-                                                DB::table('exam_models_question')->insert(
-                                                    ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $childWeight]
-                                                );
+                                    
+                                    if($questionResults['foundQuestions'][$j]['type'] == 'Parent')
+                                    {
+                                        if(in_array($selectedQuestion[0]['id'] , $attachedQuestions))
+                                        {
+                                            $j--;
+                                        }
+                                        else
+                                        {
+                                            $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
+                                            $WeightCount = 0;
+    
+                                            for ($k = 0; $k < count($selectedQuestion); $k++) {
+                                                array_push($attachedQuestions, $selectedQuestion[$k]['id']); // saving the randomly selected question
+                                                if ($k == 0) // weight for the parent only
+                                                {
+    
+                                                    DB::table('exam_models_question')->insert(
+                                                        ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
+                                                    );
+                                                } else { // weight of the child
+                                                    DB::table('exam_models_question')->insert(
+                                                        ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $childWeight]
+                                                    );
+                                                }
                                             }
                                         }
-                                    } else {
-                                        array_push($attachedQuestions, $selectedQuestion); // saving the randomly selected question
-                                        DB::table('exam_models_question')->insert(
-                                            ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
-                                        );
+                                    }
+                                    else
+                                    {
+                                        if(in_array($selectedQuestion[0]['id'] , $attachedQuestions))
+                                        {
+                                            $j--;
+                                        }
+                                        else
+                                        {
+                                            array_push($attachedQuestions, $selectedQuestion['id']); // saving the randomly selected question
+                                            DB::table('exam_models_question')->insert(
+                                                ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
+                                            );
+                                        }
                                     }
                                 }
-
                                 array_push($examModels, $newModel); // saving the recently created model
                             }
-
                             return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
                         } else {
                             return redirect('/exams/create/1')->with('status', 'There is no students on this course');

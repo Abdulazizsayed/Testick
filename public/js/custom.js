@@ -554,9 +554,7 @@ $(document).on("click", ".add-question-randomly", function() {
                             <div style="margin-left: 10px;">
                                 <input name="ch${ch}w${randomQuestions}" id="ch${ch}w${randomQuestions}" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                             </div>
-                            <div style="margin-left: 10px;">
-                                <input name="ch${ch}w${randomQuestions}Num${randomQuestions}" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
-                            </div>
+                         
 
                             <div style="margin-left: 10px">
                                 <select class="form-control" name="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" id="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" style="background-color: #1A034A;color: white;" required >
@@ -588,7 +586,7 @@ $(document).on("click", ".add-question-randomly", function() {
 
 $(".add-chapter").on("click", function() {
     let options = ``;
-    $(".select-chapters option").each(function(i) {
+    $(".select-chapters.first-select option").each(function(i) {
         if (i != 0) {
             options += `<option value="${$(this).val()}">${$(
                 this
@@ -614,9 +612,7 @@ $(".add-chapter").on("click", function() {
                         <div style="margin-left: 10px;">
                             <input name="ch${chs}w1" id="ch${chs}w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                         </div>
-                        <div style="margin-left: 10px;">
-                            <input name="ch${chs}w1Num1" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
-                        </div>
+                      
 
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch${chs}w1Q1Diff" id="ch${chs}w1Q1Diff" style="background-color: #1A034A;color: white;" required >

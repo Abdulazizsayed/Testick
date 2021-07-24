@@ -102,18 +102,35 @@ class QBcontroller extends Controller
                                 }
                             } else if ($QuestionObj['type'] == "T/F") {
                                 $correct = -1;
-                                if ($cellValue == 'Yes') {
+                                $addedValue = '';
+                                if ($cellValue == 'true') {
                                     $correct = 1;
-                                } else if ($cellValue == 'No') {
+                                    $addedValue = 'True';
+                                } else if ($cellValue == false) {
                                     $correct = 0;
+                                    $addedValue = 'False';
                                 }
-                                $insertAnswer = ['content' => $cellValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
+                                $insertAnswer = ['content' => $addedValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
                                 $answerController = new AnswerController();
                                 $answerController->store($insertAnswer);
                             }
                         } else if ($col == 'G') // Wrong Answer -  the question ID is missing :)
                         {
-                            if ($QuestionObj['type'] != "Essay") {
+                            if ($QuestionObj['type'] == "T/F") {
+                                $addedValue = '';
+                                $correct = -1;
+                                if ($cellValue == 'true') {
+                                    $correct = 1;
+                                    $addedValue = 'True';
+                                } else if ($cellValue == false) {
+                                    $correct = 0;
+                                    $addedValue = 'False';
+                                }
+                                $insertAnswer = ['content' => $addedValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
+                                $answerController = new AnswerController();
+                                $answerController->store($insertAnswer);
+                            }
+                            else if ($QuestionObj['type'] != "Essay" &&  $QuestionObj['type'] != "T/F" ) {
                                 $answersArray = explode("~", $cellValue); // cutting string on ~ char
                                 for ($ans = 0; $ans < count($answersArray); $ans++) {
                                     $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
