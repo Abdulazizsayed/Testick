@@ -56,7 +56,11 @@ class Exam extends Model
     # Calculated fields
     public function weight()
     {
-        return $this->questions()->withPivot('weight')->sum('weight');
+        if ($this->examModels()->count() > 0) {
+            return $this->examModels()->first()->questions()->withPivot('weight')->sum('weight');
+        } else {
+            return 'Have No models';
+        }
     }
 
     public function maxScore()

@@ -33,7 +33,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    
+
 
     public function exams()
     {
@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function studentAnswers()
     {
-        return $this->hasMany(StudentAnswer::class);
+        return $this->hasMany(StudentAnswer::class, 'student_id');
     }
 
     public function announcements()

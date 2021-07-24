@@ -397,16 +397,14 @@ class ExamController extends Controller
                             return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                         }
                     }
-                    // else
-                    // {
-                    //     return redirect('/exams/create/1')->with('status', "You should choose date in future or at least today");
-                    // }
                 } else {
-                    return response($validatedData->messages(), 200);
+                    return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
                 }
             } else {
-                return view('errorPages/accessDenied');
+                return response($validatedData->messages(), 200);
             }
+        } else {
+            return view('errorPages/accessDenied');
         }
     }
 
@@ -450,7 +448,7 @@ class ExamController extends Controller
             ]);
         }
 
-        $model = $student->assignedModels()->where('exam_id', $examId)->get();
+        $model = $student->assignedModels()->where('exam_id', $examId)->first();
         return view('exams.studentAnswers')->with([
             'exam' => $model,
             'student' => $student
