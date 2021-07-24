@@ -89,7 +89,7 @@
             <div style=" display: inline-block;"><header>Testick</header></div>
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction()" id="arrtestick" class="section"> &#8594;</h1></div>
         </div>
-        <p style="display: none" id="ptestick">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        <p style="display: none" id="ptestick">This System provides to you special services to make it easy for you as a teacher to create and correcting exams with any type of questions.</p>
     </section>
     <hr>
     <section>
@@ -97,7 +97,7 @@
               <div style=" display: inline-block;"><header>Courses</header></div>
               <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction1()" id="arrcourse" class="section"> &#8594;</h1></div>
         </div>
-        <p style="display: none" id="pcourse">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        <p style="display: none" id="pcourse">in this page you can announce your students and review course details and members in this course if TAs or students.</p>
     </section>
     <hr>
     <section>
@@ -106,7 +106,7 @@
             <div style=" display: inline-block;"><header>Exams</header></div>
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction2()" id="arrexams" class="section"> &#8594;</h1></div>
         </div>
-        <p style="display: none" id="pexams">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        <p style="display: none" id="pexams">this page is helping you as a teacher to create exams manually or automatically and specify its date and time for students.</p>
     </section>
     <hr>
     @if (Auth::user()->role == 1)
@@ -115,7 +115,7 @@
                 <div style=" display: inline-block;"> <header>Question Banks</header></div>
                 <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction3()" id="arrpqbank" class="section"> &#8594;</h1></div>
             </div>
-            <p style="display: none" id="pqbank">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+            <p style="display: none" id="pqbank">in this page you can add question banks or edit or delete an old ones and can access every single question to edit or delete.</p>
         </section>
     @endif
     <hr>
@@ -124,7 +124,7 @@
             <div style=" display: inline-block;"><header>Exams Analysis</header></div>
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction4()" id="arrea" class="section"> &#8594;</h1></div>
         </div>
-        <p style="display: none" id="pea">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        <p style="display: none" id="pea">in this page we helped you to show the statistics of exams immediately after exam is finished and also can get statistics of past exams.</p>
     </section>
     <hr>
     <section>
@@ -132,7 +132,7 @@
             <div style=" display: inline-block;"><header>About</header></div>
             <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction5()" id="arrabout" class="section"> &#8594;</h1></div>
         </div>
-        <p style="display: none" id="pabout">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        <p style="display: none" id="pabout">june 2021-Testick</p>
     </section>
 
 </div>
