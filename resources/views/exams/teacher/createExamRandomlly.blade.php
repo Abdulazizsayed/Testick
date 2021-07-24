@@ -115,7 +115,7 @@ use App\Course;
                 <input type="number" class="chs-count" value="1" hidden>
                 <div class="random-questions" style="margin-left: 25px;margin-top: 20px">
                     <div style="margin-left: 10px">
-                        <select class="form-control select-chapters" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
+                        <select class="form-control select-chapters first-select" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
                             @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
                                 <option value="{{$question->chapter}}">{{$question->chapter}}</option>
@@ -127,9 +127,7 @@ use App\Course;
                         <div style="margin-left: 10px;">
                             <input name="ch1w1" id="ch1w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                         </div>
-                        <div style="margin-left: 10px;">
-                            <input name="ch1w1Num1" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
-                        </div>
+                        
 
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
