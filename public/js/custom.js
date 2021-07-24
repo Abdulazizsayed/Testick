@@ -518,8 +518,7 @@ $(
 });
 
 // Enable weight input when choosing the question
-$(".add-check-box").on("change", function() {
-    console.log($(this).attr("checked"));
+$(document).on("change", ".add-check-box", function() {
     $(this)
         .parent()
         .prev()
@@ -648,6 +647,7 @@ $(".add-chapter").on("click", function() {
 // Get chapters of specific question bank
 $(".create-exam-randomly .select-question-bank").on("change", function() {
     let questionBank = this.options[this.selectedIndex].value;
+
     $.ajax({
         url: "/QB/chapters/" + questionBank,
         type: "POST",
@@ -671,6 +671,104 @@ $(".create-exam-randomly .select-question-bank").on("change", function() {
                     `<option value="${value.chapter}">${value.chapter}</option>`
                 );
             });
+        }
+    });
+});
+
+// Search questions of question bank by ajax
+$(document).on(
+    "keyup",
+    ".Create-Exam-Manually .search-filter-input",
+    function() {
+        let searchValue = $(".search-filter-input").val(),
+            filterBy = $(".filter-by").val(),
+            questionBankId = $(".question-bank-id").val();
+
+        if (searchValue == "") {
+            searchValue = "0";
+        }
+
+        $.ajax({
+            url:
+                "/questions/search/" +
+                filterBy +
+                "/" +
+                searchValue +
+                "/" +
+                questionBankId,
+            type: "POST",
+            data: [],
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            },
+            dataType: "JSON",
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                // console.log(data);
+                let questionsHolder = document.querySelector(
+                    ".questions-holder"
+                );
+                let content = "";
+                for (question of data.questions) {
+                    content += `<tr>
+                                    <td>${question[1]}</td>
+                                    <td>${question[2]}</td>
+                                    <td>${question[3]}</td>
+                                    <td>${question[4]}</td>
+                                    <td>
+                                        <input id="Weight.${question[0]}" name="Weight.${question[0]}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
+                                    </td>
+                                    <td>
+                                        <input  type="checkbox" id="ch.${question[0]}" name="ch.${question[0]}" value="${question[0]}" class="add-check-box">
+                                    </td>
+                                </tr>`;
+                }
+
+                questionsHolder.innerHTML = content;
+            }
+        });
+    }
+);
+
+// Get chapters of specific question bank
+$(".Create-Exam-Manually .select-question-bank").on("change", function() {
+    let questionBankId = this.options[this.selectedIndex].value;
+    $(".question-bank-id").val(questionBankId);
+
+    $.ajax({
+        url: "/QB/questions/" + questionBankId,
+        type: "POST",
+        data: [],
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            let questionsHolder = document.querySelector(".questions-holder");
+            let content = "";
+            for (question of data.questions) {
+                content += `<tr>
+                                <td>${question[1]}</td>
+                                <td>${question[2]}</td>
+                                <td>${question[3]}</td>
+                                <td>${question[4]}</td>
+                                <td>
+                                    <input id="Weight.${question[0]}" name="Weight.${question[0]}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
+                                </td>
+                                <td>
+                                    <input  type="checkbox" id="ch.${question[0]}" name="ch.${question[0]}" value="${question[0]}" class="add-check-box">
+                                </td>
+                            </tr>`;
+            }
+
+            questionsHolder.innerHTML = content;
         }
     });
 });
