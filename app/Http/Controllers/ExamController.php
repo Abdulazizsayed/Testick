@@ -428,15 +428,21 @@ class ExamController extends Controller
             }
             else
             {
-                return response($validatedData->messages(), 200);
+                 return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
             }
-        }
-        else
+           
+        } 
+        else 
         {
-            return view('errorPages/accessDenied');
+            return response($validatedData->messages(), 200);
         }
+       
     }
-
+    else 
+    {
+        return view('errorPages/accessDenied');
+    }
+}
     public function enterExam($examId)
     {
         $exam = Exam::find($examId);
