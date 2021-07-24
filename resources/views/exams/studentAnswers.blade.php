@@ -25,7 +25,7 @@
                         @endforeach
                     </ul>
                     @php
-                        $myAnswer = $student->studentAnswers()->where('exam_id', $exam->id)->where('question_id', $question->id)->first()
+                        $myAnswer = $student->studentAnswers()->where('exam_models_id', $exam->id)->where('question_id', $question->id)->first();
                     @endphp
                     <h6 class="font-weight-bold">Your answer: {{$myAnswer->content}} ({{$myAnswer->score}})</h6>
                 @else
