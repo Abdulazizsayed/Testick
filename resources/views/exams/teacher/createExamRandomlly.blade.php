@@ -82,7 +82,7 @@ use App\Course;
                 @enderror
             </div>
             <div style="margin-left: 50px;">
-                <input name = "modelsNumber" id="modelsNumber" placeholder = "Models Number" style="background-color: #1A034A;color: white;width: 185px">
+                <input name = "modelsNumber" type="number" id="modelsNumber" placeholder = "Number of models" style="background-color: #1A034A;color: white;width: 185px; border:0">
             </div>
         </div>
         <br>
@@ -100,7 +100,6 @@ use App\Course;
             </div>
         </div>
         <br>
-
         <div class="form-group row" style="margin-left: 30px">
 
             <div style="margin-left: 10px">
@@ -113,8 +112,8 @@ use App\Course;
                 </select>
             </div>
         </div>
-        <div class="form-group row" style="margin-left: 0px;width: 1000px;border: 2px solid gray;border-radius: 10px">
-            <div style="margin-left: 25px;margin-top: 20px">
+        <div class="form-group row" style="margin-left: 0px;border: 2px solid gray;border-radius: 10px">
+            <div class="random-questions" style="margin-left: 25px;margin-top: 20px">
 
                 <div style="margin-left: 10px">
                     <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
@@ -125,13 +124,17 @@ use App\Course;
                     </select>
                 </div>
                 <br>
-                <div class="form-group row" style="margin-left: 0px">
+                <div class="form-group row random-question" style="margin-left: 0px">
                     <div style="margin-left: 10px;">
-                        <input name="ch1w1" id="ch1w1" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
+                        <input name="ch1w1" id="ch1w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
+                    </div>
+                    <div style="margin-left: 10px;">
+                        <input name="ch1w1Num" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
                     </div>
 
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
+                            <option value="" disabled selected >Difficulty</option>
                             <option value="Easy">Easy</option>
                             <option value="Med">Med</option>
                             <option value="Hard">Hard</option>
@@ -149,11 +152,17 @@ use App\Course;
                     </div>
                 </div>
                 <br>
-                <div class="form-group row" style="margin-left: 0px">
-                    <input name="ch1w2" id="ch1w2" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
+                <div class="form-group row random-question" style="margin-left: 0px">
+                    <div style="margin-left: 10px;">
+                        <input name="ch1w2" id="ch1w2" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
+                    </div>
+                    <div style="margin-left: 10px;">
+                        <input name="ch1w1Num" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
+                    </div>
 
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1w2Q2Diff" id="ch1w2Q2Diff" style="background-color: #1A034A;color: white;" required >
+                            <option value="" disabled selected >Difficulty</option>
                             <option value="Easy">Easy</option>
                             <option value="Med">Med</option>
                             <option value="Hard">Hard</option>
@@ -171,8 +180,9 @@ use App\Course;
                         </select>
                     </div>
                 </div>
-                <br>
-                <br>
+            </div>
+            <div class="col-md-12 text-center pb-3">
+                <div class="btn add add-question-randomly"><i class="fa fa-plus fa-lg"></i></div>
             </div>
         </div>
         <div>
