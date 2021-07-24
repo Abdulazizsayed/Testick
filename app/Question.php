@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $fillable = [
-        'content', 'type', 'chapter', 'parent_id', 'question_bank_id','difficulty'
+        'content', 'type', 'chapter', 'parent_id', 'question_bank_id', 'difficulty'
     ];
 
     public function questionBank()
@@ -36,10 +36,7 @@ class Question extends Model
     }
 
     #many to many relationships
-    public function exams()
-    {
-        return $this->belongsToMany('App\Exam');
-    }
+
     public function examModels()
     {
         return $this->belongsToMany('App\examModels');

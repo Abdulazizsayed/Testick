@@ -40,7 +40,9 @@ class Exam extends Model
 
     public function questions()
     {
-        return $this->belongsToMany('App\Question');
+        return $this->examModels()->get()->map(function ($item) {
+            return $item->questions;
+        })->collapse();
     }
 
     public function course()
@@ -101,10 +103,15 @@ class Exam extends Model
 
     public function chapterAbsorbtion($ch)
     {
+        $sumOfWeights = 0;
+        foreach ($this->examModels as $model) {
+            $sumOfWeights += $model->questions()->where('chapter', $ch)->withPivot('weight')->sum('weight');
+        }
+
         if ($this->questions()->count() > 0) {
-            return ($this->questions()->where('chapter', $ch)->get()->map(function ($item) {
+            return ($this->questions()->where('chapter', $ch)->map(function ($item) {
                 return $item->studentAnswers;
-            })->collapse()->where('exam_id', $this->id)->average('score') / $this->questions()->where('chapter', $this->questions()->select('chapter')->distinct()->get()->first()->chapter)->withPivot('weight')->sum('weight')) * 100;
+            })->collapse()->where('exam_id', $this->id)->sum('score') / $sumOfWeights) * 100;
         }
 
         return 0;

@@ -38,6 +38,12 @@
                             <span>Success percentage</span>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center analysis-component mt-3">
+                            <h2 class="percentage text-warning">{{$exam->weight()}}</h2>
+                            <span>Exam weight</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,9 +60,9 @@
                     <form class="question-analysis-form" action="" method="POST">
                         @csrf
                         <input class="exam-id" type="number" name="exam_id" value="{{$exam->id}}" hidden>
-                        <select class="select ml-5 mb-4">
-                            <option value="" disabled {{$exam->questions->count() == 0 ? 'selected' : ''}}>Choose a question</option>
-                            @foreach ($exam->questions as $question)
+                        <select name="question_id" class="select ml-5 mb-4">
+                            <option value="" disabled {{$exam->questions()->count() == 0 ? 'selected' : ''}}>Choose a question</option>
+                            @foreach ($exam->questions() as $question)
                                 <option value="{{$question->id}}"{{$loop->index == 0 ? ' selected' : ''}}>{{$question->content}}({{$question->difficulty}})</option>
                             @endforeach
                         </select>
@@ -74,9 +80,17 @@
                         </div>
                         <div class="col-md-6 text-center analysis-component">
                             <h2 class="percentage text-warning avg">
-                                {{round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score') * 100, 2)}}
+                                {{round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score'), 2)}}
                             </h2>
                             <span>Average grades</span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 text-center analysis-component">
+                            <h2 class="percentage text-warning question-weight">
+                                {{round($exam->questions()->first()->examModels()->where('exam_id', $exam->id)->withPivot('weight')->first()->pivot->weight, 2)}}
+                            </h2>
+                            <span>Question weight</span>
                         </div>
                     </div>
                 </div>
@@ -96,16 +110,19 @@
                         @csrf
                         <input class="exam-id" type="number" name="exam_id" value="{{$exam->id}}" hidden>
                         <select name="chapter" class="select ml-5 mb-4">
-                            <option value="" disabled{{$exam->questions()->select('chapter')->distinct()->count() == 0 ? ' selected' : ''}}>Choose a chapter</option>
-                            @foreach ($exam->questions()->select('chapter')->distinct()->get() as $question)
-                                <option value="{{$question->chapter}}"{{$loop->index == 0 ? ' selected' : ''}}>{{$question->chapter}}</option>
+                            @php
+                                $chapters = $exam->questions()->pluck('chapter')->unique();
+                            @endphp
+                            <option value="" disabled{{$chapters->count() == 0 ? ' selected' : ''}}>Choose a chapter</option>
+                            @foreach ($chapters as $chapter)
+                                <option value="{{$chapter}}"{{$loop->index == 0 ? ' selected' : ''}}>{{$chapter}}</option>
                             @endforeach
                         </select>
                     </form>
                     <div class="row">
                         <div class="col-md-6 text-center analysis-component">
                             <h2 class="percentage text-warning chapter-absorbtion">
-                                {{round($exam->chapterAbsorbtion($exam->questions()->select('chapter')->distinct()->get()->first()), 2)}}%
+                                {{round($exam->chapterAbsorbtion($chapters->first()), 2)}}%
                             </h2>
                             <span>Chapter absorbtion</span>
                         </div>

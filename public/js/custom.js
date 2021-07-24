@@ -485,6 +485,7 @@ $(".analysis .question-analysis-form").on("submit", function(e) {
         success: function(data) {
             $(".analysis .solved").html(data.solved + "%");
             $(".analysis .avg").html(data.avg);
+            $(".analysis .question-weight").html(data.weight);
         }
     });
 });
@@ -526,4 +527,9 @@ $(".add-check-box").on("change", function() {
         .prop("disabled", function(i, v) {
             return !v;
         });
+});
+
+// Add question randomly
+$(".add-question-randomly").on("click", function() {
+    $("random-questions").append();
 });
