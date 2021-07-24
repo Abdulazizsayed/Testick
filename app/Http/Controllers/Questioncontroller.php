@@ -76,16 +76,16 @@ class Questioncontroller extends Controller
         $notFoundMessage = array();
         for($i = 0 ; $i < count($data) ; $i++)
         {
-            $QfromDB =  Question::where('question_bank_id','=',$QBid)->where('chapter','=',$data[$i][0])
-            ->where('difficulty' , '=' , $data[$i][2])
-            ->where('type','=',$data[$i][3])->get();
-            if($QfromDB->isEmpty())
+            if($data[$i][3] == 'Parent')
             {
-                array_push($notFoundMessage, ("There is no question that it's chapter: ".  $data[$i][0]." , type: " . $data[$i][3] . " , difficulty: " .$data[$i][2]." , in this question bank.  " ));
-            }
-            else
-            {
-                if($data[$i][3] == 'Parent')
+                $QfromDB =  Question::where('question_bank_id','=',$QBid)->where('chapter','=',$data[$i][0])
+                ->where('difficulty' , '=' , $data[$i][2])
+                ->where('type','=',$data[$i][3])->get();
+                if($QfromDB->isEmpty())
+                {
+                    array_push($notFoundMessage, ("There is no question that it's chapter: ".  $data[$i][0]." , type: " . $data[$i][3] . " , difficulty: " .$data[$i][2]." , in this question bank.  " ));
+                }
+                else
                 {
                     for($j = 0 ; $j < count($QfromDB) ; $j++)
                     {
@@ -107,9 +107,20 @@ class Questioncontroller extends Controller
                         }
                     }
                 }
-                else 
-                {
-                    $tempArray = array();
+            }
+            else
+            {
+                $QfromDB =  Question::where('question_bank_id','=',$QBid)->where('chapter','=',$data[$i][0])
+                ->where('difficulty' , '=' , $data[$i][2])
+                ->where('type','=',$data[$i][3])
+                ->whereNull('parent_id')->get();
+            if($QfromDB->isEmpty())
+            {
+                array_push($notFoundMessage, ("There is no question that it's chapter: ".  $data[$i][0]." , type: " . $data[$i][3] . " , difficulty: " .$data[$i][2]." , in this question bank.  " ));
+            }
+            else
+            {
+                $tempArray = array();
                     for($j = 0 ; $j < count($QfromDB) ; $j++)
                     {
                         array_push($tempArray,$QfromDB[$j]);
@@ -120,8 +131,8 @@ class Questioncontroller extends Controller
                         'type' => $data[$i][3]
                     ]);
                 } 
-            }
         }
-        return ['foundQuestions' => $Questions , 'errorMessage' => $notFoundMessage]; 
     }
+    return ['foundQuestions' => $Questions , 'errorMessage' => $notFoundMessage]; 
+}
 }
