@@ -209,8 +209,8 @@ class ExamController extends Controller
                 'EType' => 'required',
                 'EDate' => 'required|date',
                 'ECourse' => 'required',
-                'EDuration' => 'required|between:0,99.99',
-                'EAllow' => 'required|between:0,99.99',
+                'EDuration' => 'required|between:0,99.99|numeric',
+                'EAllow' => 'required|between:0,99.99|numeric',
                 'questionbank' => 'required'
             ]);
             if (!$validatedData->fails()) {
@@ -297,8 +297,8 @@ class ExamController extends Controller
                 'eType' => 'required',
                 'date' => 'required|date',
                 'course' => 'required',
-                'duration' => 'required|between:0,99.99',
-                'allow' => 'required|between:0,99.99',
+                'duration' => 'required|between:0,99.99|numeric',
+                'allow' => 'required|between:0,99.99|numeric',
             ]);
             if (!$validatedData->fails()) {
                 if (\Carbon\Carbon::parse($data['date'])->gte(\Carbon\Carbon::now())) {
