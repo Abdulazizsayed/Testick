@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Access denied')
+
 @section('content')
 <div class="container">
     <h1 class="text-center text-danger mb-3"> Access denied <h1>
