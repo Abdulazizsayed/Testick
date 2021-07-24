@@ -32,6 +32,7 @@ Route::post('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
 Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('QB/search', 'QBcontroller@search');
 Route::post('QB/chapters/{questionBankId}', 'QBcontroller@chapters');
+Route::post('QB/questions/{questionBankId}', 'QBcontroller@getQuestions');
 
 // Course routes
 Route::resource('course', 'courseController');
@@ -74,6 +75,7 @@ Route::get('exams/student/answers/{examId}', 'ExamController@myAnswers');
 // Question routes
 Route::put('questions/updateExamQuestion/{question}', 'Questioncontroller@updateExamQuestion');
 Route::post('questions/{question}', 'Questioncontroller@destroy');
+Route::post('questions/search/{filterBy}/{searchValue}/{questionBankId}', 'Questioncontroller@search');
 
 // Answer routes
 Route::put('answers/updateQuestionAnswer/{answer}', 'AnswerController@updateQuestionAnswer');
