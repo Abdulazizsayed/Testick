@@ -466,7 +466,7 @@ class ExamController extends Controller
             ]);
         }
 
-        $model = $student->assignedModels()->where('exam_id', $examId)->get();
+        $model = $student->assignedModels()->where('exam_id', $examId)->first();
         return view('exams.studentAnswers')->with([
             'exam' => $model,
             'student' => $student
