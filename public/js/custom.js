@@ -109,7 +109,9 @@ $(document).on("keyup", ".question-banks .search-filter-input", function(e) {
                 let content = "";
                 for (questionBank of data.questionBanks) {
                     content += `<tr>
-                                    <td>${questionBank[1]}</td>
+                                    <td>
+                                        <a href='questionsbank/${questionBank[0]}'>${questionBank[1]}</a>
+                                    </td>
                                     <td>${questionBank[2]}</td>
                                     <td>
                                         <a class="btn btn-success" href="QB/addQuestion/${questionBank[0]}">Add Question <i class="fa fa-plus fa-lg"></i></a>
@@ -126,6 +128,40 @@ $(document).on("keyup", ".question-banks .search-filter-input", function(e) {
                 }
 
                 questionBanksHolder.innerHTML = content;
+            }
+        });
+    };
+
+    document.getElementById("search-form").submit();
+});
+
+// Search courses by ajax
+$(document).on("keyup", ".courses .search-filter-input", function(e) {
+    document.getElementById("search-form").submit = function() {
+        $.ajax({
+            url: "/course/search",
+            type: "POST",
+            data: new FormData(this),
+            dataType: "JSON",
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function(data) {
+                let coursesHolder = document.querySelector(".courses-holder");
+                let content = "";
+                for (course of data.courses) {
+                    content += `<tr>
+                                    <td>
+                                        <a href="/course/teacher/memberList/${course[0]}">${course[1]}</a>
+                                    </td>
+                                    <td>${course[2]}</td>
+                                    <td>${course[3]}</td>
+                                    <td>${course[4]}</td>
+                                </tr>`;
+                }
+
+                coursesHolder.innerHTML = content;
             }
         });
     };

@@ -220,35 +220,34 @@ class ExamController extends Controller
             ]);
             if (!$validatedData->fails()) {
                 $examData =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => $data['ECourse'], 'creator_id' => auth()->user()->id];
-
                 $dataKeys = array_keys($data);
                 if( \Carbon\Carbon::parse($data['EDate'])->gte(\Carbon\Carbon::now()) )
                 {
-                    if (count($dataKeys) > 11) 
+                    if (count($dataKeys) > 11)
                     {
                         $examobj = Exam::create($examData);
                         $newModel = examModels::create(['exam_id' => $examobj['id']]);
-                        for ($i = 12; $i < count($dataKeys); $i = $i + 2) 
+                        for ($i = 12; $i < count($dataKeys); $i = $i + 2)
                         {
-                            if (Question::find($data[$dataKeys[$i]])->type != "Parent") 
+                            if (Question::find($data[$dataKeys[$i]])->type != "Parent")
                             {
                                 if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
                                     $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
                                 }
-                            } 
-                            else 
+                            }
+                            else
                             {
-                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) 
+                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0)
                                 {
                                     $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
                                 }
 
                                 $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
-                                foreach ($subQuestions as $subQuestion) 
+                                foreach ($subQuestions as $subQuestion)
                                 {
-                                    if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) 
+                                    if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0)
                                     {
                                         $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
                                         DB::table('exam_models_question')->insert($examModelQuestion);
@@ -256,8 +255,8 @@ class ExamController extends Controller
                                 }
                             }
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         echo "Your should choose questions";
                     }
@@ -266,13 +265,13 @@ class ExamController extends Controller
                 {
                     dd("Your should choose date in future or at least today");
                 }
-            } 
-            else 
+            }
+            else
             {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
+        }
+        else
         {
             return view('errorPages/accessDenied');
         }
@@ -322,7 +321,7 @@ class ExamController extends Controller
                 'duration' => 'required|numeric',
                 'allow' => 'required|numeric'
             ]);
-            if (!$validatedData->fails()) 
+            if (!$validatedData->fails())
             {
                 if( \Carbon\Carbon::parse($data['date'])->gte(\Carbon\Carbon::now()) )
                 {
@@ -361,20 +360,20 @@ class ExamController extends Controller
                             $tempQuestion = array();
                         }
                     }
-                    
+
                     $questionObj = new Questioncontroller();
                     $questionResults = $questionObj->findQuestions($Questions, $QBid);
-                    
+
                     if (count($questionResults['errorMessage']) != 0) // there are questions that is not found in the DB , will send an error message
                     {
                         $error = join("\n", $questionResults['errorMessage']);
                         return redirect('/exams/create/1')->with('status', $error);
-                    } 
-                    else 
+                    }
+                    else
                     {
                         $course = new courseController();
                         $foundCourseStudents = $course->findCourseStudents($data['course']);
-                        
+
                         if ($foundCourseStudents != null) {
                             $DExam =  ['title' => $data['title'], 'type' => $data['eType'], 'date' => $data['date'], 'duration' => $data['duration'], 'allow_period' => $data['allow'], 'course_id' => $data['course'], 'creator_id' => auth()->user()->id];
                             $examobj = Exam::create($DExam);
@@ -388,12 +387,12 @@ class ExamController extends Controller
                                     if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
                                         $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
                                         $WeightCount = 0;
-                                        
+
                                         for ($k = 0; $k < count($selectedQuestion); $k++) {
                                             array_push($attachedQuestions, $selectedQuestion[$k]); // saving the randomly selected question
                                             if($k == 0) // weight for the parent only
                                             {
-                                                
+
                                                 DB::table('exam_models_question')->insert(
                                                     ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
                                                 );
@@ -417,12 +416,15 @@ class ExamController extends Controller
 
                         return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
                     }
-                    else 
+                    else
                     {
                         return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                     }
                 }
-                
+                else
+                {
+                    return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
+                }
             }
             else
             {
@@ -500,7 +502,6 @@ class ExamController extends Controller
         }
 
         $model = $student->assignedModels()->where('exam_id', $examId)->get();
-        dd($model);
         return view('exams.studentAnswers')->with([
             'exam' => $model,
             'student' => $student
@@ -509,109 +510,79 @@ class ExamController extends Controller
 
     public function markExam($examModelId)
     {
-        if (auth()->user()->role == 0) 
-        {   
+        if (auth()->user()->role == 0) {
             $data = Request::all();
             $keys = array_keys($data);
             $newKeys = array();
             $remenderOfKeys = array();
-            for( $i = 1 ; $i < count($keys) ; $i++ )
-            {
-                if( strpos($keys[$i], '-') !== false )
-                {
+            for ($i = 1; $i < count($keys); $i++) {
+                if (strpos($keys[$i], '-') !== false) {
                     $pieces = explode("-", $keys[$i]);
                     array_push($newKeys, $pieces[0]);
                     array_push($remenderOfKeys, $pieces[1]);
-                }
-                else
-                {
+                } else {
                     array_push($newKeys, $keys[$i]);
                 }
             }
-            
-            for( $i = 1 ; $i < count($data) ; $i++ )
-            {
-                if( $data[$keys[$i]] == null )
-                {
-                    $studentAnswer = [ 'content' => "null" , 'score' => 0.0 ,'question_id' => $keys[$i] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+
+            for ($i = 1; $i < count($data); $i++) {
+                if ($data[$keys[$i]] == null) {
+                    $studentAnswer = ['content' => "null", 'score' => 0.0, 'question_id' => $keys[$i], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                     $studentAnswerController = new StudentAnswerController();
                     $studentAnswerController->store($studentAnswer);
                 }
             }
 
             $examModel = examModels::find($examModelId);
-            foreach( $examModel->questions as $question )
-            {
-                if( in_array( $question["id"] ,$newKeys ) )
-                {
-                    $questionRightAnswers = Answer::where("question_id",$question["id"])->where("is_correct",1)->get();
-                    if( $question["type"] == "T/F" || $question["type"] == "SSMCQ" )
-                    {
+            foreach ($examModel->questions as $question) {
+                if (in_array($question["id"], $newKeys)) {
+                    $questionRightAnswers = Answer::where("question_id", $question["id"])->where("is_correct", 1)->get();
+                    if ($question["type"] == "T/F" || $question["type"] == "SSMCQ") {
                         $flag = 0;
-                        foreach($questionRightAnswers as $Answers )
-                        {
-                            if( $data[$question["id"]] == $Answers["content"] )
-                            {
+                        foreach ($questionRightAnswers as $Answers) {
+                            if ($data[$question["id"]] == $Answers["content"]) {
                                 $flag = 1;
                             }
                         }
-                        if( $flag == 1 )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $data[$question["id"]] , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $data[$question["id"]] , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($flag == 1) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif($question["type"] == "Essay" && $data[$question["id"]] != null)
-                    {
-                        $similarty = ExamController::connectToFlaskAPI( $data[$question["id"]] , $questionRightAnswers[0]['content']);
-                        $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                        if( $similarty > 0.9 )
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $similarty * $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                    } elseif ($question["type"] == "Essay" && $data[$question["id"]] != null) {
+                        $similarty = ExamController::connectToFlaskAPI($data[$question["id"]], $questionRightAnswers[0]['content']);
+                        $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                        if ($similarty > 0.9) {
+                            $studentAnswer = ['content' => $answerString, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $answerString, 'score' => $similarty * $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif( $question["type"] == "MSMCQ" )
-                    {
+                    } elseif ($question["type"] == "MSMCQ") {
                         $counter = 0;
                         $answerString = "";
                         $pieces = explode("*", $data[$question["id"]]);
-                        for( $i = 0 ; $i < count($remenderOfKeys) ; $i++ )
-                        {
-                            foreach( $questionRightAnswers as $Answer )
-                            {
-                                if( $Answer['content'] == $data[$question["id"]."-".$remenderOfKeys[$i]] )
-                                {
-                                    $answerString .= $data[$question["id"]."-".$remenderOfKeys[$i]] ." ";
-                                    $counter ++;
+                        for ($i = 0; $i < count($remenderOfKeys); $i++) {
+                            foreach ($questionRightAnswers as $Answer) {
+                                if ($Answer['content'] == $data[$question["id"] . "-" . $remenderOfKeys[$i]]) {
+                                    $answerString .= $data[$question["id"] . "-" . $remenderOfKeys[$i]] . " ";
+                                    $counter++;
                                 }
                             }
                         }
-                        if( $counter == $pieces[2] )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $answerString , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $answerString , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($counter == $pieces[2]) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $answerString, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $answerString, 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);
-                    }
-                    elseif( $question["type"] == "Text Check" && $data[$question["id"]] != null )
-                    {
+                    } elseif ($question["type"] == "Text Check" && $data[$question["id"]] != null) {
                         $teacherAnswer = str_replace(' ', '', $questionRightAnswers[0]['content']);
                         $studentAnswer = str_replace(' ', '', $data[$question["id"]]);
 
@@ -621,22 +592,17 @@ class ExamController extends Controller
                         $teacherAnswer = strtolower($teacherAnswer);
                         $studentAnswer = strtolower($studentAnswer);
 
-                        if( $teacherAnswer == $studentAnswer )
-                        {
-                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id',$examModelId)->where('question_id',$question["id"])->get()[0];
-                            $studentAnswer = [ 'content' => $studentAnswer , 'score' => $questionWeight->weight ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
-                        }
-                        else
-                        {
-                            $studentAnswer = [ 'content' => $studentAnswer , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                        if ($teacherAnswer == $studentAnswer) {
+                            $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
+                            $studentAnswer = ['content' => $studentAnswer, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                        } else {
+                            $studentAnswer = ['content' => $studentAnswer, 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
-                        $studentAnswerController->store($studentAnswer);   
+                        $studentAnswerController->store($studentAnswer);
                     }
-                }
-                else
-                {
-                    $studentAnswer = [ 'content' => "null" , 'score' => 0.0 ,'question_id' => $question["id"] , 'student_id' => auth()->user()->id , 'exam_models_id' => $examModelId ];
+                } else {
+                    $studentAnswer = ['content' => "null", 'score' => 0.0, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                     $studentAnswerController = new StudentAnswerController();
                     $studentAnswerController->store($studentAnswer);
                 }
@@ -647,15 +613,15 @@ class ExamController extends Controller
                 $sumOfScores += $studentAnswer->score;
             }
             DB::table('submit_exam')->insert( ['score' => $sumOfScores , 'student_id' => auth()->user()->id , 'exam_id' => examModels::find($examModelId)->exam_id ] );
-        } 
-        else 
+        }
+        else
         {
             return view('errorPages/accessDenied');
         }
         return redirect('exams/student/index');
     }
 
-    public function connectToFlaskAPI($studentAnswer , $teacherAnswer)
+    public function connectToFlaskAPI($studentAnswer, $teacherAnswer)
     {
         $client = new \GuzzleHttp\Client();
 
@@ -663,12 +629,11 @@ class ExamController extends Controller
 
         $response = $client->post($url, [
             'json' => [
-                'studentAnswer' => $studentAnswer ,
+                'studentAnswer' => $studentAnswer,
                 'teacherAnswer' => $teacherAnswer
             ]
         ]);
-        $contents = json_decode($response->getBody() , true);
+        $contents = json_decode($response->getBody(), true);
         return $contents['similarity'];
     }
-
 }

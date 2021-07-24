@@ -17,7 +17,6 @@ class CreateCoursesTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->integer('semester');
-            $table->boolean('is_done')->default(false);
             $table->integer('level');
 
             $table->foreignId('subject_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
