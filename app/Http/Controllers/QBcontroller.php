@@ -232,4 +232,11 @@ class QBcontroller extends Controller
             })
         ]);
     }
+
+    public function chapters(HttpRequest $request, $questionBankId)
+    {
+        return response()->json([
+            'chapters' => QuestionBank::find($questionBankId)->questions()->select('chapter')->distinct()->get()
+        ]);
+    }
 }

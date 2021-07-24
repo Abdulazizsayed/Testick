@@ -31,6 +31,7 @@ Route::get('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestionView');
 Route::post('/QB/addQuestion/{QuestionBankID}', 'QBcontroller@addQuestion');
 Route::post('/QB/delete/{QuestionBankID}', 'QBcontroller@destroy');
 Route::post('QB/search', 'QBcontroller@search');
+Route::post('QB/chapters/{questionBankId}', 'QBcontroller@chapters');
 
 // Course routes
 Route::resource('course', 'courseController');
@@ -42,7 +43,6 @@ Route::post('/course/search', 'courseController@search');
 //student
 Route::get('/course/student/index', 'courseController@studentindex')->name('course.student.index');
 Route::get('/course/student/courseView/{couresID}', 'courseController@studentCourseView');
-
 
 // User routes
 Route::get('/users/editProfile', 'ProfileController@edit');
