@@ -16,11 +16,6 @@ use Validator;
 
 class courseController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         return view('course/teacher/index');
@@ -83,14 +78,10 @@ class courseController extends Controller
                 foreach ($courseUsers as $user) {
                     Mail::to($user['email'])->send(new Gmail($details));
                 }
-            } 
-            else 
-            {
+            } else {
                 return redirect('course/teacher/index')->with('fail', $validatedData->messages());
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
         return redirect('course/teacher/index')->with('success', "Announcement published successfully");
