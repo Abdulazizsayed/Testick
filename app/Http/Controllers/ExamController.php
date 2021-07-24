@@ -7,6 +7,8 @@ use App\Exam;
 use App\examModels;
 use App\Question;
 use App\Answer;
+use App\StudentAnswer;
+use Carbon\Carbon;
 use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
@@ -14,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Questioncontroller;
 use App\Http\Controllers\courseController;
 use App\User;
-use Carbon\Carbon;
 use DB;
 
 class ExamController extends Controller
@@ -219,42 +220,62 @@ class ExamController extends Controller
             ]);
             if (!$validatedData->fails()) {
                 $examData =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => $data['ECourse'], 'creator_id' => auth()->user()->id];
-
                 $dataKeys = array_keys($data);
-                if (count($dataKeys) > 11) {
-                    $examobj = Exam::create($examData);
-                    $newModel = examModels::create(['exam_id' => $examobj['id']]);
-                    for ($i = 12; $i < count($dataKeys); $i = $i + 2) {
-                        if (Question::find($data[$dataKeys[$i]])->type != "Parent") {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
-                                $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
-                                DB::table('exam_models_question')->insert($examModelQuestion);
-                            }
-                        } else {
-                            if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
-                                $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
-                                DB::table('exam_models_question')->insert($examModelQuestion);
-                            }
-
-                            $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
-                            foreach ($subQuestions as $subQuestion) {
-                                if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0) {
-                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]] / count($subQuestions)];
+                if( \Carbon\Carbon::parse($data['EDate'])->gte(\Carbon\Carbon::now()) )
+                {
+                    if (count($dataKeys) > 11)
+                    {
+                        $examobj = Exam::create($examData);
+                        $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                        for ($i = 12; $i < count($dataKeys); $i = $i + 2)
+                        {
+                            if (Question::find($data[$dataKeys[$i]])->type != "Parent")
+                            {
+                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0) {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
                                     DB::table('exam_models_question')->insert($examModelQuestion);
+                                }
+                            }
+                            else
+                            {
+                                if (count($newModel->questions()->where('question_id', $data[$dataKeys[$i]])->get()) == 0)
+                                {
+                                    $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $data[$dataKeys[$i]], 'weight' => $data[$dataKeys[$i - 1]]];
+                                    DB::table('exam_models_question')->insert($examModelQuestion);
+                                }
+
+                                $subQuestions = Question::where('parent_id', $data[$dataKeys[$i]])->get();
+                                foreach ($subQuestions as $subQuestion)
+                                {
+                                    if (count($newModel->questions()->where('question_id', $subQuestion['id'])->get()) == 0)
+                                    {
+                                        $examModelQuestion = ['exam_models_id' => $newModel['id'], 'question_id' => $subQuestion['id'], 'weight' => $data[$dataKeys[$i - 1]]/count($subQuestions) ];
+                                        DB::table('exam_models_question')->insert($examModelQuestion);
+                                    }
                                 }
                             }
                         }
                     }
-                } else {
-                    echo "Your should choose questions";
+                    else
+                    {
+                        echo "Your should choose questions";
+                    }
                 }
-            } else {
+                else
+                {
+                    dd("Your should choose date in future or at least today");
+                }
+            }
+            else
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        }
+        else
+        {
             return view('errorPages/accessDenied');
         }
-        return redirect('exams/create/manually/1');
+        return redirect('exams/create/0');
     }
 
 
@@ -300,94 +321,120 @@ class ExamController extends Controller
                 'duration' => 'required|numeric',
                 'allow' => 'required|numeric'
             ]);
-            if (!$validatedData->fails()) {
-                $chapterCounter = 2;
-                $questionCount = 1;
-                $QBid = $data[$keys[8]];
-                $numberOfModels = 2;
-                $Chapters = array();
-                $tempChapter = array();
-                $Questions = array();
-                for ($i = 9; $i < count($data); $i++) {
-                    if ($keys[$i] == ("ch" . $chapterCounter) || $i == count($data) - 1) {
-                        if ($i == count($data) - 1) // adding the value of last index of data
-                        {
+            if (!$validatedData->fails())
+            {
+                if( \Carbon\Carbon::parse($data['date'])->gte(\Carbon\Carbon::now()) )
+                {
+                    $chapterCounter = 2;
+                    $questionCount = 1;
+                    $QBid = $data[$keys[9]];
+                    $numberOfModels = $data[$keys[7]];
+                    $Chapters = array();
+                    $tempChapter = array();
+                    $Questions = array();
+                    for ($i = 10; $i < count($data); $i++) {
+                        if ($keys[$i] == ("ch" . $chapterCounter) || $i == count($data) - 1) {
+                            if ($i == count($data) - 1) // adding the value of last index of data
+                            {
+                                array_push($tempChapter, $data[$keys[$i]]);
+                            }
+                            array_push($Chapters, $tempChapter);
+                            $tempChapter = array();
+                            array_push($tempChapter, $data[$keys[$i]]); // adding the value of the next chapter
+                            $chapterCounter++;
+                        } else {
                             array_push($tempChapter, $data[$keys[$i]]);
                         }
-                        array_push($Chapters, $tempChapter);
-                        $tempChapter = array();
-                        array_push($tempChapter, $data[$keys[$i]]); // adding the value of the next chapter
-                        $chapterCounter++;
-                    } else {
-                        array_push($tempChapter, $data[$keys[$i]]);
                     }
-                }
 
-                for ($i = 0; $i < count($Chapters); $i++) {
-                    $tempQuestion = array();
-                    for ($j = 0; $j < count($Chapters[$i]); $j = $j + 3) {
-                        if ($j == 0) {
-                            array_push($tempQuestion, $Chapters[$i][0], $Chapters[$i][$j + 1], $Chapters[$i][$j + 2], $Chapters[$i][$j + 3]);
-                            $j++;
-                        } else {
-                            array_push($tempQuestion, $Chapters[$i][0], $Chapters[$i][$j], $Chapters[$i][$j + 1], $Chapters[$i][$j + 2]);
-                        }
-                        array_push($Questions, $tempQuestion);
+                    for ($i = 0; $i < count($Chapters); $i++) {
                         $tempQuestion = array();
+                        for ($j = 0; $j < count($Chapters[$i]); $j = $j + 3) {
+                            if ($j == 0) {
+                                array_push($tempQuestion, $Chapters[$i][0], $Chapters[$i][$j + 1], $Chapters[$i][$j + 2], $Chapters[$i][$j + 3]);
+                                $j++;
+                            } else {
+                                array_push($tempQuestion, $Chapters[$i][0], $Chapters[$i][$j], $Chapters[$i][$j + 1], $Chapters[$i][$j + 2]);
+                            }
+                            array_push($Questions, $tempQuestion);
+                            $tempQuestion = array();
+                        }
                     }
-                }
-                $questionObj = new Questioncontroller();
-                $questionResults = $questionObj->findQuestions($Questions, $QBid);
-                if (count($questionResults['errorMessage']) != 0) // there are questions that is not found in the DB , will send an error message
-                {
-                    $error = join("\n", $questionResults['errorMessage']);
-                    return redirect('/exams/create/randomlly/1')->with('status', $error);
-                } else {
-                    $course = new courseController();
-                    $foundCourseStudents = $course->findCourseStudents($data['course']);
-                    if ($foundCourseStudents != null) {
-                        $DExam =  ['title' => $data['title'], 'type' => $data['eType'], 'date' => $data['date'], 'duration' => $data['duration'], 'allow_period' => $data['allow'], 'course_id' => $data['course'], 'creator_id' => auth()->user()->id];
-                        $examobj = Exam::create($DExam);
-                        $examModels = array();
-                        for ($i = 0; $i < $numberOfModels; $i++) {
-                            $newModel = examModels::create(['exam_id' => $examobj['id']]);
-                            $attachedQuestions = array();
-                            for ($j = 0; $j < count($questionResults['foundQuestions']); $j++) {
-                                shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array
-                                $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
-                                if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
-                                    for ($k = 0; $k < count($selectedQuestion); $k++) {
-                                        array_push($attachedQuestions, $selectedQuestion[$k]); // saving the randomly selected question
+
+                    $questionObj = new Questioncontroller();
+                    $questionResults = $questionObj->findQuestions($Questions, $QBid);
+
+                    if (count($questionResults['errorMessage']) != 0) // there are questions that is not found in the DB , will send an error message
+                    {
+                        $error = join("\n", $questionResults['errorMessage']);
+                        return redirect('/exams/create/1')->with('status', $error);
+                    }
+                    else
+                    {
+                        $course = new courseController();
+                        $foundCourseStudents = $course->findCourseStudents($data['course']);
+
+                        if ($foundCourseStudents != null) {
+                            $DExam =  ['title' => $data['title'], 'type' => $data['eType'], 'date' => $data['date'], 'duration' => $data['duration'], 'allow_period' => $data['allow'], 'course_id' => $data['course'], 'creator_id' => auth()->user()->id];
+                            $examobj = Exam::create($DExam);
+                            $examModels = array();
+                            for ($i = 0; $i < $numberOfModels; $i++) {
+                                $newModel = examModels::create(['exam_id' => $examobj['id']]);
+                                $attachedQuestions = array();
+                                for ($j = 0; $j < count($questionResults['foundQuestions']); $j++) {
+                                    shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array
+                                    $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
+                                    if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
+                                        $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
+                                        $WeightCount = 0;
+
+                                        for ($k = 0; $k < count($selectedQuestion); $k++) {
+                                            array_push($attachedQuestions, $selectedQuestion[$k]); // saving the randomly selected question
+                                            if($k == 0) // weight for the parent only
+                                            {
+
+                                                DB::table('exam_models_question')->insert(
+                                                    ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
+                                                );
+                                            }
+                                            else{ // weight of the child
+                                                DB::table('exam_models_question')->insert(
+                                                    ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $childWeight]
+                                                );
+                                            }
+                                        }
+                                    } else {
+                                        array_push($attachedQuestions, $selectedQuestion); // saving the randomly selected question
                                         DB::table('exam_models_question')->insert(
-                                            ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
+                                            ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
                                         );
                                     }
-                                } else {
-                                    array_push($attachedQuestions, $selectedQuestion); // saving the randomly selected question
-                                    DB::table('exam_models_question')->insert(
-                                        ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
-                                    );
                                 }
+
+                                array_push($examModels, $newModel); // saving the recently created model
                             }
-                            array_push($examModels, $newModel); // savung the recently created model
-                        }
-                        for ($i = 0; $i < count($foundCourseStudents); $i++) {
-                            shuffle($examModels); // shuffling the question's array .
-                            $selectedModel = $examModels[0]; // taking the first index after being shuffled.
-                            $foundCourseStudents[$i]->examsAssigned()->attach($selectedModel['id']);
-                        }
-                        return redirect('/exams/create/randomlly/1')->with('success', 'Exam Created Successfully');
-                    } else {
-                        return redirect('/exams/create/randomlly/1')->with('status', 'There is no students on this course');
+
+                        return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
+                    }
+                    else
+                    {
+                        return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                     }
                 }
-            } else {
+                else
+                {
+                    return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
+                }
+            }
+            else
+            {
                 return response($validatedData->messages(), 200);
             }
-        } else {
+        }
+        else
+        {
             return view('errorPages/accessDenied');
         }
-        //return $this->createExamManuallyView(1);
     }
 
     public function enterExam($examId)
@@ -554,9 +601,18 @@ class ExamController extends Controller
                     $studentAnswerController->store($studentAnswer);
                 }
             }
-        } else {
+            $sumOfScores = 0;
+            foreach( StudentAnswer::where('student_id',auth()->user()->id)->where('exam_models_id',$examModelId)->get() as $studentAnswer )
+            {
+                $sumOfScores += $studentAnswer->score;
+            }
+            DB::table('submit_exam')->insert( ['score' => $sumOfScores , 'student_id' => auth()->user()->id , 'exam_id' => examModels::find($examModelId)->exam_id ] );
+        }
+        else
+        {
             return view('errorPages/accessDenied');
         }
+        return redirect('exams/student/index');
     }
 
     public function connectToFlaskAPI($studentAnswer, $teacherAnswer)
