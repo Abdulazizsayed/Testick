@@ -218,11 +218,13 @@ class ExamController extends Controller
                 'EAllow' => 'required|numeric',
                 'questionbank' => 'required'
             ]);
-            if (!$validatedData->fails()) {
+            if (!$validatedData->fails()) 
+            {
                 $examData =  ['title' => $data['Etitle'], 'type' => $data['EType'], 'date' => $data['EDate'], 'duration' => $data['EDuration'], 'allow_period' => $data['EAllow'], 'course_id' => $data['ECourse'], 'creator_id' => auth()->user()->id];
                 $dataKeys = array_keys($data);
                 if (\Carbon\Carbon::parse($data['EDate'])->gte(\Carbon\Carbon::now())) {
-                    if (count($dataKeys) > 11) {
+                    if (count($dataKeys) > 11) 
+                    {
                         $examobj = Exam::create($examData);
                         $newModel = examModels::create(['exam_id' => $examobj['id']]);
                         for ($i = 12; $i < count($dataKeys); $i = $i + 2) {
@@ -246,19 +248,26 @@ class ExamController extends Controller
                                 }
                             }
                         }
-                    } else {
-                        echo "Your should choose questions";
+                    } 
+                    else 
+                    {
+                        return redirect('exams/create/0')->with('fail', 'Your should choose questions');
                     }
-                } else {
-                    dd("Your should choose date in future or at least today");
+                } else 
+                {
+                    return redirect('exams/create/0')->with('fail', 'Your should choose date in future or at least today');
                 }
-            } else {
-                return response($validatedData->messages(), 200);
+            } 
+            else 
+            {
+                return redirect('exams/create/0')->with('fail', $validatedData->messages());
             }
-        } else {
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
-        return redirect('exams/create/0');
+        return redirect('exams/create/0')->with('success', 'Exam created successfully');;
     }
 
 

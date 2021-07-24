@@ -10,6 +10,11 @@ use App\Subject;
             {{ session('status') }}
         </div>
     @endif
+    @if (session('fail'))
+        <div class="alert alert-danger">
+            {{ session('fail') }}
+        </div>
+    @endif
     <div class="row">
         <div class="col">
             <h2 class="title">Question Bank</h2>
