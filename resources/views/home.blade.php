@@ -76,7 +76,7 @@
                 y.innerHTML=("&#8594;");
             }
         }
-        
+
     </script>
 <div class="container home">
     @if (session('status'))
@@ -87,7 +87,7 @@
     <section>
         <div>
             <div style=" display: inline-block;"><header>Testick</header></div>
-            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction()" id="arrtestick"> &#8594;</h1></div>
+            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction()" id="arrtestick" class="section"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="ptestick">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>
@@ -95,7 +95,7 @@
     <section>
         <div>
               <div style=" display: inline-block;"><header>Courses</header></div>
-              <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction1()" id="arrcourse"> &#8594;</h1></div>
+              <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction1()" id="arrcourse" class="section"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="pcourse">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>
@@ -104,23 +104,25 @@
 
         <div>
             <div style=" display: inline-block;"><header>Exams</header></div>
-            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction2()" id="arrexams"> &#8594;</h1></div>
+            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction2()" id="arrexams" class="section"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="pexams">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>
     <hr>
-    <section>
-        <div>
-            <div style=" display: inline-block;"> <header>Question Banks</header></div>
-            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction3()" id="arrpqbank"> &#8594;</h1></div>
-        </div>
-        <p style="display: none" id="pqbank">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
-    </section>
+    @if (Auth::user()->role == 1)
+        <section>
+            <div>
+                <div style=" display: inline-block;"> <header>Question Banks</header></div>
+                <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction3()" id="arrpqbank" class="section"> &#8594;</h1></div>
+            </div>
+            <p style="display: none" id="pqbank">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
+        </section>
+    @endif
     <hr>
     <section>
         <div>
             <div style=" display: inline-block;"><header>Exams Analysis</header></div>
-            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction4()" id="arrea"> &#8594;</h1></div>
+            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction4()" id="arrea" class="section"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="pea">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>
@@ -128,7 +130,7 @@
     <section>
         <div>
             <div style=" display: inline-block;"><header>About</header></div>
-            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction5()" id="arrabout"> &#8594;</h1></div>
+            <div style="margin-left: 5% ;display: inline-block;"><h1 onclick="myFunction5()" id="arrabout" class="section"> &#8594;</h1></div>
         </div>
         <p style="display: none" id="pabout">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, voluptate amet! Vitae molestiae explicabo magnam dolor ratione dolores sequi consectetur eius architecto, neque, quibusdam iusto nostrum debitis odit? Consectetur, eum?</p>
     </section>

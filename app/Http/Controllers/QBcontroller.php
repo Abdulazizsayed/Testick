@@ -18,13 +18,6 @@ use Illuminate\Support\Facades\Auth;
 
 class QBcontroller extends Controller
 {
-    protected $guarded = [];
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         return view('questionsbank/index');
