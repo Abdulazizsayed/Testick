@@ -5,7 +5,7 @@
 @section('content')
 <div class="container exams-show">
     <div class="timer">
-        {{$student->examsSubmitted()->withPivot('score')->get()->pivot->score . '/' . $exam->exam->weight()}}
+        {{$student->examsSubmitted()->where('exam_id', $exam->exam->id)->withPivot('score')->first()->pivot->score . '/' . $exam->exam->weight()}}
     </div>
     <h2 class="title text-center">{{$exam->exam->title}}</h2>
     @foreach ($exam->questions()->withPivot('weight')->get() as $question)

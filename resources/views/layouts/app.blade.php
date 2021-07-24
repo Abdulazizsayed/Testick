@@ -50,7 +50,7 @@
                                 <span class="link-label">Home</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="{{route('course.index')}}">
+                        <a class="nav-link" href="{{Auth::user()->role == 0 ? route('course.student.index') : route('course.index')}}">
                             <li class='{{request()->is('courses') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/courses.png')}}" alt="Courses">
@@ -58,7 +58,7 @@
                                 <span class="link-label">Courses</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="{{route('exams.index')}}">
+                        <a class="nav-link" href="{{Auth::user()->role == 0 ? route('exams.student.index') : route('exams.index')}}">
                             <li class='{{request()->is('exams') ? "active" : ""}}'>
                                 <div class="nav-link-image circle-image">
                                     <img src="{{asset('images/website/nav-links/exams.png')}}" alt="Exams">
@@ -66,22 +66,16 @@
                                 <span class="link-label">Exams</span>
                             </li>
                         </a>
-                        <a class="nav-link" href="{{route('questionsbank.index')}}">
-                            <li class='{{request()->is('questionBanks') ? "active" : ""}}'>
-                                <div class="nav-link-image circle-image">
-                                    <img src="{{asset('images/website/nav-links/question-banks.png')}}" alt="Question Banks">
-                                </div>
-                                <span class="link-label">Question Banks</span>
-                            </li>
-                        </a>
-                        <a class="nav-link" href="#">
-                            <li class='{{request()->is('examAnalysis') ? "active" : ""}}'>
-                                <div class="nav-link-image circle-image">
-                                    <img src="{{asset('images/website/nav-links/exam-analysis.png')}}" alt="Exam Analysis">
-                                </div>
-                                <span class="link-label">Exams Analysis</span>
-                            </li>
-                        </a>
+                        @if (Auth::user()->role == 1)
+                            <a class="nav-link" href="{{route('questionsbank.index')}}">
+                                <li class='{{request()->is('questionBanks') ? "active" : ""}}'>
+                                    <div class="nav-link-image circle-image">
+                                        <img src="{{asset('images/website/nav-links/question-banks.png')}}" alt="Question Banks">
+                                    </div>
+                                    <span class="link-label">Question Banks</span>
+                                </li>
+                            </a>
+                        @endif
                         <a class="nav-link" href="/logout">
                             <li>
                                 <div class="nav-link-image circle-image">
