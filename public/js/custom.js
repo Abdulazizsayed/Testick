@@ -554,7 +554,7 @@ $(document).on("click", ".add-question-randomly", function() {
                             <div style="margin-left: 10px;">
                                 <input name="ch${ch}w${randomQuestions}" id="ch${ch}w${randomQuestions}" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                             </div>
-                         
+
 
                             <div style="margin-left: 10px">
                                 <select class="form-control" name="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" id="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" style="background-color: #1A034A;color: white;" required >
@@ -612,7 +612,7 @@ $(".add-chapter").on("click", function() {
                         <div style="margin-left: 10px;">
                             <input name="ch${chs}w1" id="ch${chs}w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                         </div>
-                      
+
 
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch${chs}w1Q1Diff" id="ch${chs}w1Q1Diff" style="background-color: #1A034A;color: white;" required >
@@ -703,7 +703,6 @@ $(document).on(
             processData: false,
 
             success: function(data) {
-                // console.log(data);
                 let questionsHolder = document.querySelector(
                     ".questions-holder"
                 );

@@ -74,7 +74,7 @@ use App\Course;
                 <label for="title" class="col-md-4 col-form-label">Duration</label>
             </div>
             <div style="float:right;margin-left: 44px;width: 600px">
-                <input id="duration" name="duration" type="number" class="form-control @error('duration') is-invalid @enderror" title="duration" value="{{ old('duration') }}" required  autocomplete="duration" autofocus style="border-radius: 25px;"placeholder="Enter the duration of exam in mins">
+                <input id="duration" name="duration" type="number" step="0.01" class="form-control @error('duration') is-invalid @enderror" title="duration" value="{{ old('duration') }}" required  autocomplete="duration" autofocus style="border-radius: 25px;"placeholder="Enter the duration of exam in mins">
                 @error('duration')
                 <span class="invalid-feedback" role="alert">
                         <strong></strong>
@@ -82,7 +82,7 @@ use App\Course;
                 @enderror
             </div>
             <div style="margin-left: 50px;">
-                <input name = "modelsNumber" type="number" id="modelsNumber" placeholder = "Number of models" style="background-color: #1A034A;color: white;width: 185px; border:0">
+                <input name = "modelsNumber" type="number" step="0.01" id="modelsNumber" placeholder = "Number of models" style="background-color: #1A034A;color: white;width: 185px; border:0">
             </div>
         </div>
         <br>
