@@ -13,6 +13,16 @@ use App\Course;
     <br>
     <form action="/exams/create/manually" enctype="multipart/form-data" method="post">
         @csrf
+        @if (session('fail'))
+            <div class="alert alert-danger">
+                {{ session('fail') }}
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="form-group row" style="margin-left: 30px">
             <div style="float:left;">
                 <label for="title" class="col-md-4 col-form-label">Title</label>
@@ -127,7 +137,7 @@ use App\Course;
                 </tr>
             </thead>
             <tbody class="exams-holder">
-                @foreach(QuestionBank::find(1)->questions as $question)
+                @foreach(QuestionBank::find(3)->questions as $question)
                 <tr>
                     <td>{{$question->content}}</td>
                     <td>{{$question->type}}</td>

@@ -15,7 +15,6 @@ use App\Exam;
     <form action="{{--asset('exams/addQuestion/' . $exam->id)--}}" enctype="multipart/form-data" method="POST">
         @csrf
         @method('POST')
-
         <div class="row">
             <div class="col-8">
                 <div class="d-flex">
