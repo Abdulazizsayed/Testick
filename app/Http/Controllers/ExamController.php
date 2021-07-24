@@ -416,28 +416,31 @@ class ExamController extends Controller
                             }
 
                         return redirect('/exams/create/1')->with('success', 'Exam Created Successfully');
-                    } 
+                    }
                     else 
                     {
                         return redirect('/exams/create/1')->with('status', 'There is no students on this course');
                     }
                 }
-                else
-                {
-                    return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
-                }
-            } 
-            else 
-            {
-                return response($validatedData->messages(), 200);
+                
             }
+            else
+            {
+                 return redirect('/exams/create/1')->with('status', "Your should choose date in future or at least today");
+            }
+           
         } 
         else 
         {
-            return view('errorPages/accessDenied');
+            return response($validatedData->messages(), 200);
         }
+       
     }
-
+    else 
+    {
+        return view('errorPages/accessDenied');
+    }
+}
     public function enterExam($examId)
     {
         $exam = Exam::find($examId);
