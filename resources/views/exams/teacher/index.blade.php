@@ -72,7 +72,7 @@
                 <td class="text-center">{{$exam->weight()}}</td>
                 <td class="text-center">
                 @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
-                    <a class="btn btn-primary" href="{{asset('exams/analysis/' . $exam->id)}}">Analysis <i class="fa fa-pie-chart fa-lg"></i></a>
+                    <a class="btn btn-primary mb-2" href="{{asset('exams/analysis/' . $exam->id)}}">Analysis <i class="fa fa-pie-chart fa-lg"></i></a>
                     <a class="btn btn-success" href="{{asset('exams/studentsGrades/' . $exam->id)}}">Students grades <i class="fa fa-percent fa-lg"></i></a>
                 @else
                     <form action="/exams/{{$exam->id}}" method="POST">

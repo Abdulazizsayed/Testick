@@ -122,7 +122,7 @@ use App\Course;
             <div class="col-md-8">
                 <span class='label'>Search by <span class="selected-filter">Content</span></span>
                 <input class="search-filter-input" type="text" name="search_input" placeholder="Enter exam content">
-                <input class='question-bank-id' name='question_bank_id' type="number" value="{{Auth::user()->questionBanks()->first()->id}}" hidden>
+                <input class='question-bank-id' name='question_bank_id' type="number" value="{{Auth::user()->questionBanks()->count() > 0 ? Auth::user()->questionBanks()->first()->id : ''}}" hidden>
             </div>
         </div>
 
@@ -138,20 +138,22 @@ use App\Course;
                 </tr>
             </thead>
             <tbody class="questions-holder">
-                @foreach(Auth::user()->questionBanks()->first()->questions as $question)
-                <tr>
-                    <td>{{$question->content}}</td>
-                    <td>{{$question->type}}</td>
-                    <td>{{$question->difficulty}}</td>
-                    <td>{{$question->chapter}}</td>
-                    <td>
-                        <input id="Weight.{{$question->id}}" name="Weight.{{$question->id}}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
-                    </td>
-                    <td>
-                        <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}" class="add-check-box">
-                    </td>
-                </tr>
-                @endforeach
+                @if (Auth::user()->questionBanks()->count() > 0)
+                    @foreach(Auth::user()->questionBanks()->first()->questions as $question)
+                    <tr>
+                        <td>{{$question->content}}</td>
+                        <td>{{$question->type}}</td>
+                        <td>{{$question->difficulty}}</td>
+                        <td>{{$question->chapter}}</td>
+                        <td>
+                            <input id="Weight.{{$question->id}}" name="Weight.{{$question->id}}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
+                        </td>
+                        <td>
+                            <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}" class="add-check-box">
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
 
