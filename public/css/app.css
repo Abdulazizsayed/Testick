@@ -11128,6 +11128,10 @@ a.text-dark:focus {
     font-size: 18px;
     padding-left: 20px;
 }
+
+.home .section {
+    cursor: pointer;
+}
 /* End home page */
 
 /* Edit profile */
