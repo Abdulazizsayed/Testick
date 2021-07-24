@@ -72,7 +72,7 @@ use App\Course;
                 <label for="title" class="col-md-4 col-form-label">Duration</label>
             </div>
             <div style="float:right;margin-left: 44px;width: 500px">
-                <input id="EDuration" name="EDuration" type="number" class="form-control @error('EDuration') is-invalid @enderror" EDuration="EDuration" value="{{ old('EDuration') }}" required  autocomplete="EDuration" autofocus style="border-radius: 25px;"placeholder="Enter the duration of exam in mins">
+                <input id="EDuration" name="EDuration" type="number" step="0.01" class="form-control @error('EDuration') is-invalid @enderror" EDuration="EDuration" value="{{ old('EDuration') }}" required  autocomplete="EDuration" autofocus style="border-radius: 25px;"placeholder="Enter the duration of exam in mins">
                 @error('EDuration')
                 <span class="invalid-feedback" role="alert">
                         <strong></strong>
@@ -86,7 +86,7 @@ use App\Course;
                 <label for="title" class="col-md-4 col-form-label">AllowPeriod</label>
             </div>
             <div style="float:right;margin-left: 20px;width: 500px">
-                <input id="EAllow" name="EAllow" type="number" class="form-control @error('EAllow') is-invalid @enderror" EAllow="EAllow" value="{{ old('EAllow') }}" required  autocomplete="EAllow" autofocus style="border-radius: 25px;"placeholder="Enter Exam allow period">
+                <input id="EAllow" name="EAllow" type="number" step="0.01" class="form-control @error('EAllow') is-invalid @enderror" EAllow="EAllow" value="{{ old('EAllow') }}" required  autocomplete="EAllow" autofocus style="border-radius: 25px;"placeholder="Enter Exam allow period">
                 @error('EAllow')
                 <span class="invalid-feedback" role="alert">
                         <strong></strong>

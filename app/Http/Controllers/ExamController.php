@@ -209,8 +209,8 @@ class ExamController extends Controller
                 'EType' => 'required',
                 'EDate' => 'required|date',
                 'ECourse' => 'required',
-                'EDuration' => 'required|numeric',
-                'EAllow' => 'required|numeric',
+                'EDuration' => 'required|between:0,99.99',
+                'EAllow' => 'required|between:0,99.99',
                 'questionbank' => 'required'
             ]);
             if (!$validatedData->fails()) {
@@ -297,8 +297,8 @@ class ExamController extends Controller
                 'eType' => 'required',
                 'date' => 'required|date',
                 'course' => 'required',
-                'duration' => 'required|numeric',
-                'allow' => 'required|numeric'
+                'duration' => 'required|between:0,99.99',
+                'allow' => 'required|between:0,99.99',
             ]);
             if (!$validatedData->fails()) {
                 if (\Carbon\Carbon::parse($data['date'])->gte(\Carbon\Carbon::now())) {
@@ -359,23 +359,19 @@ class ExamController extends Controller
                                 for ($j = 0; $j < count($questionResults['foundQuestions']); $j++) {
                                     shuffle($questionResults['foundQuestions'][$j]['Questions']); // shuffling the question's array
                                     $selectedQuestion = $questionResults['foundQuestions'][$j]['Questions'][0]; // taking the first index after being shuffled, so that it be random
-                                    
-                                    if($questionResults['foundQuestions'][$j]['type'] == 'Parent')
-                                    {
-                                        if(in_array($selectedQuestion[0]['id'] , $attachedQuestions))
-                                        {
+
+                                    if ($questionResults['foundQuestions'][$j]['type'] == 'Parent') {
+                                        if (in_array($selectedQuestion[0]['id'], $attachedQuestions)) {
                                             $j--;
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             $childWeight =  $questionResults['foundQuestions'][$j]['Weight'] / (count($selectedQuestion) - 1); // dividng the total weight of the parent question to all of the childs equally
                                             $WeightCount = 0;
-    
+
                                             for ($k = 0; $k < count($selectedQuestion); $k++) {
                                                 array_push($attachedQuestions, $selectedQuestion[$k]['id']); // saving the randomly selected question
                                                 if ($k == 0) // weight for the parent only
                                                 {
-    
+
                                                     DB::table('exam_models_question')->insert(
                                                         ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion[$k]['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
                                                     );
@@ -386,15 +382,10 @@ class ExamController extends Controller
                                                 }
                                             }
                                         }
-                                    }
-                                    else
-                                    {
-                                        if(in_array($selectedQuestion[0]['id'] , $attachedQuestions))
-                                        {
+                                    } else {
+                                        if (in_array($selectedQuestion[0]['id'], $attachedQuestions)) {
                                             $j--;
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             array_push($attachedQuestions, $selectedQuestion['id']); // saving the randomly selected question
                                             DB::table('exam_models_question')->insert(
                                                 ['exam_models_id' =>  $newModel['id'], 'question_id' =>  $selectedQuestion['id'], 'weight' => $questionResults['foundQuestions'][$j]['Weight']]
