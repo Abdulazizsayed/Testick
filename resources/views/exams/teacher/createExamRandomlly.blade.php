@@ -119,11 +119,7 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-<<<<<<< HEAD
                             @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
-=======
-                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
->>>>>>> 6f3402ec04cfde0f306d8324498c7be9e71993a4
                             <option value="{{$question->chapter}}">{{$question->chapter}}</option>
                             @endforeach
                         </select>
@@ -131,17 +127,7 @@ use App\Course;
                     <br>
                     <div class="form-group row" style="margin-left: 0px">
                         <div style=";margin-left: 10px;">
-<<<<<<< HEAD
-                            <select class="form-control" name="ch1w1" id="ch1w1" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-
-                            </select>
-=======
                         <input name="ch1w1" id="ch1w1" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
->>>>>>> 6f3402ec04cfde0f306d8324498c7be9e71993a4
                         </div>
 
                         <div style="margin-left: 10px">
@@ -164,24 +150,11 @@ use App\Course;
                     </div>
                     <br>
                     <div class="form-group row" style="margin-left: 0px">
-<<<<<<< HEAD
-                        <div style=";margin-left: 10px;">
-                            <select class="form-control" name="ch1w2" id="ch1w2" style="background-color: #1A034A;color: white;" required >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
-
-=======
                         <div style="float:left;">
                             <label for="title" class="col-md-4 col-form-label">Weight</label>
                         </div>
                         <input name="ch1w2" id="ch1w2" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
-                        
->>>>>>> 6f3402ec04cfde0f306d8324498c7be9e71993a4
+
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch1w2Q2Diff" id="ch1w2Q2Diff" style="background-color: #1A034A;color: white;" required >
                                 <option value="Easy">Easy</option>
@@ -200,85 +173,9 @@ use App\Course;
 
                             </select>
                         </div>
-<<<<<<< HEAD
-=======
-                        
-                    </div>
-                    <br>
-                </div>  
-                <br>
-            </div>
-            <div class="form-group row" style="margin-left: 0px;width: 1000px;border: 2px solid gray;border-radius: 10px">
-                <div style="margin-left: 25px;margin-top: 20px">
-
-                    <div style="margin-left: 10px">
-                        <select class="form-control" name="ch2" id="ch2" style="background-color: #1A034A;color: white;width: 250px" required >
-                            <option value="" disabled selected >Chapter</option>
-                            @foreach(QuestionBank::find(2)->questions()->select('chapter')->distinct()->get() as $question)
-                            <option value="{{$question->chapter}}">{{$question->chapter}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <br>
-                    <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
-                        <div style=";margin-left: 10px;">
-                        <input name="ch2w1" id="ch2w1" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
-                        </div>
-
-                        <div style="margin-left: 10px">
-                            <select class="form-control" name="ch2w1Q2Diff" id="ch2w1Q2Diff" style="background-color: #1A034A;color: white;" required >
-                                <option value="Easy">Easy</option>
-                                <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
-                            </select>
-                        </div>
-                        <div style="margin-left: 20px">
-                            <select class="form-control" name="ch2w1Q1type" id="ch2w1Q1type" style="background-color: #1A034A;color: white;" required >
-                            <option value="MSMCQ">MSMCQ</option>
-                                <option value="SSMCQ">SSMCQ</option>
-                                <option value="Essay">Essay</option>
-                                <option value="T/F">T/F</option>
-                                <option value="Parent">Parent</option>
->>>>>>> 6f3402ec04cfde0f306d8324498c7be9e71993a4
 
                     </div>
                     <br>
-<<<<<<< HEAD
-
-=======
-                    <div class="form-group row" style="margin-left: 0px">
-                        <div style="float:left;">
-                            <label for="title" class="col-md-4 col-form-label">Weight</label>
-                        </div>
-                        <div style=";margin-left: 10px;">
-                        <input name="ch2w2" id="ch2w2" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight">
-                        </div>
-                        
-                        <div style="margin-left: 10px">
-                            <select class="form-control" name="ch2w2Q2Diff" id="ch2w2Q2Diff" style="background-color: #1A034A;color: white;" required >
-                                <option value="Easy">Easy</option>
-                                <option value="Med">Med</option>
-                                <option value="Hard">Hard</option> 
-                            </select>
-                        </div>
-                        <div style="margin-left: 20px">
-                            <select class="form-control" name="ch2w2Q2type" id="ch2w2Q2type" style="background-color: #1A034A;color: white;" required >
-                            <option value="MSMCQ">MSMCQ</option>
-                                <option value="SSMCQ">SSMCQ</option>
-                                <option value="Essay">Essay</option>
-                                <option value="T/F">T/F</option>
-                                <option value="Parent">Parent</option>
-
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <br>
-                </div>   
->>>>>>> 6f3402ec04cfde0f306d8324498c7be9e71993a4
                 <br>
             </div>
 
