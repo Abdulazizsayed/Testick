@@ -35,6 +35,7 @@ Route::post('QB/search', 'QBcontroller@search');
 // Course routes
 Route::resource('course', 'courseController');
 //teacher
+Route::get('/course/teacher/index', 'courseController@index');
 Route::get('/course/teacher/announcementLog', 'courseController@announcementLogView');
 Route::get('/course/teacher/memberList/{courseID}', 'courseController@memberlistView');
 Route::post('/course/teacher/createAnnouncement', 'courseController@createAnnouncement');

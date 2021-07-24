@@ -65,6 +65,16 @@ use App\Subject;
     <div class="create-announcement pl-5 pt-3">
         <form action="/course/teacher/createAnnouncement" enctype="multipart/form-data" method="post">
             @csrf
+            @if (session('fail'))
+                <div class="alert alert-danger">
+                    {{ session('fail') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-8">
 

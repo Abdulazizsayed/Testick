@@ -83,13 +83,17 @@ class courseController extends Controller
                 foreach ($courseUsers as $user) {
                     Mail::to($user['email'])->send(new Gmail($details));
                 }
-            } else {
-                return response($validatedData->messages(), 200);
+            } 
+            else 
+            {
+                return redirect('course/teacher/index')->with('fail', $validatedData->messages());
             }
-        } else {
+        } 
+        else 
+        {
             return view('errorPages/accessDenied');
         }
-        return $this->index();
+        return redirect('course/teacher/index')->with('success', "Announcement published successfully");
     }
 
 

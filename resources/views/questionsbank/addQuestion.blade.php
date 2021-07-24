@@ -8,7 +8,6 @@ use App\QuestionBank;
     <form action="/QB/addQuestion/{{$questionBank->id}}" enctype="multipart/form-data" method="POST">
     @csrf
     @method('POST')
-
     <h2 class="title">Add Question to {{$questionBank->title}}<h2>
     <div class="row">
             <div class="col-8">
