@@ -56,7 +56,7 @@ use Carbon\Carbon;
         </thead>
         <tbody class="exams-holder">
             @foreach (Auth::user()->exams as $exam)
-                @if( \Carbon\Carbon::parse($exam->date)->gte(\Carbon\Carbon::now()) )
+                @if( \Carbon\Carbon::parse($exam->date)->gte(\Carbon\Carbon::now()->addHours(2)) )
                     <tr>
                         <td><a href="{{asset('exams/student/enterExam/'.$exam->id)}}">{{$exam->title}}</a></td>
                         <td>{{Course::find($exam->course_id)->code}}</td>
@@ -106,7 +106,7 @@ use Carbon\Carbon;
         </thead>
         <tbody class="exams-holder">
             @foreach (Auth::user()->exams as $exam)
-                @if( \Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()) )
+                @if( \Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()->addHours(2)) )
                     <tr>
                         <td>{{$exam->title}}</td>
                         <td>{{Course::find($exam->course_id)->code}}</td>
