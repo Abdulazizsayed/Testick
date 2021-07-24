@@ -117,9 +117,11 @@ use App\Course;
                     <div style="margin-left: 10px">
                         <select class="form-control select-chapters first-select" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
                             <option value="" disabled selected >Chapter</option>
-                            @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
-                                <option value="{{$question->chapter}}">{{$question->chapter}}</option>
-                            @endforeach
+                            @if (Auth::user()->questionBanks()->count() > 0)
+                                @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
+                                    <option value="{{$question->chapter}}">{{$question->chapter}}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <br>
@@ -127,7 +129,7 @@ use App\Course;
                         <div style="margin-left: 10px;">
                             <input name="ch1w1" id="ch1w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
                         </div>
-                        
+
 
                         <div style="margin-left: 10px">
                             <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
