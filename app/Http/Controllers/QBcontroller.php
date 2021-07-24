@@ -131,17 +131,13 @@ class QBcontroller extends Controller
                         }
                     }
                 }
-            } 
-            else 
-            {
-                return redirect('/QB/index')->with('fail',$validatedData->messages());
+            } else {
+                return redirect('/QB/index')->with('fail', $validatedData->messages());
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
-        return redirect('/QB/index')->with('status',"QuestionBank created successfully");
+        return redirect('/QB/index')->with('status', "QuestionBank created successfully");
     }
 
     public function destroy($QuestionBankID)
@@ -170,8 +166,7 @@ class QBcontroller extends Controller
 
     public function addQuestion($QuestionBankID)
     {
-        if (auth()->user()->role == 1) 
-        {
+        if (auth()->user()->role == 1) {
             $data = request::all();
             $validatedData = Validator::make($data, [
                 'chapter' => 'required',
@@ -179,15 +174,11 @@ class QBcontroller extends Controller
                 'difficulty' => 'required',
                 'Qcontent' => 'required'
             ]);
-            if (!$validatedData->fails()) 
-            {
-                if (array_key_exists("parent", $data)) 
-                {
+            if (!$validatedData->fails()) {
+                if (array_key_exists("parent", $data)) {
                     $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'], 'chapter' => $data['chapter'], 'parent_id' => $data['parent'], 'question_bank_id' => $QuestionBankID];
                     $forLoopLenght = count($data) - 7;
-                } 
-                else 
-                {
+                } else {
                     $Qdata = ['content' => $data['Qcontent'], 'type' => $data['type'], 'difficulty' => $data['difficulty'], 'chapter' => $data['chapter'], 'parent_id' => NULL, 'question_bank_id' => $QuestionBankID];
                     $forLoopLenght = count($data) - 6;
                 }
@@ -206,25 +197,19 @@ class QBcontroller extends Controller
                     }
                 }
 
-                if ($data['type'] != "Parent") 
-                {
+                if ($data['type'] != "Parent") {
                     $QC = new AnswerController();
-                    for ($i = 1; $i <= count($answersData) / 2; $i++) 
-                    {
+                    for ($i = 1; $i <= count($answersData) / 2; $i++) {
                         $temp['content'] = $answersData['answer' . $i];
                         $temp['is_correct'] = $answersData["ch" . $i];
                         $temp['question_id'] = $question_obj['id'];
                         $QC->store($temp);
                     }
                 }
-            } 
-            else 
-            {
+            } else {
                 return response($validatedData->messages(), 200);
             }
-        } 
-        else 
-        {
+        } else {
             return view('errorPages/accessDenied');
         }
         return $this->addQuestionView($QuestionBankID);
@@ -251,6 +236,15 @@ class QBcontroller extends Controller
     {
         return response()->json([
             'chapters' => QuestionBank::find($questionBankId)->questions()->select('chapter')->distinct()->get()
+        ]);
+    }
+
+    public function getQuestions(HttpRequest $request, $questionBankId)
+    {
+        return response()->json([
+            'questions' => QuestionBank::find($questionBankId)->questions->map(function ($question) {
+                return [$question->id, $question->content, $question->type, $question->difficulty, $question->chapter];
+            })
         ]);
     }
 }
