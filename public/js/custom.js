@@ -530,6 +530,147 @@ $(".add-check-box").on("change", function() {
 });
 
 // Add question randomly
-$(".add-question-randomly").on("click", function() {
-    $("random-questions").append();
+let chs = 1;
+$(document).on("click", ".add-question-randomly", function() {
+    let randomQuestions =
+        parseInt(
+            $(this)
+                .parent()
+                .parent()
+                .children()
+                .eq(0)
+                .val()
+        ) + 1;
+
+    let ch = $(this)
+        .parent()
+        .parent()
+        .children()
+        .eq(1)
+        .val();
+
+    $(this)
+        .parent()
+        .prev().append(`<div class="form-group row random-question" style="margin-left: 0px">
+                            <div style="margin-left: 10px;">
+                                <input name="ch${ch}w${randomQuestions}" id="ch${ch}w${randomQuestions}" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <input name="ch${ch}w${randomQuestions}Num${randomQuestions}" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
+                            </div>
+
+                            <div style="margin-left: 10px">
+                                <select class="form-control" name="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" id="ch${ch}w${randomQuestions}Q${randomQuestions}Diff" style="background-color: #1A034A;color: white;" required >
+                                    <option value="" disabled selected >Difficulty</option>
+                                    <option value="Easy">Easy</option>
+                                    <option value="Med">Med</option>
+                                    <option value="Hard">Hard</option>
+                                </select>
+                            </div>
+                            <div style="margin-left: 20px">
+                                <select class="form-control" name="ch${ch}w${randomQuestions}Q${randomQuestions}type" id="ch${ch}w${randomQuestions}Q${randomQuestions}type" style="background-color: #1A034A;color: white;" required >
+                                    <option value="" disabled selected >Question Type</option>
+                                    <option value="MSMCQ">MSMCQ</option>
+                                    <option value="SSMCQ">SSMCQ</option>
+                                    <option value="Essay">Essay</option>
+                                    <option value="T/F">T/F</option>
+                                    <option value="Parent">Parent</option>
+
+                                </select>
+                            </div>
+                        </div>`);
+    $(this)
+        .parent()
+        .parent()
+        .children()
+        .eq(0)
+        .val(randomQuestions);
+});
+
+$(".add-chapter").on("click", function() {
+    let options = ``;
+    $(".select-chapters option").each(function(i) {
+        if (i != 0) {
+            options += `<option value="${$(this).val()}">${$(
+                this
+            ).val()}</option>`;
+        }
+    });
+
+    chs++;
+    $(
+        ".chapters"
+    ).append(`<div class="form-group row" style="margin-left: 0px;border: 2px solid gray;border-radius: 10px">
+                <input type="number" class="questions-count" value="1" hidden>
+                <input type="number" class="chs-count" value="${chs}" hidden>
+                <div class="random-questions" style="margin-left: 25px;margin-top: 20px">
+                    <div style="margin-left: 10px">
+                        <select class="form-control select-chapters" name="ch${chs}" id="ch${chs}" style="background-color: #1A034A;color: white;width: 250px" required >
+                            <option disabled selected>Chapter</option>
+                            ${options}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group row random-question" style="margin-left: 0px">
+                        <div style="margin-left: 10px;">
+                            <input name="ch${chs}w1" id="ch${chs}w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <input name="ch${chs}w1Num1" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
+                        </div>
+
+                        <div style="margin-left: 10px">
+                            <select class="form-control" name="ch${chs}w1Q1Diff" id="ch${chs}w1Q1Diff" style="background-color: #1A034A;color: white;" required >
+                                <option value="" disabled selected >Difficulty</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Med">Med</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 20px">
+                            <select class="form-control" name="ch${chs}w1Q1type" id="ch${chs}w1Q1type" style="background-color: #1A034A;color: white;" required >
+                                <option value="" disabled selected >Question Type</option>
+                                <option value="MSMCQ">MSMCQ</option>
+                                <option value="SSMCQ">SSMCQ</option>
+                                <option value="Essay">Essay</option>
+                                <option value="T/F">T/F</option>
+                                <option value="Parent">Parent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center pb-3">
+                    <div class="btn add add-question-randomly"><i class="fa fa-plus fa-lg"></i></div>
+                </div>
+            </div>`);
+});
+
+// Get chapters of specific question bank
+$(".create-exam-randomly .select-question-bank").on("change", function() {
+    let questionBank = this.options[this.selectedIndex].value;
+    $.ajax({
+        url: "/QB/chapters/" + questionBank,
+        type: "POST",
+        data: [],
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        dataType: "JSON",
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        success: function(data) {
+            let chaptersSelect = $(".create-exam-randomly").find(
+                ".select-chapters"
+            );
+            chaptersSelect.empty(); // remove old options
+            chaptersSelect.append(`<option disabled selected>Chapter</option>`);
+            $.each(data.chapters, function(key, value) {
+                chaptersSelect.append(
+                    `<option value="${value.chapter}">${value.chapter}</option>`
+                );
+            });
+        }
+    });
 });

@@ -5,7 +5,7 @@ use App\Course;
 @extends('layouts.app')
 @section('title', 'Create Exam Randomlly')
 @section('content')
-<div class="container">
+<div class="container create-exam-randomly">
     <form action="/exams/create/randomlly"  enctype="multipart/form-data"  method = "post" >
         @csrf
         @method('POST')
@@ -101,89 +101,63 @@ use App\Course;
         </div>
         <br>
         <div class="form-group row" style="margin-left: 30px">
-
             <div style="margin-left: 10px">
-                <select class="form-control" name="qBank" id="qBank" style="background-color: #1A034A;color: white;width: 250px" required >
-                    <option value="" disabled selected >Question Bank</option>
+                <select class="form-control select-question-bank" name="qBank" id="qBank" style="background-color: #1A034A;color: white;width: 250px" required >
                     @foreach( Auth::user()->questionBanks as $questionBank)
-                    <option value="{{$questionBank->id}}">{{$questionBank->title}}</option>
+                    <option value="{{$questionBank->id}}" {{$loop->index == 0 ? 'selected' : ''}}>{{$questionBank->title}}</option>
                     @endforeach
-
                 </select>
             </div>
         </div>
-        <div class="form-group row" style="margin-left: 0px;border: 2px solid gray;border-radius: 10px">
-            <div class="random-questions" style="margin-left: 25px;margin-top: 20px">
-
-                <div style="margin-left: 10px">
-                    <select class="form-control" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
-                        <option value="" disabled selected >Chapter</option>
-                        @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
-                        <option value="{{$question->chapter}}">{{$question->chapter}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <br>
-                <div class="form-group row random-question" style="margin-left: 0px">
-                    <div style="margin-left: 10px;">
-                        <input name="ch1w1" id="ch1w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
-                    </div>
-                    <div style="margin-left: 10px;">
-                        <input name="ch1w1Num" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
-                    </div>
-
+        <div class="chapters">
+            <div class="form-group row" style="margin-left: 0px;border: 2px solid gray;border-radius: 10px">
+                <input type="number" class="questions-count" value="1" hidden>
+                <input type="number" class="chs-count" value="1" hidden>
+                <div class="random-questions" style="margin-left: 25px;margin-top: 20px">
                     <div style="margin-left: 10px">
-                        <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
-                            <option value="" disabled selected >Difficulty</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Med">Med</option>
-                            <option value="Hard">Hard</option>
+                        <select class="form-control select-chapters" name="ch1" id="ch1" style="background-color: #1A034A;color: white;width: 250px" required >
+                            <option value="" disabled selected >Chapter</option>
+                            @foreach(Auth::user()->questionBanks()->first()->questions()->select('chapter')->distinct()->get() as $question)
+                                <option value="{{$question->chapter}}">{{$question->chapter}}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div style="margin-left: 20px">
-                        <select class="form-control" name="ch1w1Q1type" id="ch1w1Q1type" style="background-color: #1A034A;color: white;" required >
-                            <option value="" disabled selected >Question Type</option>
-                            <option value="MSMCQ">MSMCQ</option>
-                            <option value="SSMCQ">SSMCQ</option>
-                            <option value="Essay">Essay</option>
-                            <option value="T/F">T/F</option>
-                            <option value="Parent">Parent</option>
-                        </select>
+                    <br>
+                    <div class="form-group row random-question" style="margin-left: 0px">
+                        <div style="margin-left: 10px;">
+                            <input name="ch1w1" id="ch1w1" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <input name="ch1w1Num1" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
+                        </div>
+
+                        <div style="margin-left: 10px">
+                            <select class="form-control" name="ch1w1Q1Diff" id="ch1w1Q1Diff" style="background-color: #1A034A;color: white;" required >
+                                <option value="" disabled selected >Difficulty</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Med">Med</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 20px">
+                            <select class="form-control" name="ch1w1Q1type" id="ch1w1Q1type" style="background-color: #1A034A;color: white;" required >
+                                <option value="" disabled selected >Question Type</option>
+                                <option value="MSMCQ">MSMCQ</option>
+                                <option value="SSMCQ">SSMCQ</option>
+                                <option value="Essay">Essay</option>
+                                <option value="T/F">T/F</option>
+                                <option value="Parent">Parent</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <br>
-                <div class="form-group row random-question" style="margin-left: 0px">
-                    <div style="margin-left: 10px;">
-                        <input name="ch1w2" id="ch1w2" type="number" required  autofocus class="form-control" placeholder="Enter the Weight">
-                    </div>
-                    <div style="margin-left: 10px;">
-                        <input name="ch1w1Num" type="number" required  autofocus class="form-control" placeholder="Enter number of questions">
-                    </div>
-
-                    <div style="margin-left: 10px">
-                        <select class="form-control" name="ch1w2Q2Diff" id="ch1w2Q2Diff" style="background-color: #1A034A;color: white;" required >
-                            <option value="" disabled selected >Difficulty</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Med">Med</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-                    </div>
-                    <div style="margin-left: 20px">
-                        <select class="form-control" name="ch1w2Q2type" id="ch1w2Q2type" style="background-color: #1A034A;color: white;" required >
-                            <option value="" disabled selected >Question Type</option>
-                            <option value="MSMCQ">MSMCQ</option>
-                            <option value="SSMCQ">SSMCQ</option>
-                            <option value="Essay">Essay</option>
-                            <option value="T/F">T/F</option>
-                            <option value="Parent">Parent</option>
-
-                        </select>
-                    </div>
+                <div class="col-md-12 text-center pb-3">
+                    <div class="btn add add-question-randomly"><i class="fa fa-plus fa-lg"></i></div>
                 </div>
             </div>
-            <div class="col-md-12 text-center pb-3">
-                <div class="btn add add-question-randomly"><i class="fa fa-plus fa-lg"></i></div>
-            </div>
+        </div>
+        <div class="text-center pb-3">
+            <div class="btn add add-chapter"><i class="fa fa-plus fa-lg"></i></div>
         </div>
         <div>
             <button type="submit" class="btn btn-primary">Create</button>
