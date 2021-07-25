@@ -121,7 +121,7 @@ class ExamController extends Controller
 
         return response()->json([
             'exams' => $exams->map(function ($exam) {
-                return [$exam->id, $exam->title, $exam->course->code, $exam->course->subject->name, $exam->type, $exam->duration, $exam->allow_period, $exam->date, $exam->weight(), csrf_token()];
+                return [$exam->id, $exam->title, $exam->course->code, $exam->course->subject->name, $exam->type, $exam->duration, $exam->allow_period, $exam->date, round($exam->weight(), 2), csrf_token()];
             })
         ]);
     }
