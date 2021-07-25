@@ -98,8 +98,8 @@
     </div>
     <div class="operations text-center pt-3">
         @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
-            <button class="btn btn-primary">Analysis</button>
-            <button class="btn btn-success">Students grades</button>
+            <a href="{{asset('exams/analysis/' . $exam->id)}}" class="btn btn-primary">Analysis</a>
+            <a href="{{asset('exams/studentsGrades/' . $exam->id)}}" class="btn btn-success">Students grades</a>
         @else
             <form action="/exams/{{$exam->id}}" method="POST">
                 @csrf

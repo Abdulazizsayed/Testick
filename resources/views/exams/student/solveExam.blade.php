@@ -46,18 +46,40 @@
                                 @endforeach
                             @elseif($question->type == 'SSMCQ')
                                 @php
-                                    $rand = random_int(0, 3);
+                                    $rand = random_int(0, 2);
+                                    $firstOrNot = random_int(0, 1);
                                     $trueAnswer = $question->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                 @endphp
-                                @foreach ($question->answers()->whereNotIn('id', [$trueAnswer->id])->where('is_correct', 0)->inRandomOrder()->limit(4)->get() as $answer)
+                                @foreach ($question->answers()->whereNotIn('id', [$trueAnswer->id])->where('is_correct', 0)->inRandomOrder()->limit(3)->get() as $answer)
                                     <li>
                                         @if ($loop->index == $rand)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$trueAnswer->content}}">
-                                                <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
-                                                    {{$trueAnswer->content}}
-                                                </label>
-                                            </div>
+                                            @if ($firstOrNot)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$trueAnswer->content}}">
+                                                    <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
+                                                        {{$trueAnswer->content}}
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
+                                                    <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
+                                                        {{$answer->content}}
+                                                    </label>
+                                                </div>
+                                            @else
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
+                                                    <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
+                                                        {{$answer->content}}
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$trueAnswer->content}}">
+                                                    <label class="form-check-label" for="answer{{$question->id . $loop->index}}">
+                                                        {{$trueAnswer->content}}
+                                                    </label>
+                                                </div>
+                                            @endif
                                         @else
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="{{$question->id}}" id="answer{{$question->id . $loop->index}}" value="{{$answer->content}}">
