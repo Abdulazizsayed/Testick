@@ -1,3 +1,8 @@
+Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + h * 60 * 60 * 1000);
+    return this;
+};
+
 // Preview image onEditProfile
 let editProfileInput = document.querySelector(
     ".edit-profile .edit-profile-input"
@@ -67,15 +72,22 @@ $(document).on("keyup", ".exams-index .search-filter-input", function(e) {
                                     <td>${exam[5]}</td>
                                     <td>${exam[6]}</td>
                                     <td>${exam[7]}</td>
+                                    <td>${exam[8]}</td>
                                     <td>
                                     ${
-                                        examDate > now
+                                        examDate.addHours(exam[5]) > now
                                             ? '<form action="/exams/' +
                                               exam[0] +
                                               '" method="POST"><input type="hidden" name="_token" value="' +
                                               exam[7] +
-                                              '"><input type="hidden" name="_method" value="DELETE"><button class="btn btn-danger">Delete</button></form> <button class="btn edit-exam-btn">Edit</button>'
-                                            : '<button class="btn btn-primary">Analysis</button> <button class="btn btn-success">Students grades</button>'
+                                              '"><input type="hidden" name="_method" value="DELETE"><button class="btn btn-danger">Delete <i class="fa fa-times fa-lg"></i></button></form> <a href="exams/' +
+                                              exam[0] +
+                                              '" class="btn edit-exam-btn">Edit <i class="fa fa-edit fa-lg"></i></a>'
+                                            : '<a class="btn btn-primary mb-2" href="exams/analysis/' +
+                                              exam[0] +
+                                              '">Analysis <i class="fa fa-pie-chart fa-lg"></i></a> <a class="btn btn-success" href="exams/studentsGrades/' +
+                                              exam[0] +
+                                              '">Students grades <i class="fa fa-percent fa-lg"></i></a>'
                                     }
                                     </td>
                                 </tr>`;
