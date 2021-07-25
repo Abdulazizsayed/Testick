@@ -80,7 +80,7 @@
                         @method('DELETE')
                         <button class="btn btn-danger">Delete <i class="fa fa-times fa-lg"></i></button>
                     </form>
-                    <button class="btn edit-exam-btn">Edit <i class="fa fa-edit fa-lg"></i></button>
+                    <a href="{{asset('exams/' . $exam->id)}}" class="btn edit-exam-btn">Edit <i class="fa fa-edit fa-lg"></i></a>
                 @endif
                 </td>
             </tr>

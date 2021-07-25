@@ -5,11 +5,11 @@
 @section('content')
 <div class="container exams-show">
     <h2 class="title text-center">{{$exam->title}}</h2>
-    @foreach ($exam->questions()->withPivot('weight')->get() as $question)
+    @forelse ($exam->questions() as $question)
         <div class="question">
             <div class="question-header parent">
                 <h4 class="question-content">{{$loop->index + 1 . ') ' . $question->content}}</h4>
-                <span class="type-chapter">(Type: {{$question->type}} - Chapter: {{$question->chapter}} - Difficulty: {{$question->difficulty}} - Weight: <span class="weight">{{$question->pivot->weight}}</span>)</span>
+                <span class="type-chapter">(Type: {{$question->type}} - Chapter: {{$question->chapter}} - Difficulty: {{$question->difficulty}} - Weight: <span class="weight">{{$exam->questions()->where('id', $question->id)->first()->examModels()->where('exam_id', $exam->id)->withPivot('weight')->first()->pivot->weight}}</span>)</span>
                 <i class="fa fa-edit edit-question-btn"></i>
                 <i class="fa fa-times exam-delete delete-question-btn"></i>
                 <input type="number" value="{{$question->id}}" hidden>
@@ -90,9 +90,11 @@
             </div>
         </div>
         <hr style="border-color: #AAA">
-    @endforeach
+    @empty
+    <p class="alert alert-warning">This exam has no questions yet</p>
+    @endforelse
     <div class="text-center">
-        <a class="btn add" title="Add new question" href="{{asset('exams/addQuestion/' . $exam->id)}}">Add question <i class="fa fa-plus fa-lg"></i></a>
+        <a class="btn add" title="Add new question" href="{{asset('exams/addQuestion/' . $exam->id)}}">Add questions <i class="fa fa-plus fa-lg"></i></a>
     </div>
     <div class="operations text-center pt-3">
         @if (\Carbon\Carbon::parse($exam->date)->lt(\Carbon\Carbon::now()))
