@@ -686,7 +686,7 @@ $(".create-exam-randomly .select-question-bank").on("change", function() {
 // Search questions of question bank by ajax
 $(document).on(
     "keyup",
-    ".Create-Exam-Manually .search-filter-input",
+    ".Create-Exam-Manually .search-filter-input, .add-question .search-filter-input",
     function() {
         let searchValue = $(".search-filter-input").val(),
             filterBy = $(".filter-by").val(),
@@ -741,7 +741,9 @@ $(document).on(
 );
 
 // Get chapters of specific question bank
-$(".Create-Exam-Manually .select-question-bank").on("change", function() {
+$(
+    ".Create-Exam-Manually .select-question-bank, .add-question .select-question-bank"
+).on("change", function() {
     let questionBankId = this.options[this.selectedIndex].value;
     $(".question-bank-id").val(questionBankId);
 

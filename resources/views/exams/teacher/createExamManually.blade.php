@@ -121,7 +121,7 @@ use App\Course;
             </div>
             <div class="col-md-8">
                 <span class='label'>Search by <span class="selected-filter">Content</span></span>
-                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter exam content">
+                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter question content">
                 <input class='question-bank-id' name='question_bank_id' type="number" value="{{Auth::user()->questionBanks()->count() > 0 ? Auth::user()->questionBanks()->first()->id : ''}}" hidden>
             </div>
         </div>

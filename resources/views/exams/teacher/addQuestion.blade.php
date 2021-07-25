@@ -12,17 +12,17 @@ use App\Exam;
     </div>
     <br>
 
-    <form action="{{--asset('exams/addQuestion/' . $exam->id)--}}" enctype="multipart/form-data" method="POST">
+    <form enctype="multipart/form-data" method="POST">
         @csrf
         @method('POST')
         <div class="row">
             <div class="col-8">
                 <div class="d-flex">
                     <div style="float:right;width:40%;margin-left: 10px;">
-                        <select class="form-control" name="questionbank" id="questionbank" required style="background-color: #1A034A;color: white">
-                            <option value="" disabled selected >Question bank</option>
+                        <select class="form-control select-question-bank" name="questionbank" id="questionbank" required style="background-color: #1A034A;color: white">
+                            <option value="" disabled>Question bank</option>
                             @foreach( Auth::user()->questionBanks as $questionBank)
-                            <option value="{{$questionBank->id}}">{{$questionBank->title}}</option>
+                                <option value="{{$questionBank->id}}" {{$loop->index == 0 ? 'selected' : ''}}>{{$questionBank->title}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -30,7 +30,7 @@ use App\Exam;
                         <select class="form-control" name="exammodels" id="exammodels" required style="background-color: #1A034A;color: white">
                             <option value="" disabled selected >Exam Models</option>
                             @foreach( Exam::find($exam->id)->examModels as $model)
-                            <option value="{{$model->id}}">{{$model->id}}</option>
+                                <option value="{{$model->id}}">{{$model->id}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -43,15 +43,16 @@ use App\Exam;
             <div class="col-md-4">
                 <span class='label'>Filter</span>
                 <select class="filter-by" name="filter-by">
-                    <option value="1">Type</option>
-                    <option value="3">Difficulty</option>
-                    <option value="3">Chapter</option>
+                    <option value="content">Content</option>
+                    <option value="type">Type</option>
+                    <option value="difficulty">Difficulty</option>
+                    <option value="chapter">Chapter</option>
                 </select>
             </div>
             <div class="col-md-8">
-                <span class='label'>Search by <span class="selected-filter">Title</span></span>
-                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter exam Title">
-                <input class='filter-value' name='filter_value' type="text" value="title" hidden>
+                <span class='label'>Search by <span class="selected-filter">Content</span></span>
+                <input class="search-filter-input" type="text" name="search_input" placeholder="Enter question content">
+                <input class='question-bank-id' name='question_bank_id' type="number" value="{{Auth::user()->questionBanks()->count() > 0 ? Auth::user()->questionBanks()->first()->id : ''}}" hidden>
             </div>
         </div>
 
@@ -66,8 +67,8 @@ use App\Exam;
                     <th scope="col">Add to Exam</th>
                 </tr>
             </thead>
-            <tbody class="exams-holder">
-                @foreach(QuestionBank::find(1)->questions as $question)
+            <tbody class="questions-holder">
+                @foreach(Auth::user()->questionBanks()->first()->questions as $question)
                 <tr>
                     <td>{{$question->content}}</td>
                     <td>{{$question->type}}</td>
@@ -77,7 +78,7 @@ use App\Exam;
                         <input id="Weight.{{$question->id}}" name="Weight.{{$question->id}}" type="number" required  autofocus style="border-radius: 25px" placeholder="Enter the Question Weight" disabled>
                     </td>
                     <td>
-                        <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}" class="add-check-box"> 
+                        <input  type="checkbox" id="ch.{{$question->id}}" name="ch.{{$question->id}}" value="{{$question->id}}" class="add-check-box">
                     </td>
                 </tr>
                 @endforeach
