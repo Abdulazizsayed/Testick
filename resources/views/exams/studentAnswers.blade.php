@@ -10,7 +10,7 @@
     <h2 class="title text-center">{{$exam->exam->title}}</h2>
     @foreach ($exam->questions()->withPivot('weight')->get() as $question)
             @if ($question->parent)
-                @if($exam->questions()->contains('id', $question->parent->id))
+                @if($exam->questions()->get()->contains('id', $question->parent->id))
                     @continue
                 @endif
             @endif

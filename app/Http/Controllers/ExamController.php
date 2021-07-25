@@ -421,8 +421,8 @@ class ExamController extends Controller
 
             $model = $exam->examModels()->inRandomOrder()->first();
 
-            $exam->studentsEntered()->attach(Auth::id());
-            Auth::user()->assignedModels()->attach($model->id);
+            /*$exam->studentsEntered()->attach(Auth::id());
+            Auth::user()->assignedModels()->attach($model->id);*/
 
             return view('exams.student.solveExam')->with('exam', $model);
         } else {

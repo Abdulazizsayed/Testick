@@ -72,26 +72,14 @@
                         </form>
                         <div class="row">
                             <div class="col-md-6 text-center analysis-component">
-                                <h2 class="percentage text-warning solved">
-                                    @if ($exam->studentsSubmitted()->count() > 0)
-                                        {{round(($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->count() / $exam->studentsSubmitted()->count()) * 100, 2)}}%
-                                    @else
-                                        0%
-                                    @endif
-                                </h2>
-                                <span>Solved</span>
-                            </div>
-                            <div class="col-md-6 text-center analysis-component">
                                 <h2 class="percentage text-warning avg">
-                                    {{round($exam->questions()->first()->studentAnswers()->where('exam_id', $exam->id)->average('score'), 2)}}
+                                    {{round($exam->questions()->first()->studentAnswers()->whereIn('exam_models_id', $exam->examModels()->pluck('id'))->average('score'), 2)}}
                                 </h2>
                                 <span>Average grades</span>
                             </div>
-                        </div>
-                        <div class="row mt-3">
                             <div class="col-md-6 text-center analysis-component">
                                 <h2 class="percentage text-warning question-weight">
-                                    {{round($exam->questions()->first()->examModels()->where('exam_id', $exam->id)->withPivot('weight')->first()->pivot->weight, 2)}}
+                                {{DB::table('exam_models_question')->whereIn('exam_models_id', $exam->examModels()->pluck('id'))->where('question_id',$exam->questions()->first()->id)->get()[0]->weight}} 
                                 </h2>
                                 <span>Question weight</span>
                             </div>
