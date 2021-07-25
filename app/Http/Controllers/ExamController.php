@@ -259,9 +259,8 @@ class ExamController extends Controller
     {
         $exam = Exam::find($request->exam_id);
         return response()->json([
-            'solved' => $exam->studentsSubmitted()->count() > 0 ? round(($exam->questions()->where('id', $request->question_id)->first()->studentAnswers()->where('exam_id', $exam->id)->count() / $exam->studentsSubmitted()->count()) * 100, 2) : 0,
-            'avg' => round($exam->questions()->where('id', $request->question_id)->first()->studentAnswers()->where('exam_id', $exam->id)->average('score'), 2),
-            'weight' => round($exam->questions()->where('id', $request->question_id)->first()->examModels()->where('exam_id', $exam->id)->withPivot('weight')->first()->pivot->weight, 2),
+            'avg' => round($exam->questions()->where('id', $request->question_id)->first()->studentAnswers()->whereIn('exam_models_id', $exam->examModels()->pluck('id'))->average('score'), 2),
+            'weight' => round(DB::table('exam_models_question')->whereIn('exam_models_id', $exam->examModels()->pluck('id'))->where('question_id',$request->question_id)->get()[0]->weight, 2),
         ]);
     }
 

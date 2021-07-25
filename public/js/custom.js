@@ -495,7 +495,6 @@ $(".analysis .question-analysis-form").on("submit", function(e) {
         processData: false,
 
         success: function(data) {
-            $(".analysis .solved").html(data.solved + "%");
             $(".analysis .avg").html(data.avg);
             $(".analysis .question-weight").html(data.weight);
         }
@@ -516,6 +515,7 @@ $(".analysis .chapter-analysis-form").on("submit", function(e) {
         processData: false,
 
         success: function(data) {
+            console.log("Messageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
             $(".analysis .chapter-absorbtion").html(data.absorbtion + "%");
         }
     });
