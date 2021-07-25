@@ -46,7 +46,7 @@
                                 @endforeach
                             @elseif($question->type == 'SSMCQ')
                                 @php
-                                    $rand = random_int(1, 4);
+                                    $rand = random_int(0, 3);
                                     $trueAnswer = $question->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                 @endphp
                                 @foreach ($question->answers()->whereNotIn('id', [$trueAnswer->id])->where('is_correct', 0)->inRandomOrder()->limit(4)->get() as $answer)
@@ -138,7 +138,7 @@
                                             @endforeach
                                         @elseif($child->type == 'SSMCQ')
                                             @php
-                                                $rand = random_int(1, 4);
+                                                $rand = random_int(0, 3);
                                                 $trueAnswer = $child->answers()->where('is_correct', 1)->inRandomOrder()->first();
                                             @endphp
                                             @foreach ($child->answers()->whereNotIn('id', [$trueAnswer->id])->where('is_correct', 0)->inRandomOrder()->limit(4)->get() as $answer)

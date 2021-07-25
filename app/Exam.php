@@ -59,7 +59,7 @@ class Exam extends Model
     public function weight()
     {
         if ($this->examModels()->count() > 0) {
-            return $this->examModels()->first()->questions()->withPivot('weight')->sum('weight');
+            return $this->examModels()->first()->questions()->where('type','!=','Parent')->withPivot('weight')->sum('weight');
         } else {
             return 'Have No models';
         }

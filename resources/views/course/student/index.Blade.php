@@ -9,9 +9,7 @@ $counter =1
     <div style="margin-left: 30px;margin-top: 30px">
         <h1>Courses</h1>
     </div>
-    <div style="margin-left: 75px;margin-top: 30px;margin-right: 20px">
-        <p style="word-break: break-all;">Courses Courses CoursesCoursesCourses CoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCoursesCourses</p>
-    </div>
+    
     <div style="margin-top: 30px;margin-left: 30px">
         <h3 style="word-break: break-all">Current Courses</h3>
     </div>
