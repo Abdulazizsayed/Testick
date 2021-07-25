@@ -111,9 +111,8 @@ class Exam extends Model
         if ($this->questions()->count() > 0) {
             return ($this->questions()->where('chapter', $ch)->map(function ($item) {
                 return $item->studentAnswers;
-            })->collapse()->where('exam_id', $this->id)->sum('score') / $sumOfWeights) * 100;
+            })->collapse()->where('exam_models_id', $this->examModels()->pluck('id'))->sum('score') / $sumOfWeights) * 100;
         }
-
         return 0;
     }
 }
