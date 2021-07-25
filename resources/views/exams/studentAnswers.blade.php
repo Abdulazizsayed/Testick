@@ -9,6 +9,11 @@
     </div>
     <h2 class="title text-center">{{$exam->exam->title}}</h2>
     @foreach ($exam->questions()->withPivot('weight')->get() as $question)
+            @if ($question->parent)
+                @if($exam->questions()->contains('id', $question->parent->id))
+                    @continue
+                @endif
+            @endif
         <div class="question">
             <div class="question-header parent">
                 <h4 class="question-content">{{$loop->index + 1 . ') ' . $question->content}}</h4>
@@ -45,7 +50,7 @@
                                     @endforeach
                                 </ul>
                                 @php
-                                    $myAnswer = $student->studentAnswers()->where('exam_id', $exam->id)->where('question_id', $child->id)->first()
+                                    $myAnswer = $student->studentAnswers()->where('exam_models_id', $exam->id)->where('question_id', $child->id)->first()
                                 @endphp
                                 <h6 class="font-weight-bold">Your answer: {{$myAnswer->content}} ({{$myAnswer->score}})</h6>
                             </div>

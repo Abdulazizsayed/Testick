@@ -43,7 +43,7 @@
                 <td>{{$student->name}}</td>
                 <td>{{$student->pivot->score}}</td>
                 <td>
-                    <div class="btn btn-primary">Answers</div>
+                    <a class="btn btn-primary" href="{{asset('exams/answers/' . $exam->id . '/' . $student->id)}}">Answers</a>
                 </td>
             </tr>
             @endforeach
