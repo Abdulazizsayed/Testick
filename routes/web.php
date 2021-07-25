@@ -39,7 +39,6 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 
     // Exam routes
     Route::resource('exams', 'ExamController');
-    //teacher
     Route::post('exams/search', 'ExamController@search');
     Route::post('exams/grades/search', 'ExamController@gradesSearch');
     Route::post('exams/deleteQuestion/{questionId}/{examId}', 'ExamController@deleteQuestion');

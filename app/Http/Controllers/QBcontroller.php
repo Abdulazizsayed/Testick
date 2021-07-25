@@ -129,8 +129,7 @@ class QBcontroller extends Controller
                                 $insertAnswer = ['content' => $addedValue, 'is_correct' => $correct, 'question_id' => $QuestionFromDataBase->id];
                                 $answerController = new AnswerController();
                                 $answerController->store($insertAnswer);
-                            }
-                            else if ($QuestionObj['type'] != "Essay" &&  $QuestionObj['type'] != "T/F" ) {
+                            } else if ($QuestionObj['type'] != "Essay" &&  $QuestionObj['type'] != "T/F") {
                                 $answersArray = explode("~", $cellValue); // cutting string on ~ char
                                 for ($ans = 0; $ans < count($answersArray); $ans++) {
                                     $insertAnswer = ['content' => $answersArray[$ans], 'is_correct' => 0, 'question_id' => $QuestionFromDataBase->id];
@@ -222,7 +221,10 @@ class QBcontroller extends Controller
         } else {
             return view('errorPages/accessDenied');
         }
-        return $this->addQuestionView($QuestionBankID);
+        return view('questionsbank/addQuestion')->with([
+            'questionBank' => QuestionBank::find($QuestionBankID),
+            'status' => 'Question added successfully'
+        ]);
     }
 
     public function search(HttpRequest $request)

@@ -128,13 +128,6 @@ class ExamController extends Controller
 
     public function gradesSearch(HttpRequest $request)
     {
-        // if ($request->filter_value == 'course code') {
-        //     $exams = Auth::user()->courses()->where('code', 'LIKE', '%' . $request->search_input . '%')->get()->map(function ($item) {
-        //         return $item->exams;
-        //     })->collapse();
-        // } else {
-        //     $exams = Auth::user()->exams()->where($request->filter_value, 'LIKE', '%' . $request->search_input . '%')->get();
-        // }
         $exam = Exam::find($request->exam_id);
         $students = $exam->studentsSubmitted()->where('name', 'LIKE', '%' . $request->search_input . '%')->withPivot('score')->get();
 
@@ -524,9 +517,9 @@ class ExamController extends Controller
                         $similarty = ExamController::connectToFlaskAPI($data[$question["id"]], $questionRightAnswers[0]['content']);
                         $questionWeight = DB::table('exam_models_question')->where('exam_models_id', $examModelId)->where('question_id', $question["id"])->get()[0];
                         if ($similarty > 0.9) {
-                            $studentAnswer = ['content' => $answerString, 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         } else {
-                            $studentAnswer = ['content' => $answerString, 'score' => $similarty * $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
+                            $studentAnswer = ['content' => $data[$question["id"]], 'score' => $similarty * $questionWeight->weight, 'question_id' => $question["id"], 'student_id' => auth()->user()->id, 'exam_models_id' => $examModelId];
                         }
                         $studentAnswerController = new StudentAnswerController();
                         $studentAnswerController->store($studentAnswer);

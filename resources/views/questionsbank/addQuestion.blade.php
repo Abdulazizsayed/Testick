@@ -5,6 +5,11 @@ use App\QuestionBank;
 @section('title', 'Add quesiton to ' . $questionBank->title)
 @section('content')
 <div class="container add-question">
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <form action="/QB/addQuestion/{{$questionBank->id}}" enctype="multipart/form-data" method="POST">
     @csrf
     @method('POST')
