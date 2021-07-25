@@ -32,7 +32,13 @@
                     @php
                         $myAnswer = $student->studentAnswers()->where('exam_models_id', $exam->id)->where('question_id', $question->id)->first();
                     @endphp
-                    <h6 class="font-weight-bold">Your answer: {{$myAnswer->content}} ({{$myAnswer->score}})</h6>
+                    <h6 class="font-weight-bold">@if (Auth::user()->role == 0)
+                            Your answer:
+                        @else
+                            Student answer:
+                        @endif
+                        {{$myAnswer->content}} ({{$myAnswer->score}})
+                    </h6>
                 @else
                     @foreach ($question->children as $child)
                         <div class="question">
@@ -52,7 +58,13 @@
                                 @php
                                     $myAnswer = $student->studentAnswers()->where('exam_models_id', $exam->id)->where('question_id', $child->id)->first()
                                 @endphp
-                                <h6 class="font-weight-bold">Your answer: {{$myAnswer->content}} ({{$myAnswer->score}})</h6>
+                                <h6 class="font-weight-bold">@if (Auth::user()->role == 0)
+                                    Your answer:
+                                @else
+                                    Student answer:
+                                @endif
+                                {{$myAnswer->content}} ({{$myAnswer->score}})
+                                </h6>
                             </div>
                         </div>
                     @endforeach

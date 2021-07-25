@@ -472,6 +472,7 @@ class ExamController extends Controller
     public function markExam($examModelId)
     {
         if (auth()->user()->role == 0) {
+            ini_set('max_execution_time', 300);
             $data = Request::all();
             $keys = array_keys($data);
             $newKeys = array();
