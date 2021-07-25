@@ -383,7 +383,7 @@ class ExamController extends Controller
                                             }
                                         }
                                     } else {
-                                        if (in_array($selectedQuestion[0]['id'], $attachedQuestions)) {
+                                        if (in_array($selectedQuestion['id'], $attachedQuestions)) {
                                             $j--;
                                         } else {
                                             array_push($attachedQuestions, $selectedQuestion['id']); // saving the randomly selected question
